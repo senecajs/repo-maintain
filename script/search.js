@@ -20,11 +20,25 @@ async function doSearch() {
     data.set("desc",item.description)
     // missing type (the "what")
     data.set("update",item.updated_at.substring(0,10))
-    fs.appendFileSync("../csv/testing/initialTest.csv", data.values())
+    
+    // to stringify map values
+    function mapToObject(map){
+      const object = {}
+      for (let [key, value] of map){
+        object[key] = value
+      }
+      return object
+    }
+    const jsonData = {}
+    jsonData.data = mapToObject(data)
+    const dataToSave = JSON.stringify(jsonData)
+
+    fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
     fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
   })
 
   
+
 
   // summary.forEach((value, heading, summary) => {
   //   // fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
