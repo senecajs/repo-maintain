@@ -39,6 +39,12 @@ async function doSearch() {
   console.log('TOTAL', json.total_count)
   console.log('ITEMS LEN', json.items.length)
 
+  function logValueCSV(value, key, map){
+    // fs.appendFile("../csv/testing/initialTest.csv", value + ",")
+    console.log(value + ",")
+  }
+
+  // Gotta CLEAN all this up
   let summary = json.items.map(item=>({
     repo: item.html_url,
     owner: item.owner.login,
@@ -47,6 +53,7 @@ async function doSearch() {
     // type: item.foo, // still need to figure out how to get this
     update: item.pushed_at.substring(0,10), // only take first 10 char
     // pushed_at vs updated_at? push = on github but update = latest
+    logValueCSV()
 /**
  * TESTS to tell apart items (the what - core/plugin/support)
  * 
@@ -56,21 +63,21 @@ async function doSearch() {
  * Top-down appraoch => figure this out later
  *    
  */
-
-
   }))
-  // use (writable) file stream?
-  var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
-  fs.writeFileSync("../csv/testing/initialTest.csv", headings) // ""../csv/testing/initialTest.csv" <= are relative file paths possible?
 
-  summary.forEach(item => {
-    item.forEach(heading => {
-      fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
-      console.log(this.values() + ",")
-    })
-    fs.appendFile("../csv/testing/initialTest.csv", "\r\n")
-    console.log("Next item...")
-  });
+  
+
+  // use (writable) file stream? / Use forEach callback?
+  var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
+  // fs.writeFileSync("../csv/testing/initialTest.csv", headings) // ""../csv/testing/initialTest.csv" <= are relative file paths possible?
+
+  // summary.forEach((value, heading, summary) => {
+  //   // fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
+  //   // console.log(this.values() + ",")
+  //   console.log(this)
+  //   // fs.appendFile("../csv/testing/initialTest.csv", "\r\n")
+  //   // console.log("Next item...")
+  // });
 
   // console.log(summary)
   // NEXT STEP: test saving them to file as json blob (or directly as csv?)
