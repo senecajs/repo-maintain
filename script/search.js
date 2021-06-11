@@ -8,20 +8,23 @@ async function doSearch() {
   console.log('TOTAL', json.total_count)
   console.log('ITEMS LEN', json.items.length)
 
+  // use (writable) file stream? / Use forEach callback?
+  var headings = "Repo,Owner,Name,Description,LastUpdate\r\n" // insert what later
+  fs.writeFileSync("../csv/testing/initialTest.csv", headings)
+ 
   let summary = json.items.map(item=>{
     const data = new Map()
     data.set("repo",item.html_url)
     data.set("owner",item.owner.login)
     data.set("name",item.name)
     data.set("desc",item.description)
-    data.set("update",item.updated_at.substring(0,10))
     // missing type (the "what")
-    return data.values()
+    data.set("update",item.updated_at.substring(0,10))
+    fs.appendFileSync("../csv/testing/initialTest.csv", data.values())
+    fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
   })
 
-  // use (writable) file stream? / Use forEach callback?
-  var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
-  // fs.writeFileSync("../csv/testing/initialTest.csv", headings) // ""../csv/testing/initialTest.csv" <= are relative file paths possible?
+  
 
   // summary.forEach((value, heading, summary) => {
   //   // fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
