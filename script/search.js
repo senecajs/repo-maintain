@@ -1,3 +1,4 @@
+// COMMENTS to be edited to be purely informational once script is complete
 
 const Fetch = require('node-fetch')
 const fs = require('fs')  // invite file system module to script
@@ -15,8 +16,18 @@ const fs = require('fs')  // invite file system module to script
  * 3) Automate collecting data as csv, save file using fs,
  *    upload and import manually to google sheets
  * 
+ * i) Is there a way to automate the upload and import to
+ *    google sheets ? Possibly, should there be an automation
+ *    to check the site for new ones and add them to the sheet
+ *    if needs be, and if so, included in this script or in its
+ *    own one ?
+ * 
  * => Solution 3 might be the fastest/least hassle
- * a) create manual csv string (headings)
+ * a) Create manual csv string (headings)
+ * b) Write string to file (create file skeleton)
+ * c) Append further lines (could be done with a foreach loop,
+ *    and append \r\n (new row for each item in json blob))
+ * i) Test above with first 3
  * 
  */
 
@@ -34,8 +45,8 @@ async function doSearch() {
     name: item.name,
     desc: item.description,
     // type: item.foo, // still need to figure out how to get this
-    update: item.updated_at,
-
+    update: item.pushed_at.substring(0,10), // only take first 10 char
+    // pushed_at vs updated_at? push = on github but update = latest
 /**
  * TESTS to tell apart items (the what - core/plugin/support)
  * 
