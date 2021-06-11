@@ -2,6 +2,7 @@
 
 const Fetch = require('node-fetch')
 const fs = require('fs')  // invite file system module to script
+const { listenerCount } = require('process')
 
 /**
  * HOW to insert data to spreadsheet?
@@ -39,34 +40,52 @@ async function doSearch() {
   console.log('TOTAL', json.total_count)
   console.log('ITEMS LEN', json.items.length)
 
- 
 
   // Gotta CLEAN all this up
-  let summary = json.items.map(item=>({
-    repo: item.html_url,
-    owner: item.owner.login,
-    name: item.name,
-    desc: item.description,
-    // type: item.foo, // still need to figure out how to get this
-    update: item.pushed_at.substring(0,10), // only take first 10 char
-    // pushed_at vs updated_at? push = on github but update = latest
-/**
- * TESTS to tell apart items (the what - core/plugin/support)
- * 
- * homepage: item.homepage,
- * mirror: item.mirror_url,
- * Not gonna work --> Scan text in README to find mention of string "plugin"=true ? Include version with/without hyphen, capitals, etc (unnecs complex?)
- * Top-down appraoch => figure this out later
- *    
- */
-  }))
+  let summary = json.items.map(item=>{
+    const data = new Map()
+    data.set("repo",item.html_url)
+    data.set("owner",item.owner.login)
+    data.set("name",item.name)
+    data.set("desc",item.description)
+    data.set("update",item.updated_at.substring(0,10))
+    // missing type (the "what")
+    return data
 
-  async function logValueCSV(value, key, map){
-    // fs.appendFile("../csv/testing/initialTest.csv", value + ",")
-    console.log(value + ",")
-  }
+  })
 
-  summary.forEach(logValueCSV) // returns [object Object],
+
+
+  // async function logData(){
+  //   const map = new Map
+  //   map.set('repo:', this.html_url)
+  //   console.log(this.html_url)
+  //   map.set('owner:', this.owner.login)
+  //   map.set('name:', this.name)
+  //   map.set('desc:', this.description)
+  //   // map.set('type:', this.foo
+  //   map.set('update:', this.updated_at.substring(0,10))
+  //   console.log( map.values())
+  // }
+
+  // json.items.forEach(item=>{
+  //   logData()
+  // })
+
+
+  /**
+   * TESTS to tell apart items (the what - core/plugin/support)
+   * 
+   * homepage: item.homepage,
+   * mirror: item.mirror_url,
+   * Not gonna work --> Scan text in README to find mention of string "plugin"=true ? Include version with/without hyphen, capitals, etc (unnecs complex?)
+   * Top-down appraoch => figure this out later
+   *    
+   */
+
+  
+  // console.log(Array.from(summary.keys()))
+  // summary.forEach(logValueCSV)
 
   // use (writable) file stream? / Use forEach callback?
   var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
@@ -80,7 +99,7 @@ async function doSearch() {
   //   // console.log("Next item...")
   // });
 
-  // console.log(summary)
+  console.log(summary)
   // NEXT STEP: test saving them to file as json blob (or directly as csv?)
   
   // console.log(json)
