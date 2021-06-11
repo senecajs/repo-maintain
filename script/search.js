@@ -59,8 +59,20 @@ async function doSearch() {
 
 
   }))
+  // use (writable) file stream?
+  var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
+  fs.writeFileSync("../csv/testing/initialTest.csv", headings) // ""../csv/testing/initialTest.csv" <= are relative file paths possible?
 
-  console.log(summary)
+  summary.forEach(item => {
+    item.forEach(heading => {
+      fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
+      console.log(this.values() + ",")
+    })
+    fs.appendFile("../csv/testing/initialTest.csv", "\r\n")
+    console.log("Next item...")
+  });
+
+  // console.log(summary)
   // NEXT STEP: test saving them to file as json blob (or directly as csv?)
   
   // console.log(json)
