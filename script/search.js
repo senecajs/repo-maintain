@@ -39,10 +39,7 @@ async function doSearch() {
   console.log('TOTAL', json.total_count)
   console.log('ITEMS LEN', json.items.length)
 
-  function logValueCSV(value, key, map){
-    // fs.appendFile("../csv/testing/initialTest.csv", value + ",")
-    console.log(value + ",")
-  }
+ 
 
   // Gotta CLEAN all this up
   let summary = json.items.map(item=>({
@@ -53,7 +50,6 @@ async function doSearch() {
     // type: item.foo, // still need to figure out how to get this
     update: item.pushed_at.substring(0,10), // only take first 10 char
     // pushed_at vs updated_at? push = on github but update = latest
-    logValueCSV()
 /**
  * TESTS to tell apart items (the what - core/plugin/support)
  * 
@@ -65,7 +61,12 @@ async function doSearch() {
  */
   }))
 
-  
+  async function logValueCSV(value, key, map){
+    // fs.appendFile("../csv/testing/initialTest.csv", value + ",")
+    console.log(value + ",")
+  }
+
+  summary.forEach(logValueCSV) // returns [object Object],
 
   // use (writable) file stream? / Use forEach callback?
   var headings = "Repo,Owner,Name,Description,LastUpdate" // insert what later
