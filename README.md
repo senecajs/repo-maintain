@@ -2,11 +2,11 @@
 Maintenance automation for Seneca repos.
 
 To test script/search.js :
-    > Ensure node.js is installed and working correctly on your machine
+    > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
-        TOTAL 1803
+        TOTAL 1803 // susceptible to be modified externally
         ITEMS LEN 25
     > Expected (initialTest.csv) :
         Repo,Owner,Name,Description,LastUpdate
@@ -35,3 +35,45 @@ To test script/search.js :
         https://github.com/senecajs/seneca-entity,senecajs,seneca-entity,Entity plugin for seneca,2021-05-23
         https://github.com/senecajs-labs/seneca-rabbitmq-transport,senecajs-labs,seneca-rabbitmq-transport,Seneca micro-services message transport over RabbitMQ messaging.,2019-01-24
         https://github.com/humphd/Seneca2017LearningLab,humphd,Seneca2017LearningLab,A repo for DPS909/OSD600 students to learn open source tooling,2020-09-27
+
+To test Google Sheets API Quickstart file (scrips/sheetsQuickstart.js) :
+    > Ensure node.js and npm are installed and working correctly on your machine
+    > Navigate to the /script folder in the console
+    > Run the sheetsQuickstart script by typing "node sheetsQuickstart" and press enter
+    > Follow the proposed URL and select the google account to sign into "SenecaJS Repo Maintain" with
+    > Copy the given string and paste it back into the console
+    > Expected (console) :
+        Token stored to token.json
+        Name, Major:
+        Alexandra, English
+        Andrew, Math
+        Anna, English
+        Becky, Art
+        Benjamin, English
+        Carl, Art
+        Carrie, English
+        Dorothy, Math
+        Dylan, Math
+        Edward, English
+        Ellen, Physics
+        Fiona, Art
+        John, Physics
+        Jonathan, Math
+        Joseph, English
+        Josephine, Math
+        Karen, English
+        Kevin, Physics
+        Lisa, Art
+        Mary, Physics
+        Maureen, Physics
+        Nick, Art
+        Olivia, Physics
+        Pamela, Math
+        Patrick, Art
+        Robert, English
+        Sean, Physics
+        Stacy, Math
+        Thomas, Art
+        Will, Math
+    > Expected (token.json) :
+        {"access_token":"ya29.a0AfH6SMB-vRBmhJ6h9xHqUfjr56rGqqq7yWWLeeCurrvbYK13YElPMfYof10ZyiAwjMN88yR_29vSxG1vp0-MOwrt3unWsE0P6PRK-zajuUoNydE41ltLa8adF12bFGuKg4635aPz4wHqieLl5X3iXSdXfJfU","refresh_token":"1//03qNRH1D3hDduCgYIARAAGAMSNwF-L9IrxqJiu-rCUzTgHHzY6lis9MrpMWAHzyNK9l5shkmSq3UraTqvgRLbMKhqkzBNrYqJUoc","scope":"https://www.googleapis.com/auth/spreadsheets.readonly","token_type":"Bearer","expiry_date":1623779062767}
