@@ -10,7 +10,7 @@ async function doSearch() {
 
   // use (writable) file stream? / Use forEach callback?
   var headings = "Repo,Owner,Name,Description,LastUpdate\r\n" // insert what later
-  fs.writeFileSync("../csv/testing/initialTest.csv", headings)
+  // fs.writeFileSync("../csv/testing/initialTest.csv", headings)
  
   let summary = json.items.map(item=>{
     const data = new Map()
@@ -21,20 +21,17 @@ async function doSearch() {
     // missing type (the "what")
     data.set("update",item.updated_at.substring(0,10))
     
-    // to stringify map values
-    function mapToObject(map){
-      const object = {}
-      for (let [key, value] of map){
-        object[key] = value
-      }
-      return object
+    let dataToSave = ""
+    
+    function mapValues(value, key, map){
+      dataToSave += '${value}' + ","
     }
-    const jsonData = {}
-    jsonData.data = mapToObject(data)
-    const dataToSave = JSON.stringify(jsonData)
 
-    fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
-    fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
+    data.forEach(mapValues)
+    
+    console.log(dataToSave)
+    // fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
+    // fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
   })
 
   

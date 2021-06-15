@@ -1,4 +1,0 @@
-Repo,Owner,Name,Description,LastUpdate
-{"data":{"repo":"https://github.com/senecajs/seneca","owner":"senecajs","name":"seneca","desc":"A microservices toolkit for Node.js.","update":"2021-06-10"}}
-{"data":{"repo":"https://github.com/rjrodger/seneca-examples","owner":"rjrodger","name":"seneca-examples","desc":"Node.js seneca module usage examples ","update":"2021-06-09"}}
-{"data":{"repo":"https://github.com/nodezoo/nodezoo-workshop","owner":"nodezoo","name":"nodezoo-workshop","desc":"A microservices workshop for the Seneca framework.","update":"2021-02-24"}}
