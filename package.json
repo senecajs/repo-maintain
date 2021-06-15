@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/senecajs/repo-maintain#readme",
   "dependencies": {
+    "googleapis": "^39.2.0",
     "node-fetch": "^2.6.1"
   }
 }
