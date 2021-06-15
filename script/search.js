@@ -12,27 +12,25 @@ async function doSearch() {
   var headings = "Repo,Owner,Name,Description,LastUpdate\r\n" // insert what later
   // fs.writeFileSync("../csv/testing/initialTest.csv", headings)
  
-  let summary = json.items.map(item=>{
-    const data = new Map()
-    data.set("repo",item.html_url)
-    data.set("owner",item.owner.login)
-    data.set("name",item.name)
-    data.set("desc",item.description)
-    // missing type (the "what")
-    data.set("update",item.updated_at.substring(0,10))
-    
-    let dataToSave = ""
-    
-    function mapValues(value, key, map){
-      dataToSave += '${value}' + ","
-    }
+  
+  const data = new Map()
+  data.set("repo",json.items["html_url"])
+  data.set("owner",json.items["owner"])//["login"])
+  data.set("name",json.items["name"])
+  data.set("desc",json.items["description"])
+  // missing type (the "what")
+  data.set("update",json.items["updated_at"])//.substring(0,10))
+  
+  let dataToSave = ""
 
-    data.forEach(mapValues)
-    
-    console.log(dataToSave)
-    // fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
-    // fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
-  })
+  data.values().forEach(value => {
+    dataToSave += value + ","
+  });
+  
+  console.log(dataToSave)
+  // fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
+  // fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
+ 
 
   
 
@@ -45,7 +43,7 @@ async function doSearch() {
   //   // console.log("Next item...")
   // });
 
-  console.log(summary)
+  // console.log(summary)
 }
 
 doSearch()

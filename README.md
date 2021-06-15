@@ -8,9 +8,7 @@ To test script/search.js :
     > Expected (console) :
         TOTAL 1804
         ITEMS LEN 3
-        ${value},${value},${value},${value},${value},
-        ${value},${value},${value},${value},${value},
-        ${value},${value},${value},${value},${value},
-        [ undefined, undefined, undefined ]
+        TypeError: data.values(...).forEach is not a function
+        at doSearch
     > Expected (initialTest.csv) :
         (null - no such file exists)
