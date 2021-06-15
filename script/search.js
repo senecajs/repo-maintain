@@ -10,27 +10,35 @@ async function doSearch() {
 
   // use (writable) file stream? / Use forEach callback?
   var headings = "Repo,Owner,Name,Description,LastUpdate\r\n" // insert what later
-  // fs.writeFileSync("../csv/testing/initialTest.csv", headings)
+  fs.writeFileSync("../csv/testing/initialTest.csv", headings)
  
-  
-  const data = new Map()
-  data.set("repo",json.items["html_url"])
-  data.set("owner",json.items["owner"])//["login"])
-  data.set("name",json.items["name"])
-  data.set("desc",json.items["description"])
-  // missing type (the "what")
-  data.set("update",json.items["updated_at"])//.substring(0,10))
-  
   let dataToSave = ""
 
-  data.values().forEach(value => {
-    dataToSave += value + ","
+  json.items.forEach(repo => {
+    let url = repo["html_url"]
+    let owner = repo["owner"]["login"]
+    let name = repo["name"]
+    let desc = repo["description"]
+    // let type = repo["the what"]
+    let update = repo["updated_at"].substring(0,10)
+
+    
+    dataToSave = url + "," + owner + "," + name + "," + desc + "," + update
+    fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
+    fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
+    
   });
   
-  console.log(dataToSave)
-  // fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
-  // fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
  
+  
+
+  // data.forEach((values,keys) => {
+  //   dataToSave += values + ","
+  //   console.log(values)
+  // });
+  
+  // console.log(data)
+  
 
   
 

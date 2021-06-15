@@ -8,7 +8,8 @@ To test script/search.js :
     > Expected (console) :
         TOTAL 1804
         ITEMS LEN 3
-        TypeError: data.values(...).forEach is not a function
-        at doSearch
     > Expected (initialTest.csv) :
-        (null - no such file exists)
+        Repo,Owner,Name,Description,LastUpdate
+        https://github.com/senecajs/seneca,senecajs,seneca,A microservices toolkit for Node.js.,2021-06-14
+        https://github.com/rjrodger/seneca-examples,rjrodger,seneca-examples,Node.js seneca module usage examples ,2021-06-09
+        https://github.com/nodezoo/nodezoo-workshop,nodezoo,nodezoo-workshop,A microservices workshop for the Seneca framework.,2021-02-24
