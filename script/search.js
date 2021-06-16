@@ -2,7 +2,7 @@ const Fetch = require('node-fetch')
 const fs = require('fs')  // invite file system module to script
 
 async function doSearch() {
-  const response = await Fetch('https://api.github.com/search/repositories?q=seneca-&page=1&per_page=25')
+  const response = await Fetch('https://api.github.com/search/repositories?q=seneca-&page=1&per_page=10')
   const body = await response.text()
   const json = JSON.parse(body)
   console.log('TOTAL', json.total_count)
@@ -26,35 +26,15 @@ async function doSearch() {
     let update = repo["updated_at"].substring(0,10)
 
     
-    dataToSave = url + "," + owner + "," + name + "," + desc + "," + update
+    dataToSave = url + "," + owner + "," + name + "," + "'" + desc + "'" + "," + update
     fs.appendFileSync("../csv/testing/initialTest.csv", dataToSave)
     fs.appendFileSync("../csv/testing/initialTest.csv", "\r\n")
+
     
   });
-  
- 
-  
 
-  // data.forEach((values,keys) => {
-  //   dataToSave += values + ","
-  //   console.log(values)
-  // });
-  
-  // console.log(data)
-  
+  console.log("See ../csv/testing/initialTest.csv for printed values.")
 
-  
-
-
-  // summary.forEach((value, heading, summary) => {
-  //   // fs.appendFile("../csv/testing/initialTest.csv", this.values() + ",")
-  //   // console.log(this.values() + ",")
-  //   console.log(this)
-  //   // fs.appendFile("../csv/testing/initialTest.csv", "\r\n")
-  //   // console.log("Next item...")
-  // });
-
-  // console.log(summary)
 }
 
 doSearch()

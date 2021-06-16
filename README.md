@@ -7,13 +7,13 @@ To test script/search.js :
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
         TOTAL 1803 // susceptible to be modified externally
-        ITEMS LEN 25
+        ITEMS LEN 10
     > Expected (initialTest.csv) :
         Repo,Owner,Name,Description,LastUpdate
         https://github.com/senecajs/seneca,senecajs,seneca,A microservices toolkit for Node.js.,2021-06-14
         https://github.com/rjrodger/seneca-examples,rjrodger,seneca-examples,Node.js seneca module usage examples ,2021-06-09
         (...)
-        https://github.com/humphd/Seneca2017LearningLab,humphd,Seneca2017LearningLab,A repo for DPS909/OSD600 students to learn open source tooling,2020-09-27
+        https://github.com/senecajs/seneca-postgres-store,senecajs,seneca-postgres-store,'PostgreSQL plugin for Seneca',2018-11-02
 
 To test Google Sheets API Quickstart file (scrips/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine
