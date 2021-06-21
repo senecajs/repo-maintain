@@ -6,10 +6,17 @@ To test script/search.js :
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
-        TOTAL 1811 // susceptible to be modified externally
-        ITEMS LEN 100
-    > Expected:
-        (null)
+        Search function initiated.
+        [1] 100 results fetched...
+        [1] Results appended to file.
+        (...)
+        [10] 100 results fetched...
+        [10] Results appended to file.
+        TypeError: Cannot read property 'length' of undefined
+        at doSearch
+    > Expected (results.json):
+        [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1","name":"seneca",
+        (...)
 
 To test Google Sheets API Quickstart file (scrips/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine

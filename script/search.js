@@ -23,30 +23,30 @@ async function doSearch() {
 
   await new Promise(resolve => setTimeout(resolve,1111))
   
-  let page = 1
-  let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=100"
-  const response = await Fetch(searchURL)
-  console.log("["+page+"]"+" 100 results fetched...")
+  // console.log("Links: " + searchURL.link)
   let logged = 100
 
-  // append all data + stringify
-  const body = await response.text()
-  const json = JSON.parse(body)
-
-  while(logged < json.total_count){
-    page += 1
+  for (let page = 1; page < 50; page++) {
+    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=100"
+    const response = await Fetch(searchURL)
+    const body = await response.text()
+    const json = JSON.parse(body)
     
+    console.log("["+page+"] " + json.items.length + " results fetched...")
+    logged += json.items.length
+    // append to file - not overwrite (taking for loop into account...)
+    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json.items))
+    console.log("["+page+"]"+" Results appended to file.")
   }
+}
+
+  // append all data + stringify
   
-  // append to file - not overwrite (taking for loop into account...)
-  Fs.appendFileSync("../data/json/results.json", JSON.stringify(json.items))
-  console.log("["+page+"]"+" Results appended to file.")
-}
 
-var page = 1 // page number
-var logged = 0 // total number of repos logged
-var total = 101
+  
 
-while (logged < total) {
-  doSearch()
-}
+// var page = 1 // page number
+// var logged = 0 // total number of repos logged
+// var total = 101
+
+doSearch()
