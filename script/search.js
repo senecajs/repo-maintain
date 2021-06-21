@@ -32,6 +32,7 @@ async function doSearch() {
     const body = await response.text()
     const json = JSON.parse(body)
     
+    // undefined coming up for page 11 in loop
     console.log("["+page+"] " + json.items.length + " results fetched...")
     logged += json.items.length
     // append to file - not overwrite (taking for loop into account...)
@@ -39,14 +40,5 @@ async function doSearch() {
     console.log("["+page+"]"+" Results appended to file.")
   }
 }
-
-  // append all data + stringify
-  
-
-  
-
-// var page = 1 // page number
-// var logged = 0 // total number of repos logged
-// var total = 101
 
 doSearch()
