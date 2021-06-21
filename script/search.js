@@ -11,8 +11,10 @@
 const Fetch = require('node-fetch')
 const Fs = require('fs')  // invite file system module to script
 
+// await new Promise(resolve => setTimeout(resolve,1111))
+
 async function doSearch() {
-  const response = await Fetch('https://api.github.com/search/repositories?q=seneca-&page=1&per_page=10')
+  const response = await Fetch('https://api.github.com/search/repositories?q=seneca-&page=1&per_page=100')
   //save to disk ^ with for loop
   // append all data + stringify
   const body = await response.text()
@@ -20,6 +22,7 @@ async function doSearch() {
   console.log('TOTAL', json.total_count)
   console.log('ITEMS LEN', json.items.length)
 
+  Fs.writeFileSync("../data/json/results.json", JSON.stringify(json.items))
 }
 
 
