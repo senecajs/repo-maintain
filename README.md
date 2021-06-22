@@ -18,6 +18,17 @@ To test script/search.js :
         [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1","name":"seneca",
         (...)
 
+To test script/filter.js :
+    > Ensure node.js and npm are installed and working correctly on your machine
+    > Navigate to the /script folder in the console
+    > Run the node.js script by typing "node filter" and press enter
+    > Expected (console) :
+       undefined:1
+        ../data/json/results.json
+        SyntaxError: Unexpected token . in JSON at position 0
+            at JSON.parse (<anonymous>)
+            at Object.<anonymous>
+
 To test Google Sheets API Quickstart file (scrips/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
