@@ -8,3 +8,18 @@
    * })
    */
 
+const Fs = require('fs')
+
+// check if relevant.json exists, and if so, clear it
+let relevant = "../data/json/relevant.json"
+if(Fs.existsSync(relevant)){
+  Fs.unlinkSync(relevant)
+  console.log("Previous relevant.json file deleted.")
+}
+
+async function doFilter() {
+  // read json file
+
+  
+  Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
+}
