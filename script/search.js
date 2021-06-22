@@ -36,7 +36,7 @@ async function doSearch() {
     console.log("[" + page + "] " + json.items.length + " results fetched...")
     logged += json.items.length
     // append to file - not overwrite (taking for loop into account...)
-    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json.items))
+    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json))
     console.log("["+page+"]"+" Results appended to file.")
   }
   console.log("Search completed. See results.json file for logged data.")
