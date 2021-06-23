@@ -4,8 +4,8 @@
  *    a) search.js - Take 1803 full results and save to disk
  *    b) filter.js - Take relevant results from (a) and save to disk
  *    c) isolate.js - Isolate relavant data from (b) and save to disk
- *    d) upload.js - Upload (c) data to google sheets
- * 3) CSV management plugin (possibly JSON to CSV ?)
+ *    d) format.js - Reformat json data as csv data.
+ *    e) upload.js - Upload (d) data to google sheets
  */
 
 const Fetch = require('node-fetch')

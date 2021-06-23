@@ -10,8 +10,10 @@ if(Fs.existsSync("../data/json/data.json")){
   console.log("Previous data.json file deleted.")
 }
 
+// need keys+values in json file for format.js to work correctly
 async function doIsolate() {
   console.log("ITEMS : ", filter.length)
+  // _method to select ?
 }
 
 // json.items.forEach(repo => { // replace json.items with relevant
