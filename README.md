@@ -24,7 +24,12 @@ To test script/filter.js :
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node filter" and press enter
     > Expected (console) :
-       ITEMS :  1000
+        Previous filter.json file deleted.
+        ITEMS TO FILTER :  1000
+        FILTERED ITEMS :  63
+    > Expected (filter.json) :
+        [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1",
+        (...)
 
 To test Google Sheets API Quickstart file (scrips/tests/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine

@@ -15,15 +15,15 @@ const results = require('../data/json/results.json')
 
 
 // check if relevant.json exists, and if so, clear it
-if(Fs.existsSync("../data/json/relevant.json")){
-  Fs.unlinkSync("../data/json/relevant.json")
-  console.log("Previous relevant.json file deleted.")
+if(Fs.existsSync("../data/json/filter.json")){
+  Fs.unlinkSync("../data/json/filter.json")
+  console.log("Previous filter.json file deleted.")
 }
 
 let filter = []
 
 async function doFilter() {
-  console.log("ITEMS : ", results.length)
+  console.log("ITEMS TO FILTER : ", results.length)
   let filterList = _.where(results, {name : "seneca"})
 
   filterList.forEach(item => {
@@ -32,8 +32,7 @@ async function doFilter() {
 
   Fs.appendFileSync("../data/json/filter.json", JSON.stringify(filter))
 
-  console.log(filter)
-  console.log(filter.length)
+  console.log("FILTERED ITEMS : ", filter.length)
   
   // Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
 }
