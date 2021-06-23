@@ -9,20 +9,31 @@
    */
 
 const Fs = require('fs')
+const _ = require('underscore')
 
 const results = require('../data/json/results.json')
 
 
 // check if relevant.json exists, and if so, clear it
-let relevant = "../data/json/relevant.json"
-if(Fs.existsSync(relevant)){
-  Fs.unlinkSync(relevant)
+if(Fs.existsSync("../data/json/relevant.json")){
+  Fs.unlinkSync("../data/json/relevant.json")
   console.log("Previous relevant.json file deleted.")
 }
 
+let filter = []
+
 async function doFilter() {
-  // read json file
   console.log("ITEMS : ", results.length)
+  let filterList = _.where(results, {name : "seneca"})
+
+  filterList.forEach(item => {
+    filter.push(item)
+  });
+
+  Fs.appendFileSync("../data/json/filter.json", JSON.stringify(filter))
+
+  console.log(filter)
+  console.log(filter.length)
   
   // Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
 }
