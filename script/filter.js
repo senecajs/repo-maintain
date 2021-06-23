@@ -10,20 +10,7 @@
 
 const Fs = require('fs')
 
-/**
- * I think this is CAUSING an ERROR "unexpected token in JSON"
- * Possibly to do with either
- *  "Tokenization is skipped for long lines for performance reasons.
- *    The length of a long line can be configured via 
- *    editor.maxTokenizationLineLength."
- * or
- *  "results.json: For performance reasons, document symbols have been
- *    limited to 5000 items. Use setting 'json.maxItemsComputed' to
- *    configure the limit."
-*/
-
 const results = require('../data/json/results.json')
-console.log(results[0])
 
 
 // check if relevant.json exists, and if so, clear it
@@ -35,9 +22,9 @@ if(Fs.existsSync(relevant)){
 
 async function doFilter() {
   // read json file
-  console.log(results.length)
+  console.log("ITEMS : ", results.length)
   
-  Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
+  // Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
 }
 
 doFilter()

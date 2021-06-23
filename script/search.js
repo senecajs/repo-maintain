@@ -28,8 +28,8 @@ async function doSearch() {
   let results = []
   // exit clause for for-loop (once all results have been logged) ?
   // data for # pages held in native code
-  for (let page = 1; page < 3; page++) {
-    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=2"
+  for (let page = 1; page < 11; page++) {
+    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=100"
     const response = await Fetch(searchURL)
     const body = await response.text()
     const json = JSON.parse(body)
@@ -40,7 +40,7 @@ async function doSearch() {
     logged += json.items.length
     
     json.items.forEach(item => {
-      results += item
+      results.push(item)
     });
     
     // append to file - not overwrite (taking for loop into account...)

@@ -6,27 +6,25 @@ To test script/search.js :
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
-        Previous results.json file deleted.
+        Previous results.json file deleted. // not on first run
         Search function initiated.
-        [1] 2 results fetched...
+        [1] 100 results fetched...
         [1] Results appended to object.
-        [2] 2 results fetched...
-        [2] Results appended to object.
+        (...)
+        [10] 100 results fetched...
+        [10] Results appended to object.
         Object logged as JSON data.
         Search completed. See results.json file for logged data.
     > Expected (results.json):
-        "[object Object][object Object][object Object][object Object]"
+        [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1",
+        (...)
 
 To test script/filter.js :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node filter" and press enter
     > Expected (console) :
-       undefined:1
-        ../data/json/results.json
-        SyntaxError: Unexpected token . in JSON at position 0
-            at JSON.parse (<anonymous>)
-            at Object.<anonymous>
+       ITEMS :  1000
 
 To test Google Sheets API Quickstart file (scrips/tests/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine
