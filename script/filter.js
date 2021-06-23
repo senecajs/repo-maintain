@@ -22,7 +22,8 @@ const Fs = require('fs')
  *    configure the limit."
 */
 
-const results = JSON.parse("../data/json/results.json")
+const results = require('../data/json/results.json')
+console.log(results[0])
 
 
 // check if relevant.json exists, and if so, clear it
@@ -38,3 +39,5 @@ async function doFilter() {
   
   Fs.appendFileSync("../data/json/relevant.json", JSON.stringify(json.items))
 }
+
+doFilter()

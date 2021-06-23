@@ -29,7 +29,7 @@ To test script/filter.js :
             at JSON.parse (<anonymous>)
             at Object.<anonymous>
 
-To test Google Sheets API Quickstart file (scrips/sheetsQuickstart.js) :
+To test Google Sheets API Quickstart file (scrips/tests/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
     > Run the sheetsQuickstart script by typing "node sheetsQuickstart" and press enter

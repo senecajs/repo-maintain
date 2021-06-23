@@ -26,18 +26,21 @@ async function doSearch() {
   // console.log("Links: " + searchURL.link)
   let logged = 0
   // exit clause for for-loop (once all results have been logged) ?
-  for (let page = 1; page < 11; page++) {
-    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=100"
+  // data for # pages held in native code
+  for (let page = 1; page < 3; page++) {
+    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=2"
     const response = await Fetch(searchURL)
     const body = await response.text()
     const json = JSON.parse(body)
     
     // undefined coming up for page 11 in loop of 100 (page 10 for loop of 50)
+    // Now it's page 10 ??
     console.log("[" + page + "] " + json.items.length + " results fetched...")
     logged += json.items.length
     // append to file - not overwrite (taking for loop into account...)
-    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json))
+    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json.items))
     console.log("["+page+"]"+" Results appended to file.")
+    console.log(json.items)
   }
   console.log("Search completed. See results.json file for logged data.")
 }
