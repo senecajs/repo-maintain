@@ -6,17 +6,16 @@ To test script/search.js :
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
+        Previous results.json file deleted.
         Search function initiated.
-        [1] 100 results fetched...
-        [1] Results appended to file.
-        (...)
-        [10] 100 results fetched...
-        [10] Results appended to file.
-        TypeError: Cannot read property 'length' of undefined
-        at doSearch
+        [1] 2 results fetched...
+        [1] Results appended to object.
+        [2] 2 results fetched...
+        [2] Results appended to object.
+        Object logged as JSON data.
+        Search completed. See results.json file for logged data.
     > Expected (results.json):
-        [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1","name":"seneca",
-        (...)
+        "[object Object][object Object][object Object][object Object]"
 
 To test script/filter.js :
     > Ensure node.js and npm are installed and working correctly on your machine

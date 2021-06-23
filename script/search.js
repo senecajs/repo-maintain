@@ -25,6 +25,7 @@ async function doSearch() {
   
   // console.log("Links: " + searchURL.link)
   let logged = 0
+  let results = []
   // exit clause for for-loop (once all results have been logged) ?
   // data for # pages held in native code
   for (let page = 1; page < 3; page++) {
@@ -37,11 +38,20 @@ async function doSearch() {
     // Now it's page 10 ??
     console.log("[" + page + "] " + json.items.length + " results fetched...")
     logged += json.items.length
+    
+    json.items.forEach(item => {
+      results += item
+    });
+    
     // append to file - not overwrite (taking for loop into account...)
-    Fs.appendFileSync("../data/json/results.json", JSON.stringify(json.items))
-    console.log("["+page+"]"+" Results appended to file.")
-    console.log(json.items)
+    console.log("["+page+"]"+" Results appended to object.")
+
+    // console.log(json.items)
   }
+
+  Fs.appendFileSync("../data/json/results.json", JSON.stringify(results))
+  console.log("Object logged as JSON data.")
+
   console.log("Search completed. See results.json file for logged data.")
 }
 
