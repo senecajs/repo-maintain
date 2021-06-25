@@ -11,6 +11,10 @@
 const Fetch = require('node-fetch')
 const Fs = require('fs')  // invite file system module to script
 
+// get current year
+const today = new Date()
+const thisYear = today.getFullYear()
+
 // check if results.json exists, and if so, clear it
 let results = "../data/json/results.json"
 if(Fs.existsSync(results)){
@@ -21,42 +25,45 @@ if(Fs.existsSync(results)){
 async function doSearch() {
   console.log("Search function initiated.")
 
-  
-  
-  // console.log("Links: " + searchURL.link)
-  let logged = 0
-  let results = []
-  // exit clause for for-loop (once all results have been logged) ?
-  // data for # pages held in native code
-  for (let page = 1; page < 50; page++) {
-    await new Promise(resolve => setTimeout(resolve,9999))
-    let searchURL = "https://api.github.com/search/repositories?q=seneca-&page=" + page.toString() + "&per_page=100"
-    const response = await Fetch(searchURL)
-    const ok = response.ok
-    const body = await response.text()
-    const json = JSON.parse(body)
-    if(null == json.items) {
-      console.log("BAD!!! :(", json)
+  const map = {}
+  // increment year to search
+  for (let year = 2010; year <= thisYear; year++) {
+    // increment page of search results
+    for (let page = 1; page <= 10; page++) {
+
+      await new Promise(resolve => setTimeout(resolve,9999))
+
+      let searchURL = "https://api.github.com/search/repositories?q=seneca-+created:%3C" + year.toString() + "-01-01&page=" + page.toString() + "&per_page=100"
+      const response = await Fetch(searchURL)
+      const body = await response.text()
+      const json = JSON.parse(body)
+      // catching error
+      const ok = response.ok
+      if(null == json.items) {
+        console.log("BAD!!! :(", json)
+      }
+
+      console.log("[", year, "|", page, "]", json.items.length, " results fetched... ", ok)
+      
+      json.items.forEach(item => {
+        // issue with map.has
+        if(false == map.has(item.full_name)){
+          map[item.full_name] = item
+        }
+        
+      });
     }
 
-    // undefined coming up for page 11 in loop of 100 (page 10 for loop of 50)
-    // Now it's page 10 ??
-    console.log(ok, " [" + page + "] " + json.items.length + " results fetched...")
-    logged += json.items.length
     
-    json.items.forEach(item => {
-      results.push(item)
-      // map full_name = item (object.keys for list)
-    });
     
     // append to file - not overwrite (taking for loop into account...)
-    console.log("["+page+"]"+" Results appended to object.")
+    console.log("[", year, "]", " Results appended to map.")
 
     // console.log(json.items)
   }
 
-  Fs.writeFileSync("../data/json/results.json", JSON.stringify(results))
-  console.log("Object logged as JSON data.")
+  Fs.writeFileSync("../data/json/results.json", JSON.stringify(map.values()))
+  console.log("Map values logged as JSON data.")
 
   console.log("Search completed. See results.json file for logged data.")
 }
