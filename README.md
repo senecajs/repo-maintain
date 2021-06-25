@@ -8,16 +8,14 @@ To test script/search.js :
     > Expected (console) :
         Previous results.json file deleted. // not on first run
         Search function initiated.
-        [1] 100 results fetched...
-        [1] Results appended to object.
+        [2010] 1 results fetched...
+        [2010] Results appended to map.
         (...)
-        [10] 100 results fetched...
-        [10] Results appended to object.
-        Object logged as JSON data.
-        Search completed. See results.json file for logged data.
+        [2019] 100 results fetched...
+        [2019] Results appended to map.
+        Search completed.
     > Expected (results.json):
-        [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1",
-        (...)
+        null
 
 To test script/filter.js :
     > Ensure node.js and npm are installed and working correctly on your machine
