@@ -6,17 +6,15 @@ To test script/search.js :
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
-        Previous results.json file deleted. // not on first run
         Search function initiated.
-        [2010] 1 results fetched...
-        [2010] Results appended to map.
-        (...)
-        [2019] 100 results fetched...
-        [2019] Results appended to map.
-        Search completed.
+        Querying at endpoint: https://api.github.com/search/repositories?q=seneca-+created:%3C2010-01-01&page=1&per_page=100
+            const body = await response.text()
+                            ^
+        ReferenceError: response is not defined
     > Expected (results.json):
         null
 
+(filter.js cannot be tested until search.js is producing valid results.json file)
 To test script/filter.js :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
