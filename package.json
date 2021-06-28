@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
+    "github-search-api": "^0.0.3",
     "googleapis": "^39.2.0",
     "jsonexport": "^3.2.0",
     "node-fetch": "^2.6.1",
