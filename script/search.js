@@ -1,9 +1,9 @@
 const Fetch = require('node-fetch')
 const Fs = require('fs')  // invite file system module to script
 
-// dependencies for search
-const searchAPI = require ('github-search-api')
-const Github = new searchAPI({username: 'stokesriona', password: '***REMOVED***'})
+// // dependencies for search
+// const searchAPI = require ('github-search-api')
+// const Github = new searchAPI({username: 'username', password: 'password'})
 
 // get current year
 const today = new Date()
@@ -25,14 +25,14 @@ async function doSearch() {
     // increment page of search results
     for (let page = 1; page <= 5; page++) {
 
-      await new Promise(resolve => setTimeout(resolve,1111))
+      await new Promise(resolve => setTimeout(resolve,9999))
 
       let searchURL = "seneca-+created:%3C" + year.toString() + "-01-01&page=" + page.toString() + "&per_page=100"
-      Github.searchRepos(searchURL, function(data){
-        console.log(data)
-        const response = data
-      })
-
+      // using name+password auth
+      // Github.searchRepos(searchURL, function(data){
+      //   console.log(data)
+      // })
+      const response = await Fetch(searchURL)
       const body = await response.text()
       const json = JSON.parse(body)
       // catching error
@@ -45,10 +45,10 @@ async function doSearch() {
       
       json.items.forEach(item => {
         // issue with map.has
-        // if(false == map.has(item.full_name)){
-        //   
-        // }
-        map[item.full_name] = item
+        if(false == map.has(item.full_name)){
+          map[item.full_name] = item
+        }
+        
       });
 
       if(json.items.length <= 100){
