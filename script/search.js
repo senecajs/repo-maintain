@@ -19,7 +19,7 @@ if(Fs.existsSync(results)){
 async function doSearch() {
   console.log("Search function initiated.")
 
-  const map = new Map()
+  let map = new Map()
   // increment year to search
   for (let year = 2010; year <= 2012; year++) { // year <= thisYear; year++) {
     // increment page of search results
@@ -65,10 +65,20 @@ async function doSearch() {
 
     // console.log(json.items)
   }
-
   console.log(map)
+  var mapValues = map.values()
+  console.log(mapValues.length)
+  console.log(mapValues.next().value)
 
-  Fs.writeFileSync("../data/json/results.json", JSON.stringify(Array.from(map.values())))
+  map.forEach(item => {
+    console.log("hewwo?")
+  });
+
+  for (let repo = 0; repo < mapValues.length; repo++) {
+    Fs.appendFileSync("../data/json/results.json", JSON.stringify(mapValues.next().value))
+    console.log("log")
+  }
+
   console.log("Map values logged as JSON data.")
 
   console.log("Search completed. See results.json file for logged data.")
