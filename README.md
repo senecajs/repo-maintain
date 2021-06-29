@@ -7,10 +7,11 @@ To test script/search.js :
     > Run the node.js script by typing "node search" and press enter
     > Expected (console) :
         Search function initiated.
-        Querying at endpoint: https://api.github.com/search/repositories?q=seneca-+created:%3C2010-01-01&page=1&per_page=100
-            const body = await response.text()
-                            ^
-        ReferenceError: response is not defined
+        (...)
+        undefined
+        undefined
+        Map values logged as JSON data.
+        Search completed. See results.json file for logged data.
     > Expected (results.json):
         null
 
