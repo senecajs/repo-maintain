@@ -19,15 +19,15 @@ if(Fs.existsSync(results)){
 async function doSearch() {
   console.log("Search function initiated.")
 
-  const map = {}
+  const map = new Map()
   // increment year to search
-  for (let year = 2010; year <= 2019; year++) { // year <= thisYear; year++) {
+  for (let year = 2010; year <= 2012; year++) { // year <= thisYear; year++) {
     // increment page of search results
     for (let page = 1; page <= 5; page++) {
 
-      await new Promise(resolve => setTimeout(resolve,9999))
+      await new Promise(resolve => setTimeout(resolve,7777))
 
-      let searchURL = "seneca-+created:%3C" + year.toString() + "-01-01&page=" + page.toString() + "&per_page=100"
+      let searchURL = "https://api.github.com/search/repositories?q=seneca-+created:%3C" + year.toString() + "-01-01&page=" + page.toString() + "&per_page=100"
       // using name+password auth
       // Github.searchRepos(searchURL, function(data){
       //   console.log(data)
@@ -44,14 +44,14 @@ async function doSearch() {
       console.log("[", year, "|", page, "]", json.items.length, "results fetched... ", ok)
       
       json.items.forEach(item => {
-        // issue with map.has
         if(false == map.has(item.full_name)){
           map[item.full_name] = item
         }
         
       });
 
-      if(json.items.length <= 100){
+      // this doesn't break if later pages are empty
+      if(json.total_count <= 100){
         break
       }
 
@@ -66,11 +66,13 @@ async function doSearch() {
     // console.log(json.items)
   }
 
-  // Fs.writeFileSync("../data/json/results.json", JSON.stringify(map.values()))
-  // console.log("Map values logged as JSON data.")
+  console.log(map)
 
-  // console.log("Search completed. See results.json file for logged data.")
-  console.log("Search completed.")
+  Fs.writeFileSync("../data/json/results.json", JSON.stringify(Array.from(map.values())))
+  console.log("Map values logged as JSON data.")
+
+  console.log("Search completed. See results.json file for logged data.")
+  // console.log("Search completed.")
 }
 
 doSearch()
