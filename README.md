@@ -5,17 +5,8 @@ To test script/search.js :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
     > Run the node.js script by typing "node search" and press enter
-    > Expected (console) :
-        Search function initiated.
-        (...)
-        undefined
-        undefined
-        Map values logged as JSON data.
-        Search completed. See results.json file for logged data.
-    > Expected (results.json):
-        null
+    > Expected : creation of results.json file.
 
-(filter.js cannot be tested until search.js is producing valid results.json file)
 To test script/filter.js :
     > Ensure node.js and npm are installed and working correctly on your machine
     > Navigate to the /script folder in the console
@@ -27,6 +18,12 @@ To test script/filter.js :
     > Expected (filter.json) :
         [{"id":1012745,"node_id":"MDEwOlJlcG9zaXRvcnkxMDEyNzQ1",
         (...)
+
+To test script/format.js :
+    > Ensure node.js and npm are installed and working correctly on your machine
+    > Navigate to the /script folder in the console
+    > Run the node.js script by typing "node format" and press enter
+    > Expected: creation of results.csv file.
 
 To test Google Sheets API Quickstart file (scrips/tests/sheetsQuickstart.js) :
     > Ensure node.js and npm are installed and working correctly on your machine
