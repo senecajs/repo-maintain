@@ -68,15 +68,20 @@ async function doSearch() {
   }
   var mapValues = map.values()
   var nbRepos = 0
+  var dataStream = Fs.createWriteStream('../data/json/results.json', {flags: 'a'})
 
   map.forEach(item => {
-    jsonFile.writeFileSync("../data/json/results.json", mapValues.next().value, {flag: 'a', EOL: ','})
+    dataStream.write(mapValues.next().value)
+    dataStream.write(",")
     nbRepos++
   });
+  console.log("Search completed.", nbRepos, "map values logged as raw txt data. See results.txt for more.")
 
-  console.log(nbRepos, "map values logged as JSON data.")
+  var rawData = Fs.readFileSync('../data/txt/results.txt')
+  var parsedData = JSON.parse(rawData)
+  Fs.writeFileSync('../data/json/results.json', JSON.stringify(parsedData))
 
-  console.log("Search completed. See results.json file for logged data.")
+  console.log("Parsing completed. See results.json file for logged data.")
   // console.log("Search completed.")
 }
 
