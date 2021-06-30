@@ -21,10 +21,11 @@ async function doSearch() {
   console.log("Search function initiated.")
 
   let map = new Map()
+  let nbRepos = 0
   // increment year to search
-  for (let year = 2010; year <= 2012; year++) { // year <= thisYear; year++) {
+  for (let year = 2010; year <= thisYear; year++) {
     // increment page of search results
-    for (let page = 1; page <= 5; page++) {
+    for (let page = 1; page <= 10; page++) {
 
       await new Promise(resolve => setTimeout(resolve,7777))
 
@@ -42,17 +43,21 @@ async function doSearch() {
         console.log("BAD json!!! :(", json)
       }
 
-      console.log("[", year, "|", page, "]", json.items.length, "results fetched... ", ok)
+      console.log("[", year, "| pg", page, "]", json.items.length, "results fetched... ", ok)
       
       json.items.forEach(item => {
         if(false == map.has(item.full_name)){
           map.set(item.full_name, item)
+          nbRepos++
         }
         
       });
 
-      // this doesn't break if later pages are empty
       if(json.total_count <= 100){
+        break
+      }
+
+      if(json.items.length == 0){
         break
       }
 
@@ -62,26 +67,16 @@ async function doSearch() {
     
     
     // append to file - not overwrite (taking for loop into account...)
-    console.log("[", year, "]", " Results appended to map.")
+    console.log("[", year, "]", nbRepos, "results currently mapped.")
 
     // console.log(json.items)
   }
+
   var mapValues = map.values()
-  var nbRepos = 0
-  var dataStream = Fs.createWriteStream('../data/json/results.json', {flags: 'a'})
 
-  map.forEach(item => {
-    dataStream.write(mapValues.next().value)
-    dataStream.write(",")
-    nbRepos++
-  });
-  console.log("Search completed.", nbRepos, "map values logged as raw txt data. See results.txt for more.")
+  jsonFile.writeFileSync("../data/json/results.json", Array.from(mapValues), {flag: 'a', EOL: ',', finalEOL: false})
 
-  var rawData = Fs.readFileSync('../data/txt/results.txt')
-  var parsedData = JSON.parse(rawData)
-  Fs.writeFileSync('../data/json/results.json', JSON.stringify(parsedData))
-
-  console.log("Parsing completed. See results.json file for logged data.")
+  console.log("Search completed.", nbRepos, " repos total. See results.json file for logged data.")
   // console.log("Search completed.")
 }
 
