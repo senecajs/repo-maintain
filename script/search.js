@@ -1,5 +1,6 @@
 const Fetch = require('node-fetch')
 const Fs = require('fs')  // invite file system module to script
+const jsonFile = require ('jsonfile')
 
 // // dependencies for search
 // const searchAPI = require ('github-search-api')
@@ -69,7 +70,7 @@ async function doSearch() {
   var nbRepos = 0
 
   map.forEach(item => {
-    Fs.appendFileSync("../data/json/results.json", JSON.stringify(mapValues.next().value))
+    jsonFile.writeFileSync("../data/json/results.json", mapValues.next().value, {flag: 'a', EOL: ','})
     nbRepos++
   });
 
