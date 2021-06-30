@@ -45,7 +45,7 @@ async function doSearch() {
       
       json.items.forEach(item => {
         if(false == map.has(item.full_name)){
-          map[item.full_name] = item
+          map.set(item.full_name, item)
         }
         
       });
@@ -65,21 +65,15 @@ async function doSearch() {
 
     // console.log(json.items)
   }
-  console.log(map)
   var mapValues = map.values()
-  console.log(mapValues.length)
-  console.log(mapValues.next().value)
+  var nbRepos = 0
 
   map.forEach(item => {
-    console.log("hewwo?")
+    Fs.appendFileSync("../data/json/results.json", JSON.stringify(mapValues.next().value))
+    nbRepos++
   });
 
-  for (let repo = 0; repo < mapValues.length; repo++) {
-    Fs.appendFileSync("../data/json/results.json", JSON.stringify(mapValues.next().value))
-    console.log("log")
-  }
-
-  console.log("Map values logged as JSON data.")
+  console.log(nbRepos, "map values logged as JSON data.")
 
   console.log("Search completed. See results.json file for logged data.")
   // console.log("Search completed.")
