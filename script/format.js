@@ -14,4 +14,4 @@ if(Fs.existsSync(results)){
 
 // create csv file from json file
 Input.pipe(Export()).pipe(Output)
-console.log("JSON data successfully reformatted as CSV. See results.csv")
+console.log("JSON data successfully reformatted as CSV. See results.csv for data.")
