@@ -2,10 +2,6 @@ const Fetch = require('node-fetch')
 const Fs = require('fs')  // invite file system module to script
 const jsonFile = require ('jsonfile')
 
-// // dependencies for search
-// const searchAPI = require ('github-search-api')
-// const Github = new searchAPI({username: 'username', password: 'password'})
-
 // get current year
 const today = new Date()
 const thisYear = today.getFullYear()
@@ -20,20 +16,19 @@ if(Fs.existsSync(results)){
 async function doSearch() {
   console.log("Search function initiated.")
 
-  let map = new Map()
+  // Object better than map for when json is involved
+  let obj = {}
   let nbRepos = 0
   // increment year to search
   for (let year = 2010; year <= thisYear; year++) {
-    // increment page of search results
+    // increment page of search results + reset nbRepos for each year
+    nbRepos = 0
     for (let page = 1; page <= 10; page++) {
 
       await new Promise(resolve => setTimeout(resolve,7777))
 
-      let searchURL = "https://api.github.com/search/repositories?q=seneca-+created:%3C" + year.toString() + "-01-01&page=" + page.toString() + "&per_page=100"
-      // using name+password auth
-      // Github.searchRepos(searchURL, function(data){
-      //   console.log(data)
-      // })
+      let searchURL = "https://api.github.com/search/repositories?q=seneca-+created:%3C" + year + "-01-01&page=" + page + "&per_page=100"
+      
       const response = await Fetch(searchURL)
       const body = await response.text()
       const json = JSON.parse(body)
@@ -45,13 +40,15 @@ async function doSearch() {
 
       console.log("[", year, "| pg", page, "]", json.items.length, "results fetched... ", ok)
       
+      // if clause causes unneccessary searching through map
+      // nbRepos variable to count logged repos for this year only
       json.items.forEach(item => {
-        if(false == map.has(item.full_name)){
-          map.set(item.full_name, item)
-          nbRepos++
-        }
-        
+        obj[item.full_name] = item
+        nbRepos++
       });
+
+      // ??
+      // nbRepos = [Object[map]].length
 
       if(json.total_count <= 100){
         break
@@ -60,23 +57,17 @@ async function doSearch() {
       if(json.items.length == 0){
         break
       }
-
-      
     }
 
-    
-    
-    // append to file - not overwrite (taking for loop into account...)
-    console.log("[", year, "]", nbRepos, "results currently mapped.")
+    console.log("[", year, ":", nbRepos, "results mapped. ]")
 
-    // console.log(json.items)
   }
 
-  var mapValues = map.values()
+  var objValues = Object.values(obj)
+ 
+  jsonFile.writeFileSync("../data/json/results.json", objValues, {flag: 'a', EOL: ',', finalEOL: false})
 
-  jsonFile.writeFileSync("../data/json/results.json", Array.from(mapValues), {flag: 'a', EOL: ',', finalEOL: false})
-
-  console.log("Search completed.", nbRepos, " repos total. See results.json file for logged data.")
+  console.log("Search completed.", objValues.length, "repos total. See results.json file for logged data.")
   // console.log("Search completed.")
 }
 
