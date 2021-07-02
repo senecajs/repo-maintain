@@ -73,6 +73,8 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
  */
 function uploadCSV(auth){
+    // upload to existing sheet
+    // modify single cell on repo sheet
     console.log("hewwo?")
     const sheets = google.sheets({version: 'v4', auth});
     console.log("uwuu")
