@@ -74,20 +74,20 @@ function getNewToken(oAuth2Client, callback) {
  */
  function listMajors(auth) {
   const sheets = google.sheets({version: 'v4', auth});
-  sheets.spreadsheets.values.get({
+  var values = [
+    "hewwo?"
+  ]
+  var body = {
+    values: values
+  }
+  sheets.spreadsheets.values.update({
     spreadsheetId: '1vgL0ZiL1A33h0RANncoQBgliwFkdcNlyyoCDvr2aioY',
-    range: 'repo!A2:F15',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      console.log('Name:');
-      // Print columns A and E, which correspond to indices 0 and 4.
-      rows.map((row) => {
-        console.log(`${row[2]}`);
-      });
-    } else {
-      console.log('No data found.');
-    }
-  });
+    range: 'repo!G2',
+    valueInputOption: "RAW",
+    resource: body
+  }).then((response) => {
+    var result = response.result
+    console.log(`${result.updatedCells} cells updated.`)
+  })
+
 }
