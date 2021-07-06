@@ -9,7 +9,7 @@ if(Fs.existsSync(data)){
 
 plugins = {
     "senecajs/seneca-transport" : {"kind":"plugin"},
-    "yentsun/seneca-error-plugin" : {"kind":"plugin"},
+    "Istar-Eldritch/seneca-sequelize" : {"kind":"plugin"},
     "senecajs-attic/seneca-pubsub" : {"kind":"plugin"},
     "chico/seneca-perm-editor" : {"kind":"plugin"},
     "timugz/seneca-token" : {"kind":"plugin"},
