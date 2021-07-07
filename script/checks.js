@@ -19,7 +19,15 @@
 const Fs = require('fs')
 const Filehound = require('filehound');
 const Path = require('path')
-const jsonFile = require('jsonfile')
+const jsonFile = require('jsonfile');
+const path = require('path');
+
+// check if results.json exists, and if so, clear it
+let checks = "../data/json/pluginChecks.json"
+if(Fs.existsSync(checks)){
+  Fs.unlinkSync(checks)
+  console.log("Previous pluginChecks.json file deleted.")
+}
 
 const exts = ['md','json']
 const files = Filehound.create()
@@ -35,8 +43,12 @@ async function doChecks() {
 
         // name of org/repo
         const orgRepo = Path.basename(Path.dirname(file)).replace('_','/')
+        const orgRepoFile = Path.basename(Path.dirname(file)).replace('_','/')+"/"+path.basename(file)
         obj["org/repo"] = orgRepo
 
+        // file name.ext
+        obj["file"] = path.basename(file)
+        
         // github url
         obj["url"] = "https://github.com/"+orgRepo
 
@@ -55,7 +67,7 @@ async function doChecks() {
         }
 
         // add to top-level object
-        jsonObj[orgRepo] = obj
+        jsonObj[orgRepoFile] = obj
         console.log(obj)
     });
 

@@ -22,9 +22,9 @@ const Input = Fs.createReadStream("../data/json/pluginChecks.json")
 const Output = Fs.createWriteStream("../data/csv/pluginChecks.csv")
 
 // check if results.csv exists, and if so, clear it
-let results = "../data/csv/pluginChecks.csv"
-if(Fs.existsSync(results)){
-  Fs.unlinkSync(results)
+let checks = "../data/csv/pluginChecks.csv"
+if(Fs.existsSync(checks)){
+  Fs.unlinkSync(checks)
   console.log("Previous pluginChecks.csv file deleted.")
 }
 
