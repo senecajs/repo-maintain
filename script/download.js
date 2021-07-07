@@ -13,6 +13,7 @@ async function doDownload() {
         // change / to _ in objKeys[i]
         const orgRepo = objKeys[i].replace('/','_')
         
+        // below URLs are valid even if master branch is named "main"
         let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/README.md"
         let packageURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/package.json"
 
