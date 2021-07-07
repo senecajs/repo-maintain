@@ -15,3 +15,18 @@
  * 
  * -- flags/marks to be in json format --
  */
+
+const Filehound = require('filehound');
+
+const exts = ['md','json']
+const files = Filehound.create()
+    .paths('../data/downloads')
+    .ext(exts)
+    .find();
+
+async function doChecks() {
+    // how can I access these outside of this single promise ?
+    files.then(console.log)
+}
+
+doChecks()
