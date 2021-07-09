@@ -1,21 +1,3 @@
-/**
- * for each subdir in dir downloads:
- *      create json object
- *      read README.md
- *          does it match "404: Not Found" ?
- *              flag it as needing a check
- *          is file empty (> 0 char)?
- *              mark as ok or empty
- *      read package.json
- *          does it match "404: Not Found" ?
- *              flag it as needing a check
- *          is file empty (> 0 char)?
- *              mark as ok or empty
- *      append json object to top level json object? that process anyway
- * 
- * -- flags/marks to be in json format --
- */
-
 const Fs = require('fs')
 const Filehound = require('filehound');
 const Path = require('path')
@@ -35,7 +17,7 @@ const files = Filehound.create()
     .ext(exts)
     .find();
 
-async function doChecks() {
+async function initialChecks() {
     jsonObj = {}
     const filePath = await files
     filePath.forEach(file => {
@@ -70,10 +52,18 @@ async function doChecks() {
         jsonObj[orgRepoFile] = obj
         console.log(obj)
     });
+}
 
+async function secondaryChecks() {
+    // recheck for READMEs under different common files names/extensions
+}
+
+function doWriteFile() {
     var json = Object.values(jsonObj)
     jsonFile.writeFileSync("../data/json/pluginChecks.json", json, {flag: 'a', EOL: ',', finalEOL: false})
     console.log("All check results formatted as JSON data. See pluginChecks.json for details.")
 }
 
-doChecks()
+initialChecks()
+secondaryChecks()
+doWriteFile()
