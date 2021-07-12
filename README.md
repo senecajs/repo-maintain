@@ -5,14 +5,16 @@ Maintenance automation for Seneca repos.
 
 ### checks.js
 Runs a series of tests on the downloaded files of a set of plugins and outputs the results as a JSON file (pluginChecks.json).
-> Status of file (does it exist online where it should)
+> Status of file (in this case - does it exist as package.json or README.md/readme.md)
 >
-> Content of file (nonzero number of characters)
+> Content of file (zero or nonzero characters)
 
 
 ### download.js
 Downloads the README.md and package.json files of a predefined list of plugins from GitHub and saves them locally (data/downloads).
 > Files are saved with standard names within unique directories.
+>
+> In the event that the fetch request for "README.md" returns an error, a second request is sent for "readme.md".
 >
 > If file does not exist where it should as it should, the error message "404: Not Found" is saved as the file content instead.
 
