@@ -14,11 +14,12 @@ async function doDownload() {
         const orgRepo = objKeys[i].replace('/','_')
         
         // use regexp to match any README version (uppercase, lowercase, mix of both)
-        // doesn't work yet ik
-        let readmeREGEX = readme
+        // would this even work?? 
+        // let readmeREGEX = foo
+        // add readmeREGEX into url string
 
         // below URLs are valid even if master branch is named "main"
-        let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/" + readmeREGEX + ".md"
+        let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/README.md"
         let packageURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/package.json"
 
         // make sure directory exists and if so, clear it
@@ -27,7 +28,13 @@ async function doDownload() {
         
 
         const readmeRaw = await Fetch(readmeURL)
-        const readme = await readmeRaw.text()
+        let readme = await readmeRaw.text()
+        // re-fetch using readme.md instead of README.md if latter returns 404 error
+        if ("404: Not Found" == readme) {
+            let newURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/readme.md"
+            const newRaw = await Fetch(newURL)
+            readme = await newRaw.text()
+        }
         Fs.writeFileSync('../data/downloads/'+orgRepo+'/README.md', readme)
         console.log("README.md created.")
 
@@ -37,8 +44,6 @@ async function doDownload() {
         Fs.writeFileSync('../data/downloads/'+orgRepo+'/package.json', package)
         console.log("package.json created.")
     }
-    
-
     
 }
 
