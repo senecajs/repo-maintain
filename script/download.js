@@ -13,8 +13,12 @@ async function doDownload() {
         // change / to _ in objKeys[i]
         const orgRepo = objKeys[i].replace('/','_')
         
+        // use regexp to match any README version (uppercase, lowercase, mix of both)
+        // doesn't work yet ik
+        let readmeREGEX = readme
+
         // below URLs are valid even if master branch is named "main"
-        let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/README.md"
+        let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/" + readmeREGEX + ".md"
         let packageURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/package.json"
 
         // make sure directory exists and if so, clear it
