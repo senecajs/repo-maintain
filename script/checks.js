@@ -60,11 +60,11 @@ async function initialChecks() {
 }
 
 async function secondaryChecks() {
-    // recheck for READMEs under different common files names/extensions
+    // recheck for READMEs under lowercase file name - task moved to download.js
     var failed = _.where(jsonObj, {"status": 404})
     console.log("Failed to find files:",failed)
 
-    // Write JSON object to file once all additional checks have been completed
+    // Write JSON object to file once all additional checks have been completed 
     doWriteFile()
 }
 
