@@ -1,8 +1,9 @@
 const Fs = require('fs')
-const Filehound = require('filehound');
+const Filehound = require('filehound')
 const Path = require('path')
-const jsonFile = require('jsonfile');
-const path = require('path');
+const jsonFile = require('jsonfile')
+const path = require('path')
+const _ = require('underscore')
 
 // check if results.json exists, and if so, clear it
 let checks = "../data/json/pluginChecks.json"
@@ -50,12 +51,21 @@ async function initialChecks() {
 
         // add to top-level object
         jsonObj[orgRepoFile] = obj
-        console.log(obj)
+        // console.log(obj)
+
     });
+    
+    // Run secondary checks once initial checks have been completed
+    secondaryChecks()
 }
 
 async function secondaryChecks() {
     // recheck for READMEs under different common files names/extensions
+    var failed = _.where(jsonObj, {"status": 404})
+    console.log("Failed to find files:",failed)
+
+    // Write JSON object to file once all additional checks have been completed
+    doWriteFile()
 }
 
 function doWriteFile() {
@@ -65,5 +75,3 @@ function doWriteFile() {
 }
 
 initialChecks()
-secondaryChecks()
-doWriteFile()
