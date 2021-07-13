@@ -49,7 +49,7 @@ async function doDownloadPlugins() {
 }
 
 
-
+// Download pausing around loop 500-700, use console log to periodically find status of running script?
 async function doDownloadResults() {
     console.log("Download function initiated for results.json.")
 

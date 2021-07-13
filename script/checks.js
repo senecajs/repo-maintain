@@ -40,6 +40,7 @@ async function initialChecks() {
         if ("404: Not Found" == content) {
             obj["status"] = 404
             obj["content"] = "null"
+            // if clause here to make status=302 if README exists under "readme.md"
         } else {
             obj["status"] = 200
             if (0 == content.length) {
