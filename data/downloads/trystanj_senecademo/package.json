@@ -1,0 +1,1 @@
+"{\n  \"name\": \"senecademo\",\n  \"version\": \"1.0.0\",\n  \"description\": \"demo\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  },\n  \"author\": \"\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"chairo\": \"^2.2.1\",\n    \"hapi\": \"^14.0.0\",\n    \"seneca\": \"^2.1.0\"\n  }\n}\n"

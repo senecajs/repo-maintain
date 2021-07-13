@@ -1,0 +1,1 @@
+"{\n    \"name\": \"seneca-example\",\n    \"dependencies\": {\n\t\"seneca\": \"0.6.5\",\n\t\"express\": \"latest\"\n    }\n}\n"

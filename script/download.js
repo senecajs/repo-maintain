@@ -55,7 +55,7 @@ async function doDownloadResults() {
 
     const json = await Fs.readJson('../data/json/results.json')
 
-    for (let i = 0; i < 600; i++) {
+    for (let i = 0; i < 500; i++) {
 
         let repo = json[i]
         // change / to _ in json[i]
