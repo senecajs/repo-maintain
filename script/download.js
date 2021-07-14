@@ -1,8 +1,13 @@
 const Fetch = require('node-fetch')
 const Fs = require('fs-extra')
 const Clear = require('clear-dir')
+const Del = require('del')
 const Plugins = require('../data/json/plugins.json')
 const Results = require('../data/json/results.json')
+
+// clear downloads directory
+Del(['../data/downloads/*/'])
+console.log("Downloads directory cleared.")
 
 async function doDownloadPlugins() {
     console.log("Download function initiated.")
@@ -55,7 +60,7 @@ async function doDownloadResults() {
 
     const json = await Fs.readJson('../data/json/results.json')
 
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 700; i++) {
 
         let repo = json[i]
         // change / to _ in json[i]

@@ -1,1 +1,0 @@
-"{\n  \"name\": \"seneca-env-plugins\",\n  \"version\": \"0.0.0\",\n  \"description\": \"\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  },\n  \"author\": \"David Mark Clements\",\n  \"license\": \"MIT\",\n  \"dependencies\": {\n    \"debug\": \"^2.2.0\"\n  }\n}\n"
