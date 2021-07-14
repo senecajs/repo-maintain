@@ -6,11 +6,19 @@ const Plugins = require('../data/json/plugins.json')
 const Results = require('../data/json/results.json')
 
 // clear downloads directory
-Del(['../data/downloads/*/'])
-console.log("Downloads directory cleared.")
+async function dirMoved() {
+    conosle.log("Old files moved...")
+}
+async function dirDeleted() {
+    console.log("Old files deleted.")
+}
+
+
 
 async function doDownloadPlugins() {
     console.log("Download function initiated.")
+
+    Clear('../data/downloads', dirMoved, dirDeleted)
 
     objKeys = Object.keys(Plugins)
     // console.log(objKeys)
@@ -58,6 +66,8 @@ async function doDownloadPlugins() {
 async function doDownloadResults() {
     console.log("Download function initiated for results.json.")
 
+    Clear('../data/downloads', dirMoved, dirDeleted)
+
     const json = await Fs.readJson('../data/json/results.json')
 
     for (let i = 0; i < 700; i++) {
@@ -88,5 +98,6 @@ async function doDownloadResults() {
     }
     console.log("Downloads complete.")
 }
+
 
 doDownloadResults()

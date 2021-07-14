@@ -1,2 +1,0 @@
-# seneca-lossrate
-seneca-lossrate
