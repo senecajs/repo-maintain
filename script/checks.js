@@ -38,11 +38,10 @@ async function initialChecks() {
         // is file found ?
         const content = Fs.readFileSync(file, 'utf8')
         if ("404: Not Found" == content) {
-            obj["status"] = 404
+            obj["status"] = "FAIL"
             obj["content"] = "null"
-            // if clause here to make status=302 if README exists under "readme.md"
         } else {
-            obj["status"] = 200
+            obj["status"] = "PASS"
             if (0 == content.length) {
                 obj["content"] = "zero_char"
             } else {
@@ -62,7 +61,7 @@ async function initialChecks() {
 
 async function secondaryChecks() {
     // recheck for READMEs under lowercase file name - task moved to download.js
-    var failed = _.where(jsonObj, {"status": 404})
+    var failed = _.where(jsonObj, {"status": "FAIL"})
     console.log("Failed to find files:",failed.length)
 
     // Write JSON object to file once all additional checks have been completed 
