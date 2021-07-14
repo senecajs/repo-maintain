@@ -5,14 +5,9 @@ const jsonFile = require('jsonfile')
 const path = require('path')
 const _ = require('underscore')
 
-// check if results.json exists, and if so, clear it
-let checks = "../data/json/pluginChecks.json"
-if(Fs.existsSync(checks)){
-  Fs.unlinkSync(checks)
-  console.log("Previous pluginChecks.json file deleted.")
-}
 
 const exts = ['md','json']
+// promise object
 const files = Filehound.create()
     .paths('../data/downloads')
     .ext(exts)
@@ -25,27 +20,27 @@ async function initialChecks() {
         obj = {}
 
         // name of org/repo
-        const orgRepo = Path.basename(Path.dirname(file)).replace('_','/')
-        const orgRepoFile = Path.basename(Path.dirname(file)).replace('_','/')+"/"+path.basename(file)
-        obj["org/repo"] = orgRepo
+        const orgRepo = Path.basename(Path.dirname(file)).replace('__','/')
+        const orgRepoFile = Path.basename(Path.dirname(file)).replace('__','/')+"/"+path.basename(file)
+        obj.orgRepo = orgRepo
 
         // file name.ext
-        obj["file"] = path.basename(file)
+        obj.file = path.basename(file)
         
         // github url
-        obj["url"] = "https://github.com/"+orgRepo
+        obj.url = "https://github.com/"+orgRepo
 
         // is file found ?
         const content = Fs.readFileSync(file, 'utf8')
         if ("404: Not Found" == content) {
-            obj["status"] = "FAIL"
-            obj["content"] = "null"
+            obj.status = "FAIL"
+            obj.content = "null"
         } else {
-            obj["status"] = "PASS"
+            obj.status = "PASS"
             if (0 == content.length) {
-                obj["content"] = "zero_char"
+                obj.content = "zero_char"
             } else {
-                obj["content"] = "nonzero_char"
+                obj.content = "nonzero_char"
             }
         }
 
