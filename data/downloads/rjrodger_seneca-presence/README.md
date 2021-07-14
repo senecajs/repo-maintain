@@ -1,2 +1,0 @@
-# seneca-presence
-seneca-presence

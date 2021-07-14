@@ -1,2 +1,0 @@
-# senecajs
-first test
