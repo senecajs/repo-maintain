@@ -1,1 +1,0 @@
-For more info please got to the wiki page http://zenit.senecac.on.ca/wiki/index.php/GPU610/SSD
