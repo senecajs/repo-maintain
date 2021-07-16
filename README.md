@@ -3,7 +3,8 @@
 Maintenance automation for Seneca repos.
 ---
 
-### checks.js
+## Script folder
+### checking.js
 Runs a series of tests on the downloaded files of a set of plugins and outputs the results as a JSON file (pluginChecks.json).
 > Status of file (in this case - does it exist as package.json or README.md)
 >
@@ -42,3 +43,12 @@ Gathers as many repos under the search term "seneca-" as possible, and outputs t
 ### upload.js
 [TODO : Uploads a csv file to a Google Sheets spreadsheet using the Google Sheets API.]
 > Current issue: credentials not providing sufficient permission for task. Complete refactoring needed.
+
+---
+## Design/checks folder
+### checks.js
+Names and info of checks to run on each plugin in a given list.
+> Extensible js format (Not JSON - includes trailing commas)
+
+### execute.js
+Placeholder code - script to run checks for each plugin (as described in checks.js).
