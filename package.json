@@ -18,6 +18,7 @@
   "homepage": "https://github.com/senecajs/repo-maintain#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "chalk": "^2.4.2",
     "clear-dir": "^1.0.1",
     "clear-folder": "^3.0.0",
     "del": "^6.0.0",
