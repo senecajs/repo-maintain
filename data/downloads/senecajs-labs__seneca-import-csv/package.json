@@ -1,0 +1,35 @@
+{
+  "name": "seneca-import-csv",
+  "version": "0.1.0",
+  "description": "Import your CSV into seneca",
+  "main": "index.js",
+  "bin": "bin/seneca-import-csv.js",
+  "scripts": {
+    "test": "tap test.js"
+  },
+  "website": "https://github.com/senecajs-labs/seneca-import-csv",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs-labs/seneca-import-csv.git"
+  },
+  "bugs": {
+    "url": "http://github.com/senecajs-labs/seneca-import-csv/issues"
+  },
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "seneca-jsonfile-store": "0.1.3",
+    "tap": "^0.4.9"
+  },
+  "dependencies": {
+    "seneca-act-stream": "0.0.2",
+    "seneca-entity-save-stream": "0.0.3",
+    "seneca": "~0.5.17",
+    "through2": "^0.4.1",
+    "xtend": "^3.0.0",
+    "yargs": "^1.2.1",
+    "progress": "^1.1.5",
+    "joi": "^4.0.0",
+    "binary-csv": "^0.2.0"
+  }
+}
