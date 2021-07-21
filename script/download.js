@@ -1,8 +1,13 @@
 const Chalk = require('chalk')
 const Fetch = require('node-fetch')
 const Fs = require('fs-extra')
+const _ = require('underscore')
+
 const Plugins = require('../data/json/plugins.json')
 const Results = require('../data/json/results.json')
+const checkList = require('../design/checks/checks.js')
+
+const error404 = Fs.readFileSync('../data/txt/404.txt')
 
 
 async function doDownloadPlugins() {
@@ -15,27 +20,29 @@ async function doDownloadPlugins() {
         // change / to __ in objKeys[i]
         const orgRepo = objKeys[i].replace('/','__')
 
-        // below URLs are valid even if master branch is named "main"
-        // become function in future
-        let readmeURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/README.md"
-        let packageURL = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/package.json"
-
-        // make sure directory exists and if so, clear it
-        // BY HAND !!
-
-        // wait to new directory creation, and write files to that
+        // wait for new directory creation before proceeding
         const createDir = await Fs.ensureDir('../data/downloads/'+orgRepo)
         console.log(Chalk.cyan(objKeys[i]))
 
-        const readmeRaw = await Fetch(readmeURL)
-        let readme = await readmeRaw.text()
-        Fs.writeFileSync('../data/downloads/'+orgRepo+'/README.md', readme)
-        console.log("README.md created.")
+        const fileExistChecks = _.where(checkList, {kind: "file_exist"})
+        for(checkName in fileExistChecks) {
+            let checkDetails = fileExistChecks[checkName]
+            let file = checkDetails.file
+        
+            // below URLs are valid even if master branch is named "main"
+            let url = "https://raw.githubusercontent.com/" + objKeys[i] + "/master/" + file
 
-        const packageRaw = await Fetch(packageURL)
-        let package = await packageRaw.text()
-        Fs.writeFileSync('../data/downloads/'+orgRepo+'/package.json', package)
-        console.log("package.json created.")
+            const fileRaw = await Fetch(url)
+            let fileOK = fileRaw.ok
+            if (false == fileOK) {
+                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, error404)
+                console.log(Chalk.red(file,"File not found."))
+            } else {
+                let fileContent = await fileRaw.text()
+                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, error404)
+                console.log(file,"File created.")
+            }
+        }
     }
 }
 
