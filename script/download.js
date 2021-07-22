@@ -39,7 +39,7 @@ async function doDownloadPlugins() {
                 console.log(Chalk.red(file,"File not found."))
             } else {
                 let fileContent = await fileRaw.text()
-                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, error404)
+                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, fileContent)
                 console.log(file,"File created.")
             }
         }

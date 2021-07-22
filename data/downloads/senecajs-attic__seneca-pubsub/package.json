@@ -1,1 +1,39 @@
-"Error 404 (file not found) => error specific to Seneca JS Repo Maintain project"
+{
+  "name": "seneca-pubsub",
+  "version": "0.1.0",
+  "description": "A decoration that adds pub sub via Varo to Seneca",
+  "author": "Dean McDonnell (https://github.com/mcdonnelldean)",
+  "main": "pubsub.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senecajs/seneca-pubsub.git"
+  },
+  "scripts": {
+    "test": "lab -r console -v -L -m 3000 -c -t 90",
+    "coverage": "lab -s -r lcov | coveralls",
+    "lint": "lab -dL"
+  },
+  "keywords": [
+    "seneca",
+    "decoration",
+    "varo",
+    "pubsub",
+    "events"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "varo": "0.3.x"
+  },
+  "devDependencies": {
+    "code": "^1.5.0",
+    "coveralls": "^2.11.6",
+    "eslint-config-seneca": "^1.1.2",
+    "eslint-plugin-hapi": "^4.0.0",
+    "eslint-plugin-standard": "^1.3.1",
+    "lab": "^6.2.0",
+    "seneca": "^0.9.3"
+  }
+}

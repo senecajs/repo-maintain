@@ -1,1 +1,5 @@
-"Error 404 (file not found) => error specific to Seneca JS Repo Maintain project"
+# seneca-perm-editor
+
+## A visual permissions and roles editor plugin for the [Seneca](http://senecajs.org) toolkit
+
+TODO
