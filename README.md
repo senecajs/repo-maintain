@@ -3,19 +3,23 @@
 Maintenance automation for Seneca repos.
 ---
 
+## Design/Checks folder
+### checks.js
+Script file to hold all checks to run and their specifications.
+> Format extensible for future additions
+
+### execute.js
+Original design outline for what became runChecks.js .
+
+
 ## Script folder
-### checking.js
-Runs a series of tests on the downloaded files of a set of plugins and outputs the results as a JSON file (pluginChecks.json).
-> Status of file (in this case - does it exist as package.json or README.md)
->
-> Content of file (zero or nonzero characters)
+*Organised alphabetically.*
 
 ### download.js
-Downloads the README.md and package.json files of a predefined list of plugins from GitHub and saves them locally (data/downloads).
-> Files are saved with standard names within unique directories.
->
-> If file does not exist where it should as it should, the error message "404: Not Found" is saved as the file content instead.
-
+Downloads a predefined list of files from GitHub and saves them locally (data/downloads).
+> List of files to download is defined in checks.js.
+> 
+> Files are saved within unique directories - one directory per plugin.
 
 ### filter.js
 Creates a JSON file of the repos within results.json that include the name "seneca" (filter.json).  
@@ -35,6 +39,10 @@ Creates a JSON file for a handpicked list of plugins.
 
 ### repoMaintain.js
 [Placeholder : The top-level script for complete automation of Repo Maintain task.]
+
+### runChecks.js
+Runs a series of tests specified in checks.js on a number of files, organised by plugin.
+> Current check types : file_exist and content_contains
 
 ### search.js
 Gathers as many repos under the search term "seneca-" as possible, and outputs their JSON information as a single JSON file (results.json).
