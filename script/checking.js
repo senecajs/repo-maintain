@@ -1,72 +1,123 @@
-const Fs = require('fs')
-const Filehound = require('filehound')
-const Path = require('path')
-const jsonFile = require('jsonfile')
-const path = require('path')
-const _ = require('underscore')
+// function-related constants
+const Chalk = require('chalk') // for custom colours when logging to console
+const Fs = require('fs') // access the file system
+const Filehound = require('filehound') // better management of files and directories
+const Path = require('path') // for file and folder paths
+const jsonFile = require('jsonfile') // easily handle JSON files
+const _ = require('underscore') // for filtering of data
+
+// file-related constants
+const checkList = require('../design/checks/checks.js')
+const error404 = Fs.readFileSync('../data/txt/404.txt')
+
+// function-related constants
+const checkOps = checkOperations()
+//------------------------------------------------------------------
 
 
-const exts = ['md','json']
-// promise object
-const files = Filehound.create()
-    .paths('../data/downloads')
-    .ext(exts)
+// this creates a promise object
+const plugins = Filehound.create()
+    .path('../data/downloads')
+    .directory()
     .find();
 
-async function initialChecks() {
-    jsonObj = {}
-    const filePath = await files
-    filePath.forEach(file => {
-        obj = {}
-
-        // name of org/repo
-        const orgRepo = Path.basename(Path.dirname(file)).replace('__','/')
-        const orgRepoFile = Path.basename(Path.dirname(file)).replace('__','/')+"/"+path.basename(file)
-        obj.orgRepo = orgRepo
-
-        // file name.ext
-        obj.file = path.basename(file)
+async function runChecks() {
+    const pluginList = await plugins
+    for (let i = 0; i < pluginList.length; i++) {
+        let plugin =  pluginList[i]
         
-        // github url
-        obj.url = "https://github.com/"+orgRepo
+        results = []
 
-        // is file found ?
-        const content = Fs.readFileSync(file, 'utf8')
-        if ("404: Not Found" == content) {
-            obj.status = "FAIL"
-            obj.content = "null"
-        } else {
-            obj.status = "PASS"
-            if (0 == content.length) {
-                obj.content = "zero_char"
-            } else {
-                obj.content = "nonzero_char"
+        const pluginRelPath = Path.basename(plugin)
+        const orgRepo = pluginRelPath.replace('__','/')
+        console.log("\n\n",Chalk.blue(orgRepo))
+
+        // for each check in the list of checks to do:
+        for(checkName in checkList) {
+            let checkDetails = checkList[checkName]
+            checkDetails.name = checkName
+
+            // if check taken from checks.js does not exist in checkOperations,
+            // print error message and proceed to next check in list
+            let checkKind = checkOps[checkDetails.kind]
+            if(null == checkKind) {
+                console.log('WARNING', 'Check does not exist', checkName, checkDetails.kind)
+                continue
             }
+
+            let res = await checkKind(checkDetails, pluginRelPath)
+            console.log(Chalk.cyan("\nCheck:"),res)
+            results.push(res)
         }
-
-        // add to top-level object
-        jsonObj[orgRepoFile] = obj
-        // console.log(obj)
-
-    });
-    
-    // Run secondary checks once initial checks have been completed
-    secondaryChecks()
+    }
 }
 
-async function secondaryChecks() {
-    // recheck for READMEs under lowercase file name - task moved to download.js
-    var failed = _.where(jsonObj, {"status": "FAIL"})
-    console.log("Failed to find files:",failed.length)
-
-    // Write JSON object to file once all additional checks have been completed 
-    doWriteFile()
+async function run() {
+    console.log(Chalk.bold("\nAll Checks:"))
+    let checkResults = await runChecks()
+    console.log(Chalk.bold("\nChecks complete.\n"))
 }
 
-function doWriteFile() {
-    var json = Object.values(jsonObj)
-    jsonFile.writeFileSync("../data/json/pluginChecks.json", json, {flag: 'a', EOL: ',', finalEOL: false})
-    console.log("All check results formatted as JSON data. See pluginChecks.json for details.")
+function checkOperations() {
+    return {
+        file_exist: async function(checkDetails, pluginRelPath) {
+
+            let file = checkDetails.file
+            let filePath = '../data/downloads/'+pluginRelPath+'/'+file
+            const fileContent = Fs.readFileSync(filePath)
+            if (error404 == fileContent) {
+                var status = false
+                var status_code = "404 File not found"
+            } else {
+                var status = true
+                var status_code = "200 File exists"
+            }
+
+            return {
+              check: checkDetails.name,
+              kind: checkDetails.kind,
+              file: checkDetails.file,
+              pass: status,
+              why: status_code,
+            }
+        },
+
+        content_contain: async function(checkDetails, pluginRelPath) {
+            let file = checkDetails.file
+            let searchContent = checkDetails.contains
+            let filePath = '../data/downloads/'+pluginRelPath+'/'+file
+            const fileContent = Fs.readFileSync(filePath)
+            if (fileContent.includes(searchContent)) {
+                var status = true
+                var status_code = "200 Search string found."
+            } else {
+                var status = false
+                var status_code = "404 Search string cannot be found"
+            }
+
+            return {
+              check: checkDetails.name,
+              kind: checkDetails.kind,
+              file: checkDetails.file,
+              pass: status,
+              why: status_code,
+            }
+        },
+    }
 }
 
-initialChecks()
+run()
+
+/**
+ * TASK ORDER
+ * 
+ * For each directory of downloaded files (named for plugin):
+ *      For each check in checks.js:
+ *          Read "kind", run associated task in makeCheckFuncs function
+ *          Return result of task and write to object
+ *      Proceed to next task
+ * Proceed to next repo.
+ * 
+ */
+
+

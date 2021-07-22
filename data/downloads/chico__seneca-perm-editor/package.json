@@ -1,1 +1,48 @@
-"Error 404 (file not found) => error specific to Seneca JS Repo Maintain project"
+{
+  "name": "seneca-perm-editor",
+  "version": "0.0.2",
+  "description": "Seneca permissions and roles editor plugin",
+  "main": "lib/perm-editor.js",
+  "scripts": {
+    "test": "mocha test/perm-editor.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chico/seneca-perm-editor.git"
+  },
+  "keywords": [
+    "seneca",
+    "data",
+    "editor",
+    "plugin"
+  ],
+  "author": "Chico Charlesworth",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "LICENSE.txt",
+    "lib",
+    "test",
+    "web"
+  ],
+  "dependencies": {
+    "underscore": "1.5.x",
+    "connect": "2.12.x"
+  },
+  "peerDependencies": {
+    "seneca": "~0.5.16",
+    "seneca-perm": "~0.1.2"
+  },
+  "devDependencies": {
+    "seneca": "0.5.x",
+    "seneca-user": "0.2.x",
+    "seneca-auth": "0.2.x",
+    "seneca-perm": "0.1.x",
+    "seneca-jsonrest-api": "0.2.x",
+    "connect": "2.12.x",
+    "express": "3.4.x",
+    "mocha": "1.17.x",
+    "gex": "0.1.x",
+    "chai": "1.8.x"
+  }
+}
