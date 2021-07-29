@@ -1,5 +1,13 @@
-Package | PASS | Repo | file_exists:README.md | file_exists:LICENSE | file_exists:package.json | content_contains:README.md,Voxgig 
+Package|PASS?|orgRepo|exist_readme|exist_pkgjson|exist_license|content_readme
 ---|---|---|---|---|---|---
-seneca | pass | senecajs/seenca | pass | pass | pass | pass 
-seneca | FAIL | senecajs/seenca | pass | pass | pass | pass 
-
+seneca-load-balancer|FAIL|FAIL|pass|pass|FAIL
+seneca-sequelize|FAIL|pass|pass|pass|FAIL
+seneca-perm-editor|FAIL|pass|pass|FAIL|FAIL
+seneca-todo-flex|FAIL|pass|pass|pass|FAIL
+seneca-calendar-flex|FAIL|FAIL|pass|pass|FAIL
+seneca-pubsub|FAIL|pass|pass|pass|FAIL
+seneca-import-csv|FAIL|pass|pass|pass|FAIL
+seneca-parambulator|FAIL|pass|pass|pass|FAIL
+seneca-transport|FAIL|pass|pass|pass|FAIL
+seneca-token|FAIL|FAIL|pass|pass|FAIL
+seneca-promisify|FAIL|pass|pass|pass|FAIL
