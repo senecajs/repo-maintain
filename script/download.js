@@ -1,12 +1,9 @@
 const Chalk = require('chalk') // colours for console.log
 const Fetch = require('node-fetch') // node fetch api
 const Fs = require('fs-extra') // for interacting with the file system
-const _ = require('underscore') // for dealing with arrays etc
 
 const Plugins = require('../data/json/plugins.json') // handpicked list of plugins
-const checkList = require('../design/checks/checks.js') // extensible list for checks
-
-const error404 = Fs.readFileSync('../data/txt/404.txt') // custom error message in the event of file not found
+const checkList = require('../design/checks/checks.js') // extensible list for checks == Object
 
 
 async function doDownloadPlugins() {
@@ -22,10 +19,19 @@ async function doDownloadPlugins() {
         const createDir = await Fs.ensureDir('../data/downloads/'+orgRepo)
         console.log(Chalk.cyan(objKeys[i]))
 
+
         // only download files needed for "file_exist" checks
-        const fileExistChecks = _.where(checkList, {kind: "file_exist"})
-        for(checkName in fileExistChecks) {
-            let checkDetails = fileExistChecks[checkName]
+        // console.log(checkList)
+        // const individCheck
+        // const fileExistChecks = checkList.filter(check => check.kind == "file_exist")
+        // console.log(fileExistChecks)
+
+        for(checkName in checkList) {
+            
+            let checkDetails = checkList[checkName]
+            if (checkDetails.kind != "file_exist") {
+                continue
+            }
             let file = checkDetails.file
         
             // URL is valid even if master branch is named "main"
@@ -33,16 +39,17 @@ async function doDownloadPlugins() {
 
             const fileRaw = await Fetch(url)
             let fileOK = fileRaw.ok
-            // log custom error if file not found
-            // error causes: file was never created, non-standard naming convention, etc
+
+            // if 404, download nothing and pass to next file
             if (false == fileOK) {
-                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, error404)
-                console.log(Chalk.red(file,"File not found."))
-            } else {
-                let fileContent = await fileRaw.text()
-                Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, fileContent)
-                console.log(file,"File created.")
+                console.log(Chalk.red(file), "File not found.")
+                continue
             }
+
+            // download file text otherwise
+            let fileContent = await fileRaw.text()
+            Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, fileContent)
+            console.log(file,"File created.")
         }
     }
 }
