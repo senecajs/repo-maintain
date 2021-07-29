@@ -4,11 +4,9 @@ const Fs = require('fs') // access the file system
 const Filehound = require('filehound') // better management of files and directories
 const Path = require('path') // for file and folder paths
 const jsonFile = require('jsonfile') // easily handle JSON files
-const _ = require('underscore') // for filtering of data
 
 // file-related constants
 const checkList = require('../design/checks/checks.js') // extensible format for plugin checks
-const error404 = Fs.readFileSync('../data/txt/404.txt') // file not found custom error message
 
 // function-related constants
 const checkOps = checkOperations()
@@ -31,10 +29,11 @@ const plugins = Filehound.create()
 // main function
 async function runChecks() {
     const pluginList = await plugins
+    allChecks = {}
     for (let i = 0; i < pluginList.length; i++) {
         let plugin =  pluginList[i]
         
-        results = []
+        results = {}
         // relative path towards downloaded files - plugin specific
         const pluginRelPath = Path.basename(plugin)
         const orgRepo = pluginRelPath.replace('__','/')
@@ -53,12 +52,22 @@ async function runChecks() {
                 continue
             }
 
+            // read all files in here
+
             // run each of the checks for each plugin print to console
+            // checkData = object to call (contains all other necessary data)
+            // let res = await checkKind(checkData)
             let res = await checkKind(checkDetails, pluginRelPath)
             console.log(Chalk.cyan("\nCheck:"),res)
-            results.push(res)
+            results[checkName] = res
+            
+            // output
         }
+
+        // this is where the lookup key needs to be defined (as name of plugin)
+        allChecks[orgRepo] = results
     }
+    Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
 }
 
 // --------------------------------------------------------------------
@@ -71,51 +80,50 @@ async function run() {
 
 // what to do for each check is detailed here
 function checkOperations() {
-    return {
-        file_exist: async function(checkDetails, pluginRelPath) {
 
+    return {
+        // file_exist is a lookup key (= unique name of each element in object)
+        file_exist: async function(checkDetails, pluginRelPath) {
             let file = checkDetails.file
-            let filePath = '../data/downloads/'+pluginRelPath+'/'+file
-            const fileContent = Fs.readFileSync(filePath)
-            // check if "content of file" is just custom 404 error message
-            if (error404 == fileContent) {
-                var status = false
-                var status_code = "404 File not found"
-            } else {
-                var status = true
-                var status_code = "200 File exists"
+            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
+            let why = "not_found"
+            if (true == pass){
+                why = "found"
             }
 
             return {
               check: checkDetails.name,
               kind: checkDetails.kind,
-              file: checkDetails.file,
-              pass: status,
-              why: status_code,
+              file: file,
+              pass: pass,
+              why: why,
             }
         },
 
         content_contain: async function(checkDetails, pluginRelPath) {
 
             let file = checkDetails.file
+            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
-            let filePath = '../data/downloads/'+pluginRelPath+'/'+file
-            const fileContent = Fs.readFileSync(filePath)
+            let why = "file_not_found"
 
-            if (fileContent.includes(searchContent)) {
-                var status = true
-                var status_code = "200 Search string found."
-            } else {
-                var status = false
-                var status_code = "404 Search string cannot be found"
+            if (true == pass) {
+                const filePath = '../data/downloads/'+pluginRelPath+'/'+file
+                const fileContent = Fs.readFileSync(filePath)
+                pass = fileContent.includes(searchContent)
+                if (true == pass) {
+                    why = "found"
+                } else {
+                    why = "not_found"
+                }
             }
 
             return {
               check: checkDetails.name,
               kind: checkDetails.kind,
-              file: checkDetails.file,
-              pass: status,
-              why: status_code,
+              file: file,
+              pass: pass,
+              why: why,
             }
         },
     }
