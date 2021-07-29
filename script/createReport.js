@@ -36,6 +36,7 @@ async function genData(headings, object) {
         repoData = {}
         repoData.package = Path.basename(repo)
         repoData.PASS = "pass"
+        repoData.orgRepo = repo
         let orgRepo = object[repo]
         for (let i = 3; i < headings.length; i++) {
             let checkName = headings[i]
