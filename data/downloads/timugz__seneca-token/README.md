@@ -1,1 +1,0 @@
-"Error 404 (file not found) => error specific to Seneca JS Repo Maintain project"
