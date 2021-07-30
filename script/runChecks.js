@@ -105,12 +105,28 @@ function checkOperations() {
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
+            let contentType = checkDetails.content_type
             let why = "file_not_found"
 
             if (true == pass) {
                 const filePath = '../data/downloads/'+pluginRelPath+'/'+file
-                const fileContent = Fs.readFileSync(filePath)
-                pass = fileContent.includes(searchContent)
+                let fileContent = "placeholder"
+                if ( ".json" == Path.extname(file)) {
+                    fileContent = require(filePath)
+                } else {
+                    fileContent = Fs.readFileSync(filePath)
+                }
+                
+                if ("string" == contentType) {
+                    pass = fileContent.includes(searchContent)
+                } else if ("key" == contentType) {
+                    pass = fileContent.hasOwnProperty(searchContent)
+                } else {
+                    console.log("Content type not recognised.")
+                    pass = false
+                }
+                
+                
                 if (true == pass) {
                     why = "found"
                 } else {
@@ -126,6 +142,7 @@ function checkOperations() {
               why: why,
             }
         },
+
     }
 }
 

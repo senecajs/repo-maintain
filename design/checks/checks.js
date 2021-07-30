@@ -1,3 +1,5 @@
+const { script } = require("googleapis/build/src/apis/script");
+
 // THIS IS TO BE USED
 module.exports = {
 
@@ -19,8 +21,16 @@ module.exports = {
   content_readme: { 
     kind:'content_contain', 
     file:'README.md', 
-    contains:'Voxgig' 
+    contains:'Voxgig',
+    content_type:'string' 
   },
+
+  content_pkgjson: {
+    kind:'content_contain',
+    file:'package.json',
+    contains:'scripts.test',
+    content_type:'key'
+  }
 }
 
 
