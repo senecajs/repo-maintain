@@ -24,6 +24,8 @@ plugins = {
   "wyvernzora/seneca-as-promised" : {"kind":"plugin"},
   "voxgig/seneca-member" : {"kind":"plugin"},
   "voxgig/seneca-promisify" : {"kind":"plugin"},
+  "senecajs/seneca-apikey" : {"kind":"plugin"},
+  "nscale/seneca-balance-client" : {"kind":"plugin"},
   "salmanm/seneca-calendar-flex" : {"kind":"plugin"}
 }
 
