@@ -19,16 +19,18 @@ module.exports = {
   },
   
   content_readme: { 
-    kind:'content_contain', 
+    kind:'content_contain_string', 
     file:'README.md', 
-    contains:'Voxgig',
-    content_type:'string' 
+    contains:'Voxgig'
   },
 
   content_pkgjson: {
-    kind:'content_contain',
+    kind:'content_contain_json',
     file:'package.json',
-    contains:'scripts.test',
+    contains: {
+      level1:'scripts',
+      level2:'test'
+    },
     content_type:'key'
   }
 }

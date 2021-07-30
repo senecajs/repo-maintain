@@ -58,7 +58,7 @@ async function runChecks() {
             // checkData = object to call (contains all other necessary data)
             // let res = await checkKind(checkData)
             let res = await checkKind(checkDetails, pluginRelPath)
-            console.log(Chalk.cyan("\nCheck:"),res)
+            // console.log(Chalk.cyan("\nCheck:"),res)
             results[checkName] = res
             
             // output
@@ -100,32 +100,81 @@ function checkOperations() {
             }
         },
 
-        content_contain: async function(checkDetails, pluginRelPath) {
+        content_contain_string: async function(checkDetails, pluginRelPath) {
+
+            let file = checkDetails.file
+            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
+            let searchContent = checkDetails.contains
+            let why = "file_not_found"
+
+            if (true == pass) {
+                const filePath = '../data/downloads/'+pluginRelPath+'/'+file
+                const fileContent = Fs.readFileSync(filePath)
+                pass = fileContent.includes(searchContent)
+                
+                if (true == pass) {
+                    why = "found"
+                } else {
+                    why = "not_found"
+                }
+            }
+
+            return {
+              check: checkDetails.name,
+              kind: checkDetails.kind,
+              file: file,
+              pass: pass,
+              why: why,
+            }
+        },
+
+        content_contain_json: async function(checkDetails, pluginRelPath) {
 
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
             let contentType = checkDetails.content_type
+            let searchLevels = Object.values(searchContent)
             let why = "file_not_found"
 
             if (true == pass) {
                 const filePath = '../data/downloads/'+pluginRelPath+'/'+file
-                let fileContent = "placeholder"
-                if ( ".json" == Path.extname(file)) {
-                    fileContent = require(filePath)
-                } else {
-                    fileContent = Fs.readFileSync(filePath)
-                }
-                
-                if ("string" == contentType) {
-                    pass = fileContent.includes(searchContent)
-                } else if ("key" == contentType) {
-                    pass = fileContent.hasOwnProperty(searchContent)
+                const fileContent = require(filePath)
+                if ("key" == contentType) {
+                    // console.log(searchLevels)
+                    // console.log(searchLevels[0])
+                    // console.log(fileContent.scripts.test)
+
+                    let currentLevel = fileContent
+
+                    // if (searchLevels.length > 1) {
+                    //     for (let i = 0; i < searchLevels.length; i++) {
+                    //         currentLevel =+ "."+searchLevels[i]
+                    //         console.log(currentLevel)
+                    //     }
+                    // }
+                    pass = fileContent.scripts.hasOwnProperty(searchLevels[1])
+                    // console.log(pass)
+
+                    // let currentLevel = fileContent
+                    // let currentSearch = "placeholder"
+                    // for (let i = 0; i <= searchLevels.length - 1; i++) {
+                    //     if (1 == searchLevels.length) {
+                    //         currentSearch = searchLevels[i]
+                    //     } else {
+                    //         currentLevel += "."+searchLevels[i]
+                    //         console.log(currentLevel)
+                    //         currentSearch = searchLevels[i+1]
+                    //         console.log(currentSearch)
+                    //     }
+                    // }
+                    // pass = currentLevel.hasOwnProperty(currentSearch)
+                    // console.log(pass)
+                    // add in else if clause for json value
                 } else {
                     console.log("Content type not recognised.")
                     pass = false
                 }
-                
                 
                 if (true == pass) {
                     why = "found"
