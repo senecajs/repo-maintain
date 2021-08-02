@@ -135,27 +135,45 @@ function checkOperations() {
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
             let contentType = checkDetails.content_type
-            let searchLevels = Object.values(searchContent)
+            // let searchLevels = Object.values(searchContent)
             let why = "file_not_found"
 
             if (true == pass) {
                 const filePath = '../data/downloads/'+pluginRelPath+'/'+file
                 const fileContent = require(filePath)
                 if ("key" == contentType) {
-                    // get contains.length
-                    // set up loop for 
-                    let lenMinusOne = searchContent.length - 1
-                    let lvlToSeach = ""
-                    for (let i = 0; i < lenMinusOne; i++) {
-                        let deepLvl = Hoek.reach(searchContent,[i])
-                        lvlToSearch = "."+deepLvl
-                        
+                    let chain = []
+                    for (let i = 0; i < searchContent.length; i++) {
+                        chain.push(searchContent[i])
                     }
-                    console.log("lenMinusOne",lenMinusOne)
-                    console.log("lvlToSearch",lvlToSearch)
-                    console.log("searchContent[-1]",searchContent[lenMinusOne])
-                    pass = fileContent.lvlToSearch.hasOwnProperty(searchContent[lenMinusOne])
+                    pass = (null != (Hoek.reach(fileContent,chain)))
                     console.log(pass)
+                    // let searchNest = Hoek.reach(fileContent,chain, {default : "#!#!#"}) // custom error
+                    // if (searchNest.equals('#!#!#')) {
+                    //     pass = false
+                    //     console.log(pass)
+                    // }
+                    // console.dir(fileContent)
+
+                    // let doesContain = Hoek.contain(fileContent, searchContent[1], { deep : true })
+                    // console.log(doesContain)
+
+                    // console.log(searchContent)
+                    // let alphaKey = searchContent[0]
+                    // let bravoKey = searchContent[1]
+                    // console.log(alphaKey,bravoKey)
+                    
+                    // console.log(chain)
+                    
+                    // console.log(searchNest)
+                    // // console.log(searchContent)
+                    // // console.log(searchContent[0])
+                    // // console.log(searchContent[1])
+                    // // let alphaKey = searchContent[0]
+                    // // let bravoKey = se''archContent[1]
+                    // pass = fileContent.alphaKey.hasOwnProperty(bravoKey)
+                    // console.log(pass)
+
                     // https://hapi.dev/module/hoek/api/?v=9.2.0#reachobj-chain-options
 
                     // if (searchLevels.length > 1) {
