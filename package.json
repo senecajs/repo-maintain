@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/senecajs/repo-maintain#readme",
   "dependencies": {
+    "@hapi/hoek": "^9.2.0",
     "axios": "^0.21.1",
     "chalk": "^2.4.2",
     "clear-dir": "^1.0.1",

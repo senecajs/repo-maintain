@@ -27,10 +27,7 @@ module.exports = {
   content_pkgjson: {
     kind:'content_contain_json',
     file:'package.json',
-    contains: {
-      level1:'scripts',
-      level2:'test'
-    },
+    contains: ['scripts', 'test'],
     content_type:'key'
   }
 }

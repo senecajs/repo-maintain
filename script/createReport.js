@@ -34,10 +34,11 @@ async function genData(headings, object) {
     dataSet = []
     for(repo in object) {
         repoData = {}
+        let orgRepo = object[repo]
         repoData.package = Path.basename(repo)
         repoData.PASS = "pass"
         repoData.orgRepo = "["+repo+"](https://github.com/"+repo+")"
-        let orgRepo = object[repo]
+        
         for (let i = 3; i < headings.length; i++) {
             let checkName = headings[i]
             let checkDetails = orgRepo[checkName]

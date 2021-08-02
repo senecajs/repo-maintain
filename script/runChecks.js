@@ -4,6 +4,7 @@ const Fs = require('fs') // access the file system
 const Filehound = require('filehound') // better management of files and directories
 const Path = require('path') // for file and folder paths
 const jsonFile = require('jsonfile') // easily handle JSON files
+const Hoek = require('@hapi/hoek') // for object to reference conversions
 
 // file-related constants
 const checkList = require('../design/checks/checks.js') // extensible format for plugin checks
@@ -141,11 +142,21 @@ function checkOperations() {
                 const filePath = '../data/downloads/'+pluginRelPath+'/'+file
                 const fileContent = require(filePath)
                 if ("key" == contentType) {
-                    // console.log(searchLevels)
-                    // console.log(searchLevels[0])
-                    // console.log(fileContent.scripts.test)
-
-                    let currentLevel = fileContent
+                    // get contains.length
+                    // set up loop for 
+                    let lenMinusOne = searchContent.length - 1
+                    let lvlToSeach = ""
+                    for (let i = 0; i < lenMinusOne; i++) {
+                        let deepLvl = Hoek.reach(searchContent,[i])
+                        lvlToSearch = "."+deepLvl
+                        
+                    }
+                    console.log("lenMinusOne",lenMinusOne)
+                    console.log("lvlToSearch",lvlToSearch)
+                    console.log("searchContent[-1]",searchContent[lenMinusOne])
+                    pass = fileContent.lvlToSearch.hasOwnProperty(searchContent[lenMinusOne])
+                    console.log(pass)
+                    // https://hapi.dev/module/hoek/api/?v=9.2.0#reachobj-chain-options
 
                     // if (searchLevels.length > 1) {
                     //     for (let i = 0; i < searchLevels.length; i++) {
@@ -153,7 +164,7 @@ function checkOperations() {
                     //         console.log(currentLevel)
                     //     }
                     // }
-                    pass = fileContent.scripts.hasOwnProperty(searchLevels[1])
+                    // pass = fileContent.scripts.hasOwnProperty(searchLevels[1])
                     // console.log(pass)
 
                     // let currentLevel = fileContent
@@ -170,7 +181,7 @@ function checkOperations() {
                     // }
                     // pass = currentLevel.hasOwnProperty(currentSearch)
                     // console.log(pass)
-                    // add in else if clause for json value
+                    // add in else if clause for if searching for json value
                 } else {
                     console.log("Content type not recognised.")
                     pass = false
