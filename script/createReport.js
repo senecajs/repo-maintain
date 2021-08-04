@@ -22,7 +22,7 @@ async function genData(headings, object) {
     for(repo in object) {
         repoData = {}
         let orgRepo = object[repo]
-        repoData.package = Path.basename(repo) // this needs to come from package.json name value
+        repoData.package = repo // this comes from package.json name value
         repoData.PASS = "pass"
         repoData.orgRepo = "["+repo+"](https://github.com/"+repo+")"
 
@@ -58,8 +58,9 @@ async function genData(headings, object) {
         dataSet.push(repoDataValues)
     }
     // console.log(dataSet)
-    return dataSet
     console.log("Data generated.")
+    return dataSet
+    
 }
 
 async function genReport(headings, data) {
