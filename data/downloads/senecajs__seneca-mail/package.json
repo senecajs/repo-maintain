@@ -1,0 +1,50 @@
+{
+  "name": "@seneca/mail",
+  "version": "2.4.0",
+  "description": "Seneca email plugin",
+  "main": "mail.js",
+  "scripts": {
+    "test": "lab -v -L -P test -t 80 -I __core-js_shared__ -r console -o stdout -r html -o test/coverage.html",
+    "build": "echo null-build",
+    "doc": "seneca-doc",
+    "prettier": "prettier --write *.js lib/*.js bin/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "clean-npm": "rm -rf node_modules package-lock.json",
+    "clean-yarn": "rm -rf node_modules yarn.lock",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm test",
+    "repo-check": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && [[ '' == `git tag --list v${REPO_VERSION}` ]]",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run repo-check && npm run clean && npm i --registry http://registry.npmjs.org && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run repo-check && npm run prettier && npm run build && npm test && npm run doc && npm run repo-tag && npm publish --registry http://registry.npmjs.org"
+  },
+  "keywords": [
+    "seneca",
+    "mail",
+    "email",
+    "plugin"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "license": "MIT",
+  "dependencies": {
+    "email-templates": "~7.0.5",
+    "nodemailer": "~6.4.8",
+    "nodemailer-smtp-transport": "~2.7.4",
+    "nodemailer-stub-transport": "~1.1.0"
+  },
+  "devDependencies": {
+    "@hapi/code": "^8.0.1",
+    "@hapi/lab": "^22.0.4",
+    "@seneca/doc": "^4.0.0",
+    "nodemailer-sendgrid": "^1.0.3",
+    "seneca": "plugin",
+    "seneca-entity": "^9.0.1",
+    "seneca-plugin-validator": "^0.6.1",
+    "seneca-promisify": "^1.4.0"
+  },
+  "files": [
+    "README.md",
+    "LICENSE.txt",
+    "mail.js"
+  ]
+}
