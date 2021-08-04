@@ -1,26 +1,13 @@
 const Fs = require('fs')
 const Path = require('path')
+const { isNumber } = require('util')
 const checkList = require('../design/checks/checks.js')
 
 const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
 let checkResults = JSON.parse(checkResultsRaw)
 
 async function genHeadings(){
-    let headings = ["Package", "PASS?", "orgRepo"]
-    for(checkName in checkList){
-        // let checkDetails = checkList[checkName]
-        // let kind = checkDetails.kind
-        // let file = checkDetails.file
-        // let headingName = kind+"@"+file
-        
-        // if ("content_contain" == kind) {
-        //     let content = checkDetails.contains
-        //     headingName += "("+content+")"
-        // }
-
-        let headingName = checkName
-        headings.push(headingName)
-    }
+    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars", "Open Issues", "Open PRs"]
     // console.log(headings)
     console.log("Headings created.")
     return headings
@@ -35,20 +22,37 @@ async function genData(headings, object) {
     for(repo in object) {
         repoData = {}
         let orgRepo = object[repo]
-        repoData.package = Path.basename(repo)
+        repoData.package = Path.basename(repo) // this needs to come from package.json name value
         repoData.PASS = "pass"
         repoData.orgRepo = "["+repo+"](https://github.com/"+repo+")"
-        
-        for (let i = 3; i < headings.length; i++) {
-            let checkName = headings[i]
-            let checkDetails = orgRepo[checkName]
+
+        repoData.fails = ""
+        for (check in orgRepo) {
+            checkDetails = orgRepo[check]
             if (false == checkDetails.pass) {
-                repoData[checkName] = "FAIL"
-                repoData.PASS = "FAIL"
-            } else {
-                repoData[checkName] = "pass"
+                repoData.fails += check+" "
+                console.log(check)
             }
-            
+        }
+
+        // let nb = 0
+        // for (plugin in checkResults) {
+        //     allChecks = checkResults[plugin]
+        //     console.log("\n\n",plugin)
+        //     nb++
+        //     for (check in allChecks) {
+        //         checkDetails = allChecks[check]
+        //         if (false == checkDetails.pass) {
+        //             repoData.fails += check,", "
+        //             console.log(check)
+        //         }
+        //     }
+        // }
+        // console.log(nb)
+        
+        for (let i = 4; i < headings.length; i++) {
+            let title = headings[i]
+            repoData[title] = "apiData"
         }
         var repoDataValues = Object.values(repoData)
         dataSet.push(repoDataValues)
