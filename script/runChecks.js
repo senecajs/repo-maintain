@@ -40,6 +40,57 @@ async function runChecks() {
         const orgRepo = pluginRelPath.replace('__','/')
         console.log("\n\n",Chalk.blue(orgRepo))
 
+
+        // read all files in here
+        // JSON files
+        const jsonPromise = Filehound.create()
+            .paths('../data/downloads/'+pluginRelPath)
+            .ext('json')
+            .find();
+        const jsonFiles = await jsonPromise
+
+        // non-JSON files
+        const stringPromise = Filehound.create()
+            .paths('../data/downloads/'+pluginRelPath)
+            .ext('json')
+            .not()
+            .find();
+        const stringFiles = await stringPromise
+
+        dataForChecks = {}
+        dataForChecks.pluginPath = pluginRelPath
+
+        for (let j = 0; j < jsonFiles.length; j++) {
+            let filePath = jsonFiles[j]
+
+            // const fileExt = Path.extname(filePath)
+            // const fileName = Path.basename(filePath, fileExt)
+            let fileName = Path.basename(filePath)
+            let fileContent = require(filePath)
+
+            dataForChecks[fileName] = fileContent
+
+            //to get package name from package.json file
+            if ("package.json" == fileName) {
+                dataForChecks.packageName = fileContent.name
+                console.log(dataForChecks.packageName)
+            }
+        }
+
+        for (let s = 0; s < stringFiles.length; s++) {
+            let filePath = stringFiles[s]
+
+            // const fileExt = Path.extname(filePath)
+            // const fileName = Path.basename(filePath, fileExt)
+            let fileName = Path.basename(filePath)
+            let fileContent = Fs.readFileSync(filePath)
+
+            dataForChecks[fileName] = fileContent
+        }
+
+        // console.dir(dataForChecks)
+
+
         // for each check in the list of checks to do:
         for(checkName in checkList) {
             let checkDetails = checkList[checkName]
@@ -53,8 +104,6 @@ async function runChecks() {
                 continue
             }
 
-            // read all files in here
-
             // run each of the checks for each plugin print to console
             // checkData = object to call (contains all other necessary data)
             // let res = await checkKind(checkData)
@@ -66,7 +115,7 @@ async function runChecks() {
         }
 
         // this is where the lookup key needs to be defined (as name of plugin)
-        allChecks[orgRepo] = results
+        allChecks[dataForChecks.packageName] = results
     }
     Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
 }
@@ -148,57 +197,7 @@ function checkOperations() {
                     }
                     pass = (null != (Hoek.reach(fileContent,chain)))
                     console.log(pass)
-                    // let searchNest = Hoek.reach(fileContent,chain, {default : "#!#!#"}) // custom error
-                    // if (searchNest.equals('#!#!#')) {
-                    //     pass = false
-                    //     console.log(pass)
-                    // }
-                    // console.dir(fileContent)
 
-                    // let doesContain = Hoek.contain(fileContent, searchContent[1], { deep : true })
-                    // console.log(doesContain)
-
-                    // console.log(searchContent)
-                    // let alphaKey = searchContent[0]
-                    // let bravoKey = searchContent[1]
-                    // console.log(alphaKey,bravoKey)
-                    
-                    // console.log(chain)
-                    
-                    // console.log(searchNest)
-                    // // console.log(searchContent)
-                    // // console.log(searchContent[0])
-                    // // console.log(searchContent[1])
-                    // // let alphaKey = searchContent[0]
-                    // // let bravoKey = se''archContent[1]
-                    // pass = fileContent.alphaKey.hasOwnProperty(bravoKey)
-                    // console.log(pass)
-
-                    // https://hapi.dev/module/hoek/api/?v=9.2.0#reachobj-chain-options
-
-                    // if (searchLevels.length > 1) {
-                    //     for (let i = 0; i < searchLevels.length; i++) {
-                    //         currentLevel =+ "."+searchLevels[i]
-                    //         console.log(currentLevel)
-                    //     }
-                    // }
-                    // pass = fileContent.scripts.hasOwnProperty(searchLevels[1])
-                    // console.log(pass)
-
-                    // let currentLevel = fileContent
-                    // let currentSearch = "placeholder"
-                    // for (let i = 0; i <= searchLevels.length - 1; i++) {
-                    //     if (1 == searchLevels.length) {
-                    //         currentSearch = searchLevels[i]
-                    //     } else {
-                    //         currentLevel += "."+searchLevels[i]
-                    //         console.log(currentLevel)
-                    //         currentSearch = searchLevels[i+1]
-                    //         console.log(currentSearch)
-                    //     }
-                    // }
-                    // pass = currentLevel.hasOwnProperty(currentSearch)
-                    // console.log(pass)
                     // add in else if clause for if searching for json value
                 } else {
                     console.log("Content type not recognised.")
