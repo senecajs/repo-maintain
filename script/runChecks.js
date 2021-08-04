@@ -115,7 +115,8 @@ async function runChecks() {
         }
 
         // this is where the lookup key needs to be defined (as name of plugin)
-        allChecks[dataForChecks.packageName] = results
+        let nameOfObj = orgRepo+"##"+dataForChecks.packageName
+        allChecks[nameOfObj] = results
     }
     Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
 }

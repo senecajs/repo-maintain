@@ -22,9 +22,12 @@ async function genData(headings, object) {
     for(repo in object) {
         repoData = {}
         let orgRepo = object[repo]
-        repoData.package = repo // this comes from package.json name value
+        let names = repo.split('##')
+        let repoName = names[0]
+        let pkgName = names[1]
+        repoData.package = pkgName // this should be a url to npm
         repoData.PASS = "pass"
-        repoData.orgRepo = "["+repo+"](https://github.com/"+repo+")"
+        repoData.orgRepo = "["+repoName+"](https://github.com/"+repoName+")"
 
         repoData.fails = ""
         for (check in orgRepo) {
