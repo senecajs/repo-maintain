@@ -34,9 +34,11 @@ async function genData(headings, object) {
             checkDetails = orgRepo[check]
             if (false == checkDetails.pass) {
                 repoData.fails += check+" "
-                console.log(check)
+                repoData.PASS = "FAIL"
             }
         }
+
+
 
         // let nb = 0
         // for (plugin in checkResults) {
