@@ -1,0 +1,64 @@
+{
+  "name": "seneca-mem-store",
+  "version": "6.0.3",
+  "description": "Seneca in-memory data storage plugin.",
+  "main": "dist/mem-store.js",
+  "types": "dist/mem-store.d.ts",
+  "license": "MIT",
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "contributors": [
+    "Richard Rodger (http://richardrodger.com)",
+    "Nicolas Herment (https://github.com/nherment)",
+    "Dean McDonnell (https://github.com/mcdonnelldean)",
+    "Maxence Dalmais (https://github.com/maxired)",
+    "Mihai Dima (https://github.com/mihaidma)",
+    "Wyatt Preul (https://github.com/geek)",
+    "Paolo Chiodi (https://github.com/paolochiodi)",
+    "Shane Lacey (https://github.com/shanel262)",
+    "Oisín Hennessy (https://github.com/code-jace)",
+    "Efim Bogdanovsky (https://github.com/lilsweetcaligula)"
+  ],
+  "scripts": {
+    "build": "tsc -d",
+    "watch": "tsc -w -d",
+    "test": "lab -v -P test -L -t 90 -r console -o stdout -r html -o test/coverage.html -r lcov -o test/lcov.info --sourcemaps --transform node_modules/lab-transform-typescript",
+    "test-some": "lab -v -P test --sourcemaps --transform node_modules/lab-transform-typescript -g",
+    "prettier": "prettier --write --no-semi --single-quote *.ts test/*.js",
+    "reset": "npm run clean && npm i && npm run build && npm test",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run clean && npm i --registry=http://registry.npmjs.org && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run prettier && npm run build && npm test && npm run repo-tag && npm publish --access public --registry=http://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs/seneca-mem-store"
+  },
+  "keywords": [
+    "seneca",
+    "plugin",
+    "store",
+    "mem",
+    "memory"
+  ],
+  "devDependencies": {
+    "@hapi/code": "8.0.3",
+    "@hapi/lab": "24.2.1",
+    "async": "3.2.0",
+    "lab-transform-typescript": "3.0.1",
+    "prettier": "2.3.1",
+    "seneca": "3.23.3",
+    "seneca-entity": "14.0.0",
+    "seneca-plugin-validator": "0.6.1",
+    "seneca-promisify": "2.0.0",
+    "seneca-store-test": "4.0.2",
+    "typescript": "4.3.2"
+  },
+  "files": [
+    "README.md",
+    "CHANGES.md",
+    "LICENSE",
+    "dist",
+    "*.ts"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "name": "seneca-amqp-transport",
+  "version": "2.2.0",
+  "codename": "Migrative Meathook",
+  "description": "Official AMQP transport plugin for Seneca",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib/*",
+    "defaults.json"
+  ],
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "scripts": {
+    "coverage": "nyc --cache npm test",
+    "test": "npm-run-all test:unit test:e2e",
+    "test:unit": "NODE_ENV=test mocha --reporter spec --bail test/**/*.test.js",
+    "test:e2e": "NODE_ENV=test mocha --reporter spec --bail e2e/**/*.e2e.js",
+    "lint": "eslint index.js lib",
+    "validate": "npm-run-all lint test:unit",
+    "integrate": "npm-run-all lint coverage",
+    "release": "./scripts/release.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:senecajs/seneca-amqp-transport.git"
+  },
+  "keywords": [
+    "seneca",
+    "official",
+    "plugin",
+    "amqp",
+    "transport",
+    "rabbitmq",
+    "zmq",
+    "activemq",
+    "microservice",
+    "rpc"
+  ],
+  "author": "Nicolás Fantone <nfantone@gmail.com> (https://github.com/nfantone)",
+  "contributors": [
+    "George Haidar <ghaidar0@gmail.com> (https://github.com/disintegrator)",
+    "Chris Spiliotopoulos <chrysanthos.spiliotopoulos@gmail.com> (https://github.com/chefArchitect)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/senecajs/seneca-amqp-transport/issues"
+  },
+  "homepage": "https://github.com/senecajs/seneca-amqp-transport",
+  "dependencies": {
+    "amqplib": "^0.5.1",
+    "amqpuri": "^1.1.0",
+    "bluebird": "^3.5.0",
+    "jsonic": "^0.3.0",
+    "lodash": "^4.17.4",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "chai": "^4.0.2",
+    "chai3-json-schema": "^1.2.1",
+    "dirty-chai": "^2.0.0",
+    "eslint": "^4.1.1",
+    "eslint-config-seneca": "^3.0.0",
+    "eslint-plugin-hapi": "^4.0.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "pre-commit": "^1.2.2",
+    "seneca": "^3.3.0",
+    "sinon": "^2.3.5",
+    "sinon-chai": "^2.11.0",
+    "sinon-test": "^2.0.0",
+    "npm-run-all": "^4.0.2",
+    "nyc": "^11.0.3"
+  },
+  "pre-commit": [
+    "validate"
+  ]
+}

@@ -5,7 +5,7 @@ Maintenance automation for Seneca repos.
 
 ## How to run plugin checks
 - Checks are defined in checks.js.
-- Plugins to check are defined in plugins.js.
+- Plugins to check are defined in plugins.js (run **node plugins** to update).
 - **node download** to download required files from plugins for checks.
 - **node runChecks** to run all checks on plugins and create JSON files of the results.
 - **node createReport** to generate a report in Markdown table format from check results.

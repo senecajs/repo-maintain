@@ -1,0 +1,44 @@
+{
+  "name": "@seneca/test-plugin",
+  "version": "0.0.1",
+  "description": "Test Seneca plugin.",
+  "main": "test-plugin.js",
+  "scripts": {
+    "watch": "webpack --watch",
+    "test": "lab -P test -t 80 -I URL,URLSearchParams",
+    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "clean-npm": "rm -rf node_modules package-lock.json",
+    "clean-yarn": "rm -rf node_modules yarn.lock",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"`; echo TAG: v$REPO_VERSION; git commit -a -m v$REPO_VERSION; git push; git tag v$REPO_VERSION; git push --tags;",
+    "repo-publish": "npm run repo-tag; npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voxgig/seneca-test-plugin.git"
+  },
+  "author": "Richard Rodger (richardrodger.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voxgig/seneca-test-plugin/issues"
+  },
+  "homepage": "https://github.com/voxgig/seneca-test-plugin#readme",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "test-plugin.js"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "code": "5",
+    "coveralls": "3",
+    "lab": "18",
+    "prettier": "1",
+    "seneca-promisify": "0",
+    "seneca": "senecajs/seneca",
+    "seneca-plugin-validator": "0"
+  }
+}
