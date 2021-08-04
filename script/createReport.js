@@ -25,7 +25,7 @@ async function genData(headings, object) {
         let names = repo.split('##')
         let repoName = names[0]
         let pkgName = names[1]
-        repoData.package = pkgName // this should be a url to npm
+        repoData.package = "["+pkgName+"](https://www.npmjs.com/package/"+pkgName+")" // this should be a url to npm
         repoData.PASS = "pass"
         repoData.orgRepo = "["+repoName+"](https://github.com/"+repoName+")"
 
