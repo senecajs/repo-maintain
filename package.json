@@ -38,5 +38,8 @@
     "rimraf": "^2.2.8",
     "stafo": "^1.0.0",
     "underscore": "^1.13.1"
-  }
+  },
+  "workspaces": [
+    "script/pluginCLI"
+  ]
 }

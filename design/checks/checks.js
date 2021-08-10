@@ -1,5 +1,3 @@
-const { script } = require("googleapis/build/src/apis/script");
-
 // THIS IS TO BE USED
 module.exports = {
 
