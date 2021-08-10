@@ -1,5 +1,6 @@
 const Fs = require('fs')
 const Path = require('path')
+const Stafo = require('stafo')
 const { isNumber } = require('util')
 const checkList = require('../design/checks/checks.js')
 
@@ -7,7 +8,7 @@ const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
 let checkResults = JSON.parse(checkResultsRaw)
 
 async function genHeadings(){
-    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars", "Open Issues", "Open PRs"]
+    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars"] //, "Open Issues", "Open PRs"]
     // console.log(headings)
     console.log("Headings created.")
     return headings
@@ -37,23 +38,9 @@ async function genData(headings, object) {
                 repoData.PASS = "FAIL"
             }
         }
-
-
-
-        // let nb = 0
-        // for (plugin in checkResults) {
-        //     allChecks = checkResults[plugin]
-        //     console.log("\n\n",plugin)
-        //     nb++
-        //     for (check in allChecks) {
-        //         checkDetails = allChecks[check]
-        //         if (false == checkDetails.pass) {
-        //             repoData.fails += check,", "
-        //             console.log(check)
-        //         }
-        //     }
-        // }
-        // console.log(nb)
+        // 'use strict'
+        // let starsForks = await Stafo.repo(repoName)
+        // console.log(starsForks)
         
         for (let i = 4; i < headings.length; i++) {
             let title = headings[i]
