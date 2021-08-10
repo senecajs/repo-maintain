@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/senecajs/repo-maintain/issues"
   },
-  "homepage": "https://github.com/senecajs/repo-maintain#readme"
+  "homepage": "https://github.com/senecajs/repo-maintain#readme",
+  "bin": {
+    "start": "index.js"
+  }
 }
