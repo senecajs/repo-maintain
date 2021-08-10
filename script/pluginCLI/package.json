@@ -1,0 +1,20 @@
+{
+  "name": "seneca-testmyplugin",
+  "version": "1.0.0",
+  "description": "CLI tool to help standardize your Seneca JS plugin",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senecajs/repo-maintain.git"
+  },
+  "author": "stokesriona",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/senecajs/repo-maintain/issues"
+  },
+  "homepage": "https://github.com/senecajs/repo-maintain#readme"
+}
