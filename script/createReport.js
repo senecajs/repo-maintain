@@ -1,14 +1,13 @@
 const Fs = require('fs')
 const Path = require('path')
-const Stafo = require('stafo')
-const { isNumber } = require('util')
+const Fetch = require('node-fetch')
 const checkList = require('../design/checks/checks.js')
 
 const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
 let checkResults = JSON.parse(checkResultsRaw)
 
 async function genHeadings(){
-    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars"] //, "Open Issues", "Open PRs"]
+    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars", "Open Issues", "Open PRs"]
     // console.log(headings)
     console.log("Headings created.")
     return headings
@@ -38,9 +37,20 @@ async function genData(headings, object) {
                 repoData.PASS = "FAIL"
             }
         }
-        // 'use strict'
-        // let starsForks = await Stafo.repo(repoName)
-        // console.log(starsForks)
+
+        // HITTING api rate limit
+        // let forksRaw = await Fetch('https://api.github.com/repos/'+repoName+'/forks')
+        // let forksText = await forksRaw.text()
+        // let forksJson = JSON.parse(forksText)
+        // let forksNb = forksJson.length
+
+        // let starsRaw = await Fetch('https://api.github.com/repos/'+repoName+'/stargazers')
+        // let starsText = await starsRaw.text()
+        // let starsJson = JSON.parse(starsText)
+        // let starsNb = starsJson.length
+
+        // repoData.forks = forksNb
+        // repoData.stars = starsNb
         
         for (let i = 4; i < headings.length; i++) {
             let title = headings[i]
