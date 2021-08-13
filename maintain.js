@@ -27,6 +27,8 @@ class Maintain {
         //-------------------------------------------
 
         async function runChecks() {
+            let results = {}
+
             // reading client's files in
             const jsonPromise = Filehound.create()
                 .paths(process.cwd())
@@ -44,7 +46,44 @@ class Maintain {
                 .find();
             const stringFiles = await stringPromise
             console.log(stringFiles)
-        }
+
+            let dataForChecks = {}
+
+            for (let j = 0; j < jsonFiles.length; j++) {
+                let filePath = jsonFiles[j]
+    
+                // const fileExt = Path.extname(filePath)
+                // const fileName = Path.basename(filePath, fileExt)
+                let fileName = Path.basename(filePath)
+                let fileContent = require(filePath)
+    
+                dataForChecks[fileName] = fileContent
+                console.log(Chalk.yellow("\n\n"+fileName))
+                console.log(fileContent)
+    
+                //to get package name from package.json file
+                if ("package.json" == fileName) {
+                    dataForChecks.packageName = fileContent.name
+                    console.log(dataForChecks.packageName)
+                }
+            }
+    
+            for (let s = 0; s < stringFiles.length; s++) {
+                let filePath = stringFiles[s]
+    
+                // const fileExt = Path.extname(filePath)
+                // const fileName = Path.basename(filePath, fileExt)
+                let fileName = Path.basename(filePath)
+                let fileContent = Fs.readFileSync(filePath)
+    
+                dataForChecks[fileName] = fileContent
+                console.log(Chalk.cyan("\n\n"+fileName))
+                console.log(fileContent)
+            }
+
+        } // end of runChecks()
+        
+
         runChecks()
     }
 }
