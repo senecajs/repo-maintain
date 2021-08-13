@@ -26,7 +26,26 @@ class Maintain {
         // console.log(lines)
         //-------------------------------------------
 
-        
+        async function runChecks() {
+            // reading client's files in
+            const jsonPromise = Filehound.create()
+                .paths(process.cwd())
+                .discard('node_modules')
+                .ext('json')
+                .find();
+            const jsonFiles = await jsonPromise
+            console.log(jsonFiles)
+
+            // non-JSON files
+            const stringPromise = Filehound.create()
+                .paths(process.cwd())
+                .discard('node_modules')
+                .discard('.json')
+                .find();
+            const stringFiles = await stringPromise
+            console.log(stringFiles)
+        }
+        runChecks()
     }
 }
 
