@@ -13,14 +13,14 @@ const checkList = require('./design/checks/checks.js') // extensible format for 
 
 class Maintain {
     run() {
-        console.log('running :)')
+        // console.log('running :)')
         // code to run checks on single plugin in same dir goes here
-        let pkg = require(process.cwd()+'/package.json')
+        // let pkg = require(process.cwd()+'/package.json')
         // console.log(pkg)
 
         // const Chalk = require('chalk')
-        console.log(Chalk.red("rededemption"))
-        let lines = require('./data/json/plugins.json')
+        // console.log(Chalk.red("rededemption"))
+        // let lines = require('./data/json/plugins.json')
         // console.log(lines)
         //-------------------------------------------
         
@@ -64,7 +64,7 @@ class Maintain {
                 //to get package name from package.json file
                 if ("package.json" == fileName) {
                     dataForChecks.packageName = fileContent.name
-                    console.log(dataForChecks.packageName)
+                    // console.log(dataForChecks.packageName)
                 }
             }
     
@@ -111,15 +111,31 @@ class Maintain {
         } // end of runChecks()
 
         async function conclusion(checkResults) {
-
+            let totalNb = 0
+            let failNb = 0
+            let fails = []
+            for (const check in checkResults) {
+                totalNb++
+                let checkDetails = checkResults[check]
+                checkDetails.name = check
+                if (false == checkDetails.pass) {
+                    failNb++
+                    fails.push(checkDetails.check)
+                }
+            }
+            let failMsg = "Failed checks: "+failNb
+            let totalMsg = "Total checks: "+totalNb
+            let message = `${totalMsg}\n${failMsg}\n${fails}`
+            return message
         }
 
         // --------------------------------------------------------------------
-        async function run() {
-            console.log(Chalk.bold("\nRunning checks on your plugin..."))
+        async function runAll() {
+            console.log("Running checks on your plugin...")
             let checkResults = await runChecks() // "undefined" printing here before anything else
-            console.log(checkResults)
-            console.log(Chalk.bold("\nChecks complete.\n"))
+            console.log("Process complete.")
+            let checkConc = await conclusion(checkResults)
+            console.log(checkConc)
         }
         // --------------------------------------------------------------------
 
@@ -218,7 +234,7 @@ class Maintain {
         } // end of checkOperations()
         
         // -------------------
-        run()
+        runAll()
         // -------------------
     }
 }
