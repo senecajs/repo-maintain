@@ -28,16 +28,20 @@ class Maintain {
 
         async function runChecks() {
             let results = {}
-
+            
             // reading client's files in
             const jsonPromise = Filehound.create()
                 .paths(process.cwd())
                 .discard('node_modules')
                 .ext('json')
                 .find();
-            const jsonFiles = await jsonPromise
-            // console.log(jsonFiles)
 
+            //---------------------------------------------------------------------
+            console.log("is it here?")   
+            const jsonFiles = await jsonPromise // this returns "undefined"
+            console.log("or there?")
+            //---------------------------------------------------------------------
+            
             // non-JSON files
             const stringPromise = Filehound.create()
                 .paths(process.cwd())
@@ -46,9 +50,9 @@ class Maintain {
                 .find();
             const stringFiles = await stringPromise
             // console.log(stringFiles)
-
+            
             let dataForChecks = {}
-
+            
             for (let j = 0; j < jsonFiles.length; j++) {
                 let filePath = jsonFiles[j]
     
@@ -123,9 +127,7 @@ class Maintain {
                     fails.push(checkDetails.check)
                 }
             }
-            let failMsg = "Failed checks: "+failNb
-            let totalMsg = "Total checks: "+totalNb
-            let message = `${totalMsg}\n${failMsg}\n${fails}`
+            let message = `Total checks:${totalNb}\nFailed checks:${failNb}\n\t${fails}`
             return message
         }
 
