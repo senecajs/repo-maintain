@@ -1,46 +1,30 @@
 // function-related constants
-const Chalk = require('chalk') // for custom colours when logging to console
-const Fs = require('fs') // access the file system
-const Filehound = require('filehound') // better management of files and directories
-const Path = require('path') // for file and folder paths
-const jsonFile = require('jsonfile') // easily handle JSON files
-const Hoek = require('@hapi/hoek') // for object to reference conversions
+const Chalk = require('chalk')
+const Fs = require('fs')
+const Filehound = require('filehound')
+const Path = require('path')
+const jsonFile = require('jsonfile') 
+const Hoek = require('@hapi/hoek')
 
 // file-related constants
-const checkList = require('./design/checks/checks.js') // extensible format for plugin checks
+const checkList = require('./design/checks/checks.js')
 
 
 
 class Maintain {
     run() {
-        // console.log('running :)')
-        // code to run checks on single plugin in same dir goes here
-        // let pkg = require(process.cwd()+'/package.json')
-        // console.log(pkg)
-
-        // const Chalk = require('chalk')
-        // console.log(Chalk.red("rededemption"))
-        // let lines = require('./data/json/plugins.json')
-        // console.log(lines)
-        //-------------------------------------------
-        
         const checkOps = checkOperations()
 
         async function runChecks() {
             let results = {}
             
-            // reading client's files in
+            // reading client's JSON files in
             const jsonPromise = Filehound.create()
                 .paths(process.cwd())
                 .discard('node_modules')
                 .ext('json')
                 .find();
-
-            //---------------------------------------------------------------------
-            // console.log("is it here?")   
-            const jsonFiles = await jsonPromise // this returns "undefined"
-            // console.log("or there?")
-            //---------------------------------------------------------------------
+            const jsonFiles = await jsonPromise // this returns "undefined" at the moment
             
             // non-JSON files
             const stringPromise = Filehound.create()
@@ -49,44 +33,33 @@ class Maintain {
                 .discard('.json')
                 .find();
             const stringFiles = await stringPromise
-            // console.log(stringFiles)
             
             let dataForChecks = {}
             
             for (let j = 0; j < jsonFiles.length; j++) {
                 let filePath = jsonFiles[j]
-    
-                // const fileExt = Path.extname(filePath)
-                // const fileName = Path.basename(filePath, fileExt)
+
                 let fileName = Path.basename(filePath)
                 let fileContent = require(filePath)
     
                 dataForChecks[fileName] = fileContent
-                // console.log(Chalk.yellow("\n\n"+fileName))
-                // console.log(fileContent)
     
                 //to get package name from package.json file
                 if ("package.json" == fileName) {
                     dataForChecks.packageName = fileContent.name
-                    // console.log(dataForChecks.packageName)
                 }
             }
     
             for (let s = 0; s < stringFiles.length; s++) {
                 let filePath = stringFiles[s]
     
-                // const fileExt = Path.extname(filePath)
-                // const fileName = Path.basename(filePath, fileExt)
                 let fileName = Path.basename(filePath)
                 let fileContent = Fs.readFileSync(filePath)
     
                 dataForChecks[fileName] = fileContent
-                // console.log(Chalk.cyan("\n\n"+fileName))
-                // console.log(fileContent)
             }
 
             let fileNameos = Object.keys(dataForChecks)
-            // console.log(fileNameos)
 
             for(const checkName in checkList) {
                 let checkDetails = checkList[checkName]
@@ -100,14 +73,9 @@ class Maintain {
                     continue
                 }
     
-                // run each of the checks for each plugin print to console
-                // checkData = object to call (contains all other necessary data)
-                // let res = await checkKind(checkData)
                 let res = await checkKind(checkDetails)
-                // console.log(Chalk.cyan("\nCheck:"),res)
                 results[checkName] = res
                 
-                // output
             }   
             
             return results
@@ -134,7 +102,7 @@ class Maintain {
         // --------------------------------------------------------------------
         async function runAll() {
             console.log("Running checks on your plugin...")
-            let checkResults = await runChecks() // "undefined" printing here before anything else
+            let checkResults = await runChecks()
             console.log("Process complete.")
             let checkConc = await conclusion(checkResults)
             console.log(checkConc)
@@ -144,7 +112,6 @@ class Maintain {
         function checkOperations() {
 
             return {
-                // file_exist is a lookup key (= unique name of each element in object)
                 file_exist: async function(checkDetails) {
                     let file = checkDetails.file
                     let pass = Fs.existsSync('./'+file)
@@ -208,10 +175,8 @@ class Maintain {
                                 chain.push(searchContent[i])
                             }
                             pass = (null != (Hoek.reach(fileContent,chain)))
-                            // console.log(pass)
         
-                            // add in else if clause for if searching for json value
-                        } else {
+                        } else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
                             pass = false
                         }
@@ -235,13 +200,14 @@ class Maintain {
             }
         } // end of checkOperations()
         
-        // -------------------
+        // -------------------------------------------------------
         runAll()
-        // -------------------
-    }
-}
+        // -------------------------------------------------------
 
-// TODO printing undefined ?
+    } // end of run()
+    
+} // end of Maintain class
+
 module.exports = {
     Maintain
 }

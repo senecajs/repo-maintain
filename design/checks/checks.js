@@ -1,4 +1,3 @@
-// THIS IS TO BE USED
 module.exports = {
 
   exist_readme: {
