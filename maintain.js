@@ -37,9 +37,9 @@ class Maintain {
                 .find();
 
             //---------------------------------------------------------------------
-            console.log("is it here?")   
+            // console.log("is it here?")   
             const jsonFiles = await jsonPromise // this returns "undefined"
-            console.log("or there?")
+            // console.log("or there?")
             //---------------------------------------------------------------------
             
             // non-JSON files
@@ -127,7 +127,7 @@ class Maintain {
                     fails.push(checkDetails.check)
                 }
             }
-            let message = `Total checks:${totalNb}\nFailed checks:${failNb}\n\t${fails}`
+            let message = `Total checks: ${totalNb}\nFailed checks: ${failNb}\n\t${fails}`
             return message
         }
 
