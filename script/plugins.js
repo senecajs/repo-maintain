@@ -1,7 +1,5 @@
 const Fs = require('fs')
 
-// idempotency
-
 plugins = {
   "senecajs/seneca-transport" : {"kind":"plugin"},
   "Istar-Eldritch/seneca-sequelize" : {"kind":"plugin"},

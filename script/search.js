@@ -1,26 +1,20 @@
 const Fetch = require('node-fetch')
-const Fs = require('fs')  // invite file system module to script
+const Fs = require('fs')
 const jsonFile = require ('jsonfile')
 
-// get current year
 const today = new Date()
 const thisYear = today.getFullYear()
 
-// check if results.json exists, and if so, clear it
-let results = "../data/json/results.json"
-if(Fs.existsSync(results)){
-  Fs.unlinkSync(results)
-  console.log("Previous results.json file deleted.")
-}
 
 async function doSearch() {
   console.log("Search function initiated.")
 
-  // Object better than map for when json is involved
   let obj = {}
   let nbRepos = 0
+
   // increment year to search
   for (let year = 2010; year <= thisYear; year++) {
+
     // increment page of search results + reset nbRepos for each year
     nbRepos = 0
     for (let page = 1; page <= 10; page++) {
@@ -40,15 +34,11 @@ async function doSearch() {
 
       console.log("[", year, "| pg", page, "]", json.items.length, "results fetched... ", ok)
       
-      // if clause causes unneccessary searching through map
-      // nbRepos variable to count logged repos for this year only
       json.items.forEach(item => {
         obj[item.full_name] = item
         nbRepos++
       });
 
-      // ??
-      // nbRepos = [Object[map]].length
 
       if(json.total_count <= 100){
         break
@@ -68,7 +58,6 @@ async function doSearch() {
   jsonFile.writeFileSync("../data/json/results.json", objValues, {flag: 'a', EOL: ',', finalEOL: false})
 
   console.log("Search completed.", objValues.length, "repos total. See results.json file for logged data.")
-  // console.log("Search completed.")
 }
 
 doSearch()
