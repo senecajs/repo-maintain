@@ -23,7 +23,13 @@ module.exports = {
   content_readme: { 
     kind:'content_contain_string', 
     file:'README.md', 
-    contains:'Voxgig'
+    contains: ['Voxgig']
+  },
+
+  version_codeconduct: { 
+    kind:'content_contain_string', 
+    file:'CODE_OF_CONDUCT.md',
+    contains: ['version 2.1', 'https://www.contributor-covenant.org/version/2/1/']
   },
 
   content_pkgjson: {
@@ -31,13 +37,8 @@ module.exports = {
     file:'package.json',
     contains: ['scripts', 'test'],
     content_type:'key'
-  },
+  }
 
-  content_codeconduct: { 
-    kind:'content_contain_string', 
-    file:'CODE_OF_CONDUCT.md',
-    contains: ['version 2.1', 'https://www.contributor-covenant.org/version/2/1/']
-  },
 }
 
 
