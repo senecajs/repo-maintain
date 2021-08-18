@@ -21,15 +21,16 @@ class Maintain {
             // reading client's JSON files in
             const jsonPromise = Filehound.create()
                 .paths(process.cwd())
-                .discard('node_modules')
+                .discard(/node_modules/) // This being a regex instead of a string still leads to "undefined" printing
                 .ext('json')
                 .find();
             const jsonFiles = await jsonPromise // this returns "undefined" at the moment
+            console.log(jsonFiles)
             
             // non-JSON files
             const stringPromise = Filehound.create()
                 .paths(process.cwd())
-                .discard('node_modules')
+                .discard(/node_modules/)
                 .discard('.json')
                 .find();
             const stringFiles = await stringPromise
@@ -139,7 +140,10 @@ class Maintain {
                     if (true == pass) {
                         const filePath = './'+file
                         const fileContent = Fs.readFileSync(filePath)
-                        pass = fileContent.includes(searchContent)
+
+                        for (let i = 0; i < searchContent.length; i++) {
+                            pass = fileContent.includes(searchContent[i])
+                        }
                         
                         if (true == pass) {
                             why = "found"

@@ -133,7 +133,9 @@ function checkOperations() {
             if (true == pass) {
                 const filePath = '../data/downloads/'+pluginRelPath+'/'+file
                 const fileContent = Fs.readFileSync(filePath)
-                pass = fileContent.includes(searchContent)
+                for (let i = 0; i < searchContent.length; i++) {
+                    pass = fileContent.includes(searchContent[i])
+                }
                 
                 if (true == pass) {
                     why = "found"
