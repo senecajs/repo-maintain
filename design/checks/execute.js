@@ -1,5 +1,4 @@
-// THIS IS JUST A SUGGESTION - DESIGN OUTLINE
-
+// SUGGESTION - DESIGN OUTLINE
 
 let Checks = require('./checks')
 

@@ -15,9 +15,6 @@ async function genHeadings(){
 
 
 async function genData(headings, object) {
-    // headings = names to show as headings of table
-    // object = object to search for data within
-
     dataSet = []
     for(repo in object) {
         repoData = {}
@@ -25,7 +22,7 @@ async function genData(headings, object) {
         let names = repo.split('##')
         let repoName = names[0]
         let pkgName = names[1]
-        repoData.package = "["+pkgName+"](https://www.npmjs.com/package/"+pkgName+")" // this should be a url to npm
+        repoData.package = "["+pkgName+"](https://www.npmjs.com/package/"+pkgName+")"
         repoData.PASS = "pass"
         repoData.orgRepo = "["+repoName+"](https://github.com/"+repoName+")"
 
@@ -38,20 +35,6 @@ async function genData(headings, object) {
             }
         }
 
-        // HITTING api rate limit
-        // let forksRaw = await Fetch('https://api.github.com/repos/'+repoName+'/forks')
-        // let forksText = await forksRaw.text()
-        // let forksJson = JSON.parse(forksText)
-        // let forksNb = forksJson.length
-
-        // let starsRaw = await Fetch('https://api.github.com/repos/'+repoName+'/stargazers')
-        // let starsText = await starsRaw.text()
-        // let starsJson = JSON.parse(starsText)
-        // let starsNb = starsJson.length
-
-        // repoData.forks = forksNb
-        // repoData.stars = starsNb
-        
         for (let i = 4; i < headings.length; i++) {
             let title = headings[i]
             repoData[title] = "apiData"
@@ -59,7 +42,6 @@ async function genData(headings, object) {
         var repoDataValues = Object.values(repoData)
         dataSet.push(repoDataValues)
     }
-    // console.log(dataSet)
     console.log("Data generated.")
     return dataSet
     

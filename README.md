@@ -1,69 +1,47 @@
+![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
+> A module to help you standardize your [Seneca.js](https://www.npmjs.com/package/seneca) plugin.
+
 # repo-maintain
 
-Maintenance automation for Seneca repos.
----
+| ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
+|---|---|
 
-## How to run plugin checks
-- Checks are defined in checks.js.
-- Plugins to check are defined in plugins.js (run **node plugins** to update).
-- **node download** to download required files from plugins for checks.
-- **node runChecks** to run all checks on plugins and create JSON files of the results.
-- **node createReport** to generate a report in Markdown table format from check results.
+## Description
 
-## Design/Checks folder
-### checks.js
-Script file to hold all checks to run and their specifications.
-> Format extensible for future additions
+This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this plugin to scan your own prior to publishing to see if it meets our standardisation specifications.
 
-### execute.js
-Original design outline for what became runChecks.js .
+If you're using this module, and need help, you can:
 
+- Post a [github issue](https://github.com/senecajs/repo-maintain/issues),
+- Tweet to [@senecajs](http://twitter.com/senecajs),
+- Ask the [author](https://github.com/stokesriona).
 
-## Script folder
-*Organised alphabetically.*
+If you are new to Seneca in general, please take a look at [senecajs.org](https://www.npmjs.com/package/seneca). We have everything from tutorials to sample apps to help get you up and running quickly.
 
-### download.js
-Downloads a predefined list of files from GitHub and saves them locally (data/downloads).
-> List of files to download is defined in checks.js.
-> 
-> Files are saved within unique directories - one directory per plugin.
+## Installation and Usage
 
-### filter.js
-Creates a JSON file of the repos within results.json that include the name "seneca" (filter.json).  
+repo-maintain is not currently published as an npm package. Please check back regularly for updates.
 
-### format.js
-Takes a JSON file and reformats it as a CSV file, saving it locally (data/csv).
-> Currently includes code for reformatting results.json and pluginChecks.json
+See below for what each check means in the event of it failing.
 
-### isolate.js
-[TODO : Returns a JSON file with only specified information from each repo from a given list.]
+## Checks
+### exist_readme
+This check looks for the existence of a README.md file. A README saved under a different file name or extension will count as a fail.
 
-### plugins.js
-Creates a JSON file for a handpicked list of plugins.
-> Currently contains 11 repos.
->
-> Format extensible for inclusion of future features.
+### exist_pkgjson
+This check looks for the existence of a package.json file. It does not scan for a package-lock.json file.
 
-### repoMaintain.js
-[Placeholder : The top-level script for complete automation of Repo Maintain task.]
+### exist_license
+This check looks for the existence of a LICENSE file. A LICENSE file saved under a different name or with any file extension will count as a fail.
 
-### runChecks.js
-Runs a series of tests specified in checks.js on a number of files, organised by plugin.
-> Current check types : file_exist and content_contains
+### content_readme
+This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
 
-### search.js
-Gathers as many repos under the search term "seneca-" as possible, and outputs their JSON information as a single JSON file (results.json).
-> Due in part to limitations of the Search API, only ~1200 of the ~1800 results have been logged.
+### content_pkgjson
+This check scans the content of the package.json file for the existence of a scripts.test value. The content of the value is not read. If the file does not exist, or if there is no "test" key, the check will fail.
 
-### upload.js
-[TODO : Uploads a csv file to a Google Sheets spreadsheet using the Google Sheets API.]
-> Current issue: credentials not providing sufficient permission for task. Complete refactoring needed.
+## Contributing
+The [Senecajs org](https://github.com/senecajs) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features, please get in touch.
 
----
-## Design/checks folder
-### checks.js
-Names and info of checks to run on each plugin in a given list.
-> Extensible js format (Not JSON - includes trailing commas)
-
-### execute.js
-Placeholder code - script to run checks for each plugin (as described in checks.js).
+## License
+Licensed under [MIT](./LICENSE).

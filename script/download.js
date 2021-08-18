@@ -1,9 +1,9 @@
-const Chalk = require('chalk') // colours for console.log
-const Fetch = require('node-fetch') // node fetch api
-const Fs = require('fs-extra') // for interacting with the file system
+const Chalk = require('chalk')
+const Fetch = require('node-fetch')
+const Fs = require('fs-extra')
 
-const Plugins = require('../data/json/plugins.json') // handpicked list of plugins
-const checkList = require('../design/checks/checks.js') // extensible list for checks == Object
+const Plugins = require('../data/json/plugins.json')
+const checkList = require('../design/checks/checks.js')
 
 
 async function doDownloadPlugins() {
@@ -12,19 +12,12 @@ async function doDownloadPlugins() {
     objKeys = Object.keys(Plugins)
     for (let i = 0; i < objKeys.length; i++) {
 
-        // change / to __ in objKeys[i]
+        // namespacing
         const orgRepo = objKeys[i].replace('/','__')
 
         // wait for new directory creation before proceeding
         const createDir = await Fs.ensureDir('../data/downloads/'+orgRepo)
         console.log(Chalk.cyan(objKeys[i]))
-
-
-        // only download files needed for "file_exist" checks
-        // console.log(checkList)
-        // const individCheck
-        // const fileExistChecks = checkList.filter(check => check.kind == "file_exist")
-        // console.log(fileExistChecks)
 
         for(checkName in checkList) {
             
@@ -40,20 +33,16 @@ async function doDownloadPlugins() {
             const fileRaw = await Fetch(url)
             let fileOK = fileRaw.ok
 
-            // if 404, download nothing and pass to next file
             if (false == fileOK) {
                 console.log(Chalk.red(file), "File not found.")
                 continue
             }
 
-            // download file text otherwise
             let fileContent = await fileRaw.text()
             Fs.writeFileSync('../data/downloads/'+orgRepo+'/'+file, fileContent)
             console.log(file,"File created.")
         }
     }
 }
-
-// if required, find doDownloadResults function in github commits
 
 doDownloadPlugins()

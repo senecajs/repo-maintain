@@ -1,27 +1,18 @@
 // function-related constants
-const Chalk = require('chalk') // for custom colours when logging to console
-const Fs = require('fs') // access the file system
-const Filehound = require('filehound') // better management of files and directories
-const Path = require('path') // for file and folder paths
-const jsonFile = require('jsonfile') // easily handle JSON files
-const Hoek = require('@hapi/hoek') // for object to reference conversions
+const Chalk = require('chalk')
+const Fs = require('fs')
+const Filehound = require('filehound')
+const Path = require('path') 
+const jsonFile = require('jsonfile')
+const Hoek = require('@hapi/hoek')
 
 // file-related constants
-const checkList = require('../design/checks/checks.js') // extensible format for plugin checks
+const checkList = require('../design/checks/checks.js')
 
 // function-related constants
 const checkOps = checkOperations()
 //---------------------------------------------------------------
-/**
- * ORDER OF OPERATIONS
- * 
- * run() => runChecks() => checkOperations()
- *                          ^
- *                          this is run for every check, for every plugin
- */
 
-
-// this creates a promise object
 const plugins = Filehound.create()
     .path('../data/downloads')
     .directory()
@@ -40,8 +31,6 @@ async function runChecks() {
         const orgRepo = pluginRelPath.replace('__','/')
         console.log("\n\n",Chalk.blue(orgRepo))
 
-
-        // read all files in here
         // JSON files
         const jsonPromise = Filehound.create()
             .paths('../data/downloads/'+pluginRelPath)
@@ -63,8 +52,6 @@ async function runChecks() {
         for (let j = 0; j < jsonFiles.length; j++) {
             let filePath = jsonFiles[j]
 
-            // const fileExt = Path.extname(filePath)
-            // const fileName = Path.basename(filePath, fileExt)
             let fileName = Path.basename(filePath)
             let fileContent = require(filePath)
 
@@ -80,18 +67,12 @@ async function runChecks() {
         for (let s = 0; s < stringFiles.length; s++) {
             let filePath = stringFiles[s]
 
-            // const fileExt = Path.extname(filePath)
-            // const fileName = Path.basename(filePath, fileExt)
             let fileName = Path.basename(filePath)
             let fileContent = Fs.readFileSync(filePath)
 
             dataForChecks[fileName] = fileContent
         }
 
-        // console.dir(dataForChecks)
-
-
-        // for each check in the list of checks to do:
         for(checkName in checkList) {
             let checkDetails = checkList[checkName]
             checkDetails.name = checkName
@@ -100,21 +81,14 @@ async function runChecks() {
             let checkKind = checkOps[checkDetails.kind]
             if(null == checkKind) {
                 console.log('WARNING', 'Check does not exist', checkName, checkDetails.kind)
-                // proceed to next check
                 continue
             }
 
-            // run each of the checks for each plugin print to console
-            // checkData = object to call (contains all other necessary data)
-            // let res = await checkKind(checkData)
             let res = await checkKind(checkDetails, pluginRelPath)
-            // console.log(Chalk.cyan("\nCheck:"),res)
             results[checkName] = res
             
-            // output
         }
 
-        // this is where the lookup key needs to be defined (as name of plugin)
         let nameOfObj = orgRepo+"##"+dataForChecks.packageName
         allChecks[nameOfObj] = results
     }
@@ -129,11 +103,9 @@ async function run() {
 }
 // --------------------------------------------------------------------
 
-// what to do for each check is detailed here
 function checkOperations() {
 
     return {
-        // file_exist is a lookup key (= unique name of each element in object)
         file_exist: async function(checkDetails, pluginRelPath) {
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
