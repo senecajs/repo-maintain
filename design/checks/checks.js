@@ -14,6 +14,11 @@ module.exports = {
     kind:'file_exist', 
     file:'LICENSE' 
   },
+
+  exist_codeconduct: { 
+    kind:'file_exist', 
+    file:'CODE_OF_CONDUCT.md' 
+  },
   
   content_readme: { 
     kind:'content_contain_string', 
@@ -26,7 +31,13 @@ module.exports = {
     file:'package.json',
     contains: ['scripts', 'test'],
     content_type:'key'
-  }
+  },
+
+  content_codeconduct: { 
+    kind:'content_contain_string', 
+    file:'CODE_OF_CONDUCT.md',
+    contains: ['version 2.1', 'https://www.contributor-covenant.org/version/2/1/']
+  },
 }
 
 
