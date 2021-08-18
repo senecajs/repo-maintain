@@ -20,9 +20,11 @@ If you are new to Seneca in general, please take a look at [senecajs.org](https:
 
 ## Installation and Usage
 
-repo-maintain is not currently published as an npm package. Please check back regularly for updates.
+__repo-maintain is not currently published as an npm package. Please check back regularly for updates.__
 
 See below for what each check means in the event of it failing.
+
+Please note: if your repository contains file name duplicates (for example, two package.json files), the module will return a SyntaxError. This is a known issue.
 
 ## Checks
 ### exist_readme
@@ -34,8 +36,14 @@ This check looks for the existence of a package.json file. It does not scan for 
 ### exist_license
 This check looks for the existence of a LICENSE file. A LICENSE file saved under a different name or with any file extension will count as a fail.
 
+### exist_codeconduct
+This checks looks for the existence of a CODE_OF_CONDUCT.md file. Details for this file can be found by visiting the [Contricutor Covenant website](https://www.contributor-covenant.org/).
+
 ### content_readme
 This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
+
+### version_codeconduct
+This checks scans the content of the CODE_OF_CONTENT file for a mention of the latest version (v2.1). It searches for the keyword "version 2.1" and the [URL of the current version](https://www.contributor-covenant.org/version/2/1/), as described on the site.
 
 ### content_pkgjson
 This check scans the content of the package.json file for the existence of a scripts.test value. The content of the value is not read. If the file does not exist, or if there is no "test" key, the check will fail.
