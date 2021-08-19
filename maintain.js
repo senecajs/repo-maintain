@@ -143,7 +143,8 @@ class Maintain {
                         
                         if (true == pass) {
                             why = "found"
-                        } else {
+                        }
+                        else {
                             why = "not_found"
                         }
                     }
@@ -176,14 +177,16 @@ class Maintain {
                             }
                             pass = (null != (Hoek.reach(fileContent,chain)))
         
-                        } else { // add in "else if" clause if searching for json value
+                        }
+                        else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
                             pass = false
                         }
                         
                         if (true == pass) {
                             why = "found"
-                        } else {
+                        }
+                        else {
                             why = "not_found"
                         }
                     }
