@@ -1,0 +1,42 @@
+{
+  "name": "seneca-zipkin-tracer",
+  "version": "0.2.0",
+  "description": "Seneca tracer sending data to zipkin",
+  "main": "zipkin-tracer.js",
+  "license": "MIT",
+  "author": "Paolo Chiodi (https://github.com/paolochiodi)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senecajs-labs/seneca-zipkin-tracer.git"
+  },
+  "scripts": {
+    "test": "lab test/*.test.js -r console -t 90 -c -v",
+    "integration": "lab integration/*.test.js -r console -v",
+    "lint": "lab *.js -dL",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "coverage": "lab -v -P test -L -t 80 -r html > docs/coverage.html"
+  },
+  "keywords": [
+    "seneca",
+    "zipkin",
+    "trace",
+    "tracer"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "code": "4.1.x",
+    "coveralls": "2.11.12",
+    "eslint-config-seneca": "3.0.0",
+    "eslint-plugin-hapi": "4.0.0",
+    "eslint-plugin-standard": "2.0.0",
+    "fastbench": "^1.0.1",
+    "lab": "14.0.x",
+    "seneca": "plugin"
+  },
+  "dependencies": {
+    "seneca": "plugin",
+    "zipkin-simple": "1.0.0"
+  }
+}

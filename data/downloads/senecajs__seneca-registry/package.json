@@ -1,0 +1,48 @@
+{
+  "name": "seneca-registry",
+  "version": "0.3.2",
+  "description": "Seneca service registry (simplistic single instance).",
+  "main": "registry.js",
+  "scripts": {
+    "test": "lab -v -P test -L -t 90 -I URL,URLSearchParams,BigUint64Array,BigInt64Array,BigInt,SharedArrayBuffer,Atomics",
+    "coveralls": "lab -s -P test -r lcov -I URL,URLSearchParams | coveralls",
+    "coverage": "lab -v -P test -L -t 90 -r html > coverage.html",
+    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
+    "clean-npm": "rm -rf node_modules package-lock.json",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"`; echo TAG: v$REPO_VERSION; git commit -a -m v$REPO_VERSION; git tag v$REPO_VERSION; git push --tags;",
+    "repo-publish": "npm run repo-tag; npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs/seneca-registry"
+  },
+  "keywords": [
+    "seneca",
+    "plugin",
+    "service",
+    "registry",
+    "key",
+    "value",
+    "store"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "contributors": [
+    "Richard Rodger (http://richardrodger.com)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "4"
+  },
+  "devDependencies": {
+    "code": "4",
+    "lab": "14",
+    "prettier": "1",
+    "seneca": "plugin",
+    "seneca-chain": "0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "registry.js"
+  ]
+}

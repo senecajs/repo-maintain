@@ -1,0 +1,35 @@
+{
+  "name": "seneca-pino-logger",
+  "version": "1.0.1",
+  "description": "Pino logger plugin for Seneca",
+  "main": "pino.js",
+  "scripts": {
+    "test": "lab -l -v -L -c test -t 90",
+    "annotate": "docco transport.js -o docs/annotated",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "coverage": "lab -v -P test -L -t 90 -r html > docs/coverage.html"
+  },
+  "author": "David Gonzalez",
+  "license": "MIT",
+  "dependencies": {
+    "pino": "4.6.0"
+  },
+  "devDependencies": {
+    "code": "4.1.x",
+    "eslint-config-seneca": "3.x.x",
+    "eslint-plugin-hapi": "4.x.x",
+    "eslint-plugin-standard": "2.x.x",
+    "lab": "13.1.x",
+    "pre-commit": "1.1.x",
+    "docco": "0.7.x",
+    "seneca": "plugin"
+  },
+  "files": [
+    "pino.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "pre-commit": [
+    "test"
+  ]
+}

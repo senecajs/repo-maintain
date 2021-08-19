@@ -1,0 +1,46 @@
+{
+  "name": "seneca-logentries-logger",
+  "version": "1.0.0",
+  "description": "Logentries logger plugin for Seneca",
+  "main": "logentries.js",
+  "precommit": "test",
+  "scripts": {
+    "test": "lab -v -P test -L -t 90",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "coverage": "lab -v -P test -L -t 90 -r html > docs/coverage.html",
+    "annotate": "docco logentries.js -o docs/annotated"
+  },
+  "author": "David Gonzalez",
+  "license": "MIT",
+  "dependencies": {
+    "le_node": "1.6.2"
+  },
+  "engines": {
+    "node": ">=4.x"
+  },
+  "contributors": [
+    "David Gonzalez (https://github.com/dgonzalez)",
+    "Emer Rutherford (https://github.com/eeswr)",
+    "Shane Lacey (https://github.com/shanel262)"
+  ],
+  "devDependencies": {
+    "chai": "3.5.0",
+    "code": "3.0.x",
+    "coveralls": "2.11.x",
+    "docco": "0.7.x",
+    "eslint-config-seneca": "3.x.x",
+    "eslint-plugin-hapi": "4.x.x",
+    "eslint-plugin-standard": "2.x.x",
+    "lab": "11.0.x",
+    "mock-require": "1.3.0",
+    "seneca": "plugin"
+  },
+  "pre-commit": [
+    "test"
+  ],
+  "files": [
+    "logentries.js",
+    "README.md",
+    "LICENSE"
+  ]
+}

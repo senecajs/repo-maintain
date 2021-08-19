@@ -1,0 +1,48 @@
+{
+  "name": "seneca-hana-store",
+  "version": "0.2.0",
+  "description": "Seneca data store plugin for SAP HANA",
+  "main": "lib/hana-store.js",
+  "author": "Marian Radulescu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs-labs/seneca-hana-store.git"
+  },
+  "keywords": [
+    "seneca",
+    "plugin",
+    "store",
+    "sap",
+    "hana",
+    "hdb"
+  ],
+  "scripts": {
+    "lint": "lab test -dL",
+    "test": "lab tests/*.test.js -r console -v"
+  },
+  "dependencies": {
+    "seneca": "plugin",
+    "hdb": "0.5.3",
+    "lodash": "~4.x.x",
+    "node-uuid": "1.4.x",
+    "moment": "2.11.x"
+  },
+  "devDependencies": {
+    "async": "1.5.x",
+    "mocha": "2.4.x",
+    "chai": "3.5.x",
+    "eslint-config-seneca": "1.x.x",
+    "eslint-plugin-standard": "1.x.x",
+    "eslint-plugin-hapi": "4.x.x",
+    "seneca-store-test": "^1.0.0",
+    "lab": "8.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/senecajs-labs/seneca-hana-store/issues"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}
+

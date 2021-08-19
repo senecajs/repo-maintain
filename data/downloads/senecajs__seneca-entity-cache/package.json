@@ -1,0 +1,57 @@
+{
+  "name": "@seneca/entity-cache",
+  "version": "1.2.2",
+  "description": "Versioned caching plugin for seneca",
+  "main": "entity-cache.js",
+  "scripts": {
+    "test": "npm run lab && SENECA_CACHE_PLUGIN=cache npm run lab && SENECA_CACHE_PLUGIN=redis-cache npm run lab",
+    "lab": "lab -v -P test -t 10",
+    "doc": "seneca-doc",
+    "prettier": "prettier --write --no-semi --single-quote *.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "reset": "npm run clean && npm i && npm test",
+    "repo-publish": "npm run clean && npm install --registry http://registry.npmjs.org && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run prettier && npm test && npm run repo-tag && npm publish --registry http://registry.npmjs.org --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs/seneca-entity-cache.git"
+  },
+  "keywords": [
+    "seneca",
+    "entity",
+    "version",
+    "cache",
+    "memcached",
+    "plugin"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "contributors": [
+    "Georgi Griffiths (https://github.com/georgigriffiths)",
+    "Eran Hammer (https://github.com/hueniverse)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lru-cache": "^6.0.0"
+  },
+  "devDependencies": {
+    "@hapi/code": "^8.0.1",
+    "@hapi/lab": "^22.0.4",
+    "@seneca/cache": "^4.2.1",
+    "@seneca/memcached-cache": "^2.1.3",
+    "@seneca/redis-cache": "^2.0.2",
+    "coveralls": "^3.1.0",
+    "prettier": "^2.0.5",
+    "seneca": "plugin",
+    "@seneca/doc": "^4.0.0",
+    "seneca-entity": "^10.0.2",
+    "seneca-promisify": "^2.0.0"
+  },
+  "files": [
+    "LICENSE.txt",
+    "README.md",
+    "entity-cache.js"
+  ]
+}

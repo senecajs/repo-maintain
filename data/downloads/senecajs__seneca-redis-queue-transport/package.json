@@ -1,0 +1,66 @@
+{
+  "name": "seneca-redis-queue-transport",
+  "version": "0.3.0",
+  "description": "Seneca Redis Queue Transport",
+  "main": "redis-queue-transport.js",
+  "license": "MIT",
+  "author": "Ianto Cristian",
+  "contributors": [
+    "Ianto Cristian (https://github.com/iantocristian)",
+    "Richard Rodger (http://richardrodger.com)",
+    "Cristian Kiss (https://github.com/ckiss)",
+    "Wyatt Preul (https://github.com/geek)",
+    "Josh Reeter (https://github.com/jreeter)",
+    "Shane Lacey (https://github.com/shanel262)",
+    "David Gonzalez (https://github.com/dgonzalez)"
+  ],
+  "scripts": {
+    "test": "lab test/*.test.js -r console -v -L -m 3000 -t 89 -c",
+    "lint": "lab -P test -dL",
+    "annotate": "docco redis-queue-transport.js -o docs/annotated",
+    "build": "docker-compose build",
+    "start": "docker-compose up",
+    "stop": "docker-compose kill",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "coverage": "lab -v -P test -L -t 89 -r html > docs/coverage.html"
+  },
+  "keywords": [
+    "seneca",
+    "transport",
+    "plugin",
+    "redis",
+    "queue"
+  ],
+  "homepage": "https://github.com/senecajs/seneca-redis-queue-transport",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iantocristian/seneca-redis-queue-transport.git"
+  },
+  "bugs": {
+    "url": "https://github.com/senecajs/seneca-redis-queue-transport/issues"
+  },
+  "dependencies": {
+    "lodash": "4.x.x",
+    "redis": "2.x.x"
+  },
+  "devDependencies": {
+    "async": "2.x.x",
+    "code": "3.x.x",
+    "coveralls": "2.11.x",
+    "docco": "0.7.0",
+    "eslint-config-seneca": "3.x.x",
+    "eslint-plugin-standard": "2.x.x",
+    "lab": "11.x.x",
+    "pre-commit": "1.1.x",
+    "seneca": "plugin",
+    "seneca-transport-test": "0.1.3"
+  },
+  "files": [
+    "README.md",
+    "LICENSE.txt",
+    "redis-queue-transport.js"
+  ],
+  "pre-commit": [
+    "test"
+  ]
+}

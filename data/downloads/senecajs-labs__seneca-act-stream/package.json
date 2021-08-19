@@ -1,0 +1,29 @@
+{
+  "name": "seneca-act-stream",
+  "version": "0.0.3",
+  "description": "Seneca.act through a stream interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test.js"
+  },
+  "pre-commit": ["test"],
+  "website": "https://github.com/senecajs-labs/seneca-act-stream",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs-labs/seneca-act-stream.git"
+  },
+  "bugs": {
+    "url": "http://github.com/senecajs-labs/seneca-act-stream/issues"
+  },
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "tap": "^0.4.9",
+    "seneca": "^0.5.17",
+    "pre-commit": "0.0.7"
+  },
+  "dependencies": {
+    "readable-stream": "^1.0.27-1",
+    "inherits": "^2.0.1"
+  }
+}
