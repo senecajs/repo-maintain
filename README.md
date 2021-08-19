@@ -37,7 +37,7 @@ This check looks for the existence of a package.json file. It does not scan for 
 This check looks for the existence of a LICENSE file. A LICENSE file saved under a different name or with any file extension will count as a fail.
 
 ### exist_codeconduct
-This checks looks for the existence of a CODE_OF_CONDUCT.md file. Details for this file can be found by visiting the [Contricutor Covenant website](https://www.contributor-covenant.org/).
+This checks looks for the existence of a CODE_OF_CONDUCT.md file. Details for this file can be found by visiting the [Contributor Covenant website](https://www.contributor-covenant.org/).
 
 ### content_readme
 This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
