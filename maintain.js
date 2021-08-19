@@ -19,9 +19,9 @@ class Maintain {
             let results = {}
             
             // reading client's JSON files in
-            const jsonPromise = Filehound.create()
+            const jsonPromise = Filehound.create() // only takes top-level JSON files
                 .paths(process.cwd())
-                .discard('node_modules')
+                .depth(0)
                 .ext('json')
                 .find();
             const jsonFiles = await jsonPromise // this returns "undefined" at the moment
