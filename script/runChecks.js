@@ -11,6 +11,10 @@ const checkList = require('../design/checks/checks.js')
 
 // function-related constants
 const checkOps = checkOperations()
+
+const argString = process.argv.slice(2)
+const argArray = argString[0].split(',')
+console.log(argArray)
 //---------------------------------------------------------------
 
 const plugins = Filehound.create()
@@ -29,7 +33,7 @@ async function runChecks() {
         // relative path towards downloaded files - plugin specific
         const pluginRelPath = Path.basename(plugin)
         const orgRepo = pluginRelPath.replace('__','/')
-        console.log("\n\n",Chalk.blue(orgRepo))
+        // console.log("\n\n",Chalk.blue(orgRepo))
 
         // JSON files
         const jsonPromise = Filehound.create()
@@ -60,7 +64,7 @@ async function runChecks() {
             //to get package name from package.json file
             if ("package.json" == fileName) {
                 dataForChecks.packageName = fileContent.name
-                console.log(dataForChecks.packageName)
+                // console.log(dataForChecks.packageName)
             }
         }
 
@@ -171,7 +175,7 @@ function checkOperations() {
                         chain.push(searchContent[i])
                     }
                     pass = (null != (Hoek.reach(fileContent,chain)))
-                    console.log(pass)
+                    // console.log(pass)
 
                     // add in else if clause for if searching for json value
                 } else {

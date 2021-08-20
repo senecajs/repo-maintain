@@ -15,6 +15,10 @@ class Maintain {
     run() {
         const checkOps = checkOperations()
 
+        const argString = process.argv.slice(2)
+        const argArray = argString[0].split(',')
+        console.log(argArray)
+
         async function runChecks() {
             let results = {}
             
@@ -25,7 +29,6 @@ class Maintain {
                 .ext('json')
                 .find();
             const jsonFiles = await jsonPromise // this returns "undefined" at the moment
-            console.log(jsonFiles)
             
             // non-JSON files
             const stringPromise = Filehound.create()
