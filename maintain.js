@@ -18,6 +18,11 @@ class Maintain {
         const argString = process.argv.slice(2)
         const argArray = argString[0].split(',')
         console.log(argArray)
+        let argMap = {}
+        for (const config of argArray) {
+            argMap[config] = config
+        }
+        console.log(argMap)
 
         async function runChecks() {
             let results = {}
@@ -65,6 +70,14 @@ class Maintain {
 
             let fileNameos = Object.keys(dataForChecks)
 
+            // this is where the configs come into play ----------------------------------------------------------
+            // const relChecks = checkList.filter(check => check[checkName].config = "core")
+            // console.log(relChecks)
+            for (const [name, data] of Object.entries(checkList)) {
+                for (const [key, value] of Object.entries(data)) {
+                    console.log(value)
+                }
+            }
             for(const checkName in checkList) {
                 let checkDetails = checkList[checkName]
                 checkDetails.name = checkName
@@ -76,9 +89,11 @@ class Maintain {
                     // proceed to next check
                     continue
                 }
-    
+                
+                // console.log(argMap[checkDetails.config]) // undefined
                 let res = await checkKind(checkDetails)
                 results[checkName] = res
+                
                 
             }   
             
