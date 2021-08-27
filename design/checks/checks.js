@@ -26,13 +26,12 @@ module.exports = {
 
   exist_entry: {
     config:'js',
-    kind:'fileX_exist_if_json',
-    file:'xyz',
+    kind:'fileX_exist_if_contain_json',
+    file:'404',
     if_file:'package.json',
     contains:['main'],
     contains_type:'key',
-    contains_not:['main', 'index.js'],
-    contains_not_type:'value'
+    contains_is_not:'index.js'
   },
   
   content_readme: { 
