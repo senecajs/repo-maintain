@@ -23,6 +23,17 @@ module.exports = {
     kind:'file_exist', 
     file:'CODE_OF_CONDUCT.md' 
   },
+
+  exist_entry: {
+    config:'js',
+    kind:'fileX_exist_if_json',
+    file:'xyz',
+    if_file:'package.json',
+    contains:['main'],
+    contains_type:'key',
+    contains_not:['main', 'index.js'],
+    contains_not_type:'value'
+  },
   
   content_readme: { 
     config:'base',
@@ -38,12 +49,12 @@ module.exports = {
     contains: ['version 2.1', 'https://www.contributor-covenant.org/version/2/1/']
   },
 
-  content_pkgjson: {
+  test_pkgjson: {
     config:'base',
     kind:'content_contain_json',
     file:'package.json',
     contains: ['scripts', 'test'],
-    content_type:'key'
+    contains_type:'key'
   }
 
 }

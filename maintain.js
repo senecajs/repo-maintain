@@ -48,9 +48,10 @@ class Maintain {
     
                 dataForChecks[fileName] = fileContent
     
-                //to get package name from package.json file
+                //to get package and main name from package.json file
                 if ("package.json" == fileName) {
                     dataForChecks.packageName = fileContent.name
+                    dataForChecks.mainName = fileContent.main
                 }
             }
     
@@ -140,6 +141,59 @@ class Maintain {
                       why: why,
                     }
                 },
+
+                fileX_exist_if_json_not: async function(checkDetails) {
+        
+                    /**
+                     * Get if-file
+                     * Get if-value from if-file
+                     * Check FAILS if if-value == not-value
+                     * Insert if-value to file(new)
+                     * Check for file(new)
+                     */
+                    let ifFile = checkDetails.if_file
+                    let pass = Fs.existsSync('./'+ifFile)
+
+                    if (true == pass) {
+                        const ifFilePath
+                    }
+
+
+                    let searchContent = checkDetails.contains
+                    let containsType = checkDetails.contains_type
+                    // let searchLevels = Object.values(searchContent)
+                    let why = "file_not_found"
+        
+                    if (true == pass) {
+                        const filePath = './'+file
+                        const fileContent = require(filePath)
+                        if ("key" == containsType) {
+                            let chain = []
+                            for (let i = 0; i < searchContent.length; i++) {
+                                chain.push(searchContent[i])
+                            }
+                            pass = (null != (Hoek.reach(fileContent,chain)))
+        
+                        } else { // add in "else if" clause if searching for json value
+                            console.log("Content type not recognised.")
+                            pass = false
+                        }
+                        
+                        if (true == pass) {
+                            why = "found"
+                        } else {
+                            why = "not_found"
+                        }
+                    }
+
+                    return {
+                        check: checkDetails.name,
+                        kind: checkDetails.kind,
+                        file: file,
+                        pass: pass,
+                        why: why,
+                      }
+                },
         
                 content_contain_string: async function(checkDetails) {
         
@@ -177,14 +231,14 @@ class Maintain {
                     let file = checkDetails.file
                     let pass = Fs.existsSync('./'+file)
                     let searchContent = checkDetails.contains
-                    let contentType = checkDetails.content_type
+                    let containsType = checkDetails.contains_type
                     // let searchLevels = Object.values(searchContent)
                     let why = "file_not_found"
         
                     if (true == pass) {
                         const filePath = './'+file
                         const fileContent = require(filePath)
-                        if ("key" == contentType) {
+                        if ("key" == containsType) {
                             let chain = []
                             for (let i = 0; i < searchContent.length; i++) {
                                 chain.push(searchContent[i])
