@@ -68,8 +68,7 @@ class Maintain {
                 dataForChecks[fileName] = fileContent
             }
 
-
-            // this is where the configs come into play ----------------------------------------------------------
+            // Filter checks object to configs
             const relCheckList = {}
             for (const checkName in checkList) {
                 let checkDetails = checkList[checkName]
@@ -77,32 +76,8 @@ class Maintain {
                     relCheckList[checkName] = checkDetails
                 }
             }
-            console.log("RELCHECKS:",relCheckList)
-            // console.log("\n\n\nRELCHECKS:\n",relChecks,"\n\n\n")
-            // let relCheckList = Object.fromEntries(relChecks)
-            // console.log("RELCHECKLIST:",relCheckList)
-
-            // //-----------------------------------------------
-            // let testObj = {
-            //     exist_readme: {
-            //       config:'base',
-            //       kind:'file_exist',
-            //       file:'README.md'
-            //     },
-            //     exist_pkgjson: { 
-            //       config:'base',
-            //       kind:'file_exist', 
-            //       file:'package.json' 
-            //     }
-            // }
-            // let testArray = Object.entries(testObj)
-            // // console.log("TESTARRAY:", testArray)
-            // let testObj2 = Object.fromEntries(testArray)
-            // // console.log("TEST OBJ:", testObj2)
-            // //------------------------------------------------
-
-            for(const checkName in relCheckList) { // rel checks
-            // for(const checkName in checkList) { // all checks
+            
+            for(const checkName in relCheckList) {
                 let checkDetails = checkList[checkName]
                 checkDetails.name = checkName
     
@@ -114,7 +89,6 @@ class Maintain {
                     continue
                 }
                 
-                // console.log(argMap[checkDetails.config]) // undefined
                 let res = await checkKind(checkDetails)
                 results[checkName] = res
                 
