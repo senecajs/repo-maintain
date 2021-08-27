@@ -128,9 +128,9 @@ class Maintain {
                 file_exist: async function(checkDetails) {
                     let file = checkDetails.file
                     let pass = Fs.existsSync('./'+file)
-                    let why = "not_found"
+                    let why = "file_not_found"
                     if (true == pass){
-                        why = "found"
+                        why = "file_found"
                     }
         
                     return {
@@ -142,48 +142,53 @@ class Maintain {
                     }
                 },
 
-                fileX_exist_if_json_not: async function(checkDetails) {
+                fileX_exist_if_contain_json: async function(checkDetails) {
         
-                    /**
-                     * Get if-file
-                     * Get if-value from if-file
-                     * Check FAILS if if-value == not-value
-                     * Insert if-value to file(new)
-                     * Check for file(new)
-                     */
+                    console.log(process.cwd())
+                    let file = checkDetails.file
+                    console.log("FILE:",file)
                     let ifFile = checkDetails.if_file
                     let pass = Fs.existsSync('./'+ifFile)
-
-                    if (true == pass) {
-                        const ifFilePath
-                    }
-
-
+                    let why = "json_file_not_found"
                     let searchContent = checkDetails.contains
+                    let searchIsNot = checkDetails.contains_is_not
                     let containsType = checkDetails.contains_type
-                    // let searchLevels = Object.values(searchContent)
-                    let why = "file_not_found"
-        
+
                     if (true == pass) {
-                        const filePath = './'+file
-                        const fileContent = require(filePath)
+                        const ifFilePath = './'+ifFile
+                        const ifFileContent = require(ifFilePath)
+                        console.log(process.cwd())
                         if ("key" == containsType) {
-                            let chain = []
-                            for (let i = 0; i < searchContent.length; i++) {
-                                chain.push(searchContent[i])
-                            }
-                            pass = (null != (Hoek.reach(fileContent,chain)))
+                            // let chain = []
+                            // for (let i = 0; i < searchContent.length; i++) {
+                            //     chain.push(searchContent[i])
+                            // }
+                            console.log(process.cwd())
+                            var searchIs = Hoek.reach(ifFileContent,searchContent)
+                            console.log(process.cwd())
+                            console.log("SEARCHIS:",searchIs)
+                            pass = (null != searchIs && searchIsNot != searchIs)
         
                         } else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
                             pass = false
                         }
-                        
+
                         if (true == pass) {
-                            why = "found"
+                            file = searchIs
+                            console.log("FILE:",file)
+                            pass = Fs.existsSync('./'+file)
+
+                            if (true == pass) {
+                            why = "file_found"
+                            } else {
+                                why = "file_not_found"
+                            }
                         } else {
-                            why = "not_found"
+                            why = "illegal_value"
                         }
+
+                        
                     }
 
                     return {
@@ -239,11 +244,12 @@ class Maintain {
                         const filePath = './'+file
                         const fileContent = require(filePath)
                         if ("key" == containsType) {
-                            let chain = []
-                            for (let i = 0; i < searchContent.length; i++) {
-                                chain.push(searchContent[i])
-                            }
-                            pass = (null != (Hoek.reach(fileContent,chain)))
+                            // clean this up
+                            // let chain = []
+                            // for (let i = 0; i < searchContent.length; i++) {
+                            //     chain.push(searchContent[i])
+                            // }
+                            pass = (null != (Hoek.reach(fileContent,searchContent)))
         
                         } else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
