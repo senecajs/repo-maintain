@@ -73,11 +73,82 @@ class Maintain {
             // this is where the configs come into play ----------------------------------------------------------
             // const relChecks = checkList.filter(check => check[checkName].config = "core")
             // console.log(relChecks)
-            for (const [name, data] of Object.entries(checkList)) {
-                for (const [key, value] of Object.entries(data)) {
-                    console.log(value)
+            // let checkMap = {}
+            // let summary = json.items.map(item=>({
+            //     name: item.name,
+            //     owner: item.owner.login,
+            // }))
+
+            //Object.entries(checkList)
+            // Object.entries(checkList).map(function(data) {
+            //     // console.log("\noh this?\n",data,"\nhmmm\n",index)
+            //     // console.log("CONFIG:",data.config)
+            //     // console.log(data,"\n------\n------\n")
+            // })
+
+            // const checksMap = new Map(Object.entries(checkList))
+            // console.log("MAP:",checksMap)
+            // console.log("MAP VALUES:",checksMap.values())
+            console.log(typeof(checkList))
+
+            let testObj = {
+                exist_readme: {
+                  config:'base',
+                  kind:'file_exist',
+                  file:'README.md'
+                },
+                exist_pkgjson: { 
+                  config:'base',
+                  kind:'file_exist', 
+                  file:'package.json' 
                 }
             }
+
+            console.log("\n-----------------------")
+             let testObjToArray = Object.entries(testObj)
+            console.log("OBJ 2 ARRAY:", testObjToArray)
+            let relArray = [];
+            for (const check in testObjToArray) {
+                console.log(check.relArray.filter(ch => ch.file === "README.md"))
+                // relArray.push(...check.relArray.filter(ch => ch.file === "README.md"))
+            }
+            let relObj = Object.fromEntries(relArray)
+            console.log("README CHECKS:",relObj)
+           
+
+            // function isREADME(value) {
+            //     return "README.md" === value
+            // }
+            // let filter = testObjToArray.filter(isREADME)
+            // console.log("FILTER:",filter)
+
+            // let testArrayToObj = Object.fromEntries(testObjToArray)
+            // console.log("ARRAY TO OBJ:", testArrayToObj)
+            console.log("-----------------------\n")
+
+
+
+
+
+            // const checksMapValues = new Map(Object.entries(checksMap.values()))
+            // console.log("INDIV VALUES:",checksMapValues)
+            // for (data in checksMap.values()){
+            //     console.log(data.config)
+            // }
+            // console.log("MAP:",checksMap[1])
+            // for (const [name, data] of Object.entries(checkList)) {
+            //     checkMap[name]
+
+                // const allChecks = Object.entries(data)
+                // console.log(allChecks)
+                // // const relChecksArray = allChecks.filter(check => argArray.includes(argArray))
+                // const relChecksArray = allChecks.filter(([key, value]) => argArray.includes(value))
+                // console.log("\n\n",relChecksArray)
+                // console.log(relChecksArray)
+                // for (const [key, value] of Object.entries(data)) {
+                //     relChecks[key] = value
+                // }
+            // }
             for(const checkName in checkList) {
                 let checkDetails = checkList[checkName]
                 checkDetails.name = checkName
