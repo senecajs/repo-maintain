@@ -18,11 +18,6 @@ class Maintain {
         const argString = process.argv.slice(2)
         const argArray = argString[0].split(',')
         console.log(argArray)
-        // let argMap = {}
-        // for (const config of argArray) {
-        //     argMap[config] = config
-        // }
-        // console.log(argMap)
 
         async function runChecks() {
             let results = {}

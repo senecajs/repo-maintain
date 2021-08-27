@@ -44,14 +44,6 @@ module.exports = {
     file:'package.json',
     contains: ['scripts', 'test'],
     content_type:'key'
-  },
-
-  testo_testo: {
-    config:'test',
-    kind:'content_contain_json',
-    file:'package.json',
-    contains: ['scripts', 'name'],
-    content_type:'key'
   }
 
 }

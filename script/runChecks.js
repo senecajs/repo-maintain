@@ -77,7 +77,16 @@ async function runChecks() {
             dataForChecks[fileName] = fileContent
         }
 
-        for(checkName in checkList) {
+        // Filter checks object to configs
+        const relCheckList = {}
+        for (const checkName in checkList) {
+            let checkDetails = checkList[checkName]
+            if (argArray.includes(checkDetails.config)){
+                relCheckList[checkName] = checkDetails
+            }
+        }
+        
+        for(const checkName in relCheckList) {
             let checkDetails = checkList[checkName]
             checkDetails.name = checkName
 
