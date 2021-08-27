@@ -136,6 +136,57 @@ function checkOperations() {
             }
         },
 
+        fileX_exist_if_contain_json: async function(checkDetails,pluginRelPath) {
+        
+            let file = checkDetails.file
+            let ifFile = checkDetails.if_file
+            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+ifFile)
+            let why = "json_file_not_found"
+            let searchContent = checkDetails.contains
+            let searchIsNot = checkDetails.contains_is_not
+            let containsType = checkDetails.contains_type
+
+            if (true == pass) {
+                const ifFilePath = '../data/downloads/'+pluginRelPath+'/'+ifFile
+                const ifFileContent = Fs.readFileSync(ifFilePath)
+                if ("key" == containsType) {
+                    // let chain = []
+                    // for (let i = 0; i < searchContent.length; i++) {
+                    //     chain.push(searchContent[i])
+                    // }
+                    var searchIs = Hoek.reach(ifFileContent,searchContent)
+                    pass = (null != searchIs && searchIsNot != searchIs)
+
+                } else { // add in "else if" clause if searching for json value
+                    console.log("Content type not recognised.")
+                    pass = false
+                }
+
+                if (true == pass) {
+                    file = searchIs
+                    pass = file in dataForChecks
+
+                    if (true == pass) {
+                    why = "file_found"
+                    } else {
+                        why = "file_not_found"
+                    }
+                } else {
+                    why = "illegal_value"
+                }
+
+                
+            }
+
+            return {
+                check: checkDetails.name,
+                kind: checkDetails.kind,
+                file: file,
+                pass: pass,
+                why: why,
+              }
+        },
+
         content_contain_string: async function(checkDetails, pluginRelPath) {
 
             let file = checkDetails.file
