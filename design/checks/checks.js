@@ -33,6 +33,16 @@ module.exports = {
     contains_type:'key',
     contains_is_not:'index.js'
   },
+
+  exist_dist: {
+    config:'ts',
+    kind:'fileX_exist_if_contain_json',
+    file:'404',
+    if_file:'package.json',
+    contains:['main'],
+    contains_type:'key',
+    contains_is_not:'dist/index.js'
+  },
   
   content_readme: { 
     config:'base',
