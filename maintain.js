@@ -174,9 +174,7 @@ class Maintain {
                             }
                             if ("ts" == config) {
                                 file = Path.basename(searchIs,'.js')+'.ts'
-                                console.log(file)
                                 pass = file in dataForChecks
-                                console.log(Object.keys(dataForChecks))
                             }
 
                             if (true == pass) {

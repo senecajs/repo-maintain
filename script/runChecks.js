@@ -145,6 +145,7 @@ function checkOperations() {
             let searchContent = checkDetails.contains
             let searchIsNot = checkDetails.contains_is_not
             let containsType = checkDetails.contains_type
+            let config = checkDetails.config
 
             if (true == pass) {
                 const ifFilePath = '../data/downloads/'+pluginRelPath+'/'+ifFile
@@ -163,8 +164,14 @@ function checkOperations() {
                 }
 
                 if (true == pass) {
-                    file = searchIs
-                    pass = file in dataForChecks
+                    if ("js" == config) {
+                        file = searchIs
+                        pass = file in dataForChecks
+                    }
+                    if ("ts" == config) {
+                        file = Path.basename(searchIs,'.js')+'.ts'
+                        pass = file in dataForChecks
+                    }
 
                     if (true == pass) {
                     why = "file_found"
