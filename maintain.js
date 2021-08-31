@@ -5,6 +5,7 @@ const Filehound = require('filehound')
 const Path = require('path')
 const jsonFile = require('jsonfile') 
 const Hoek = require('@hapi/hoek')
+const gitDefault = require('default-branch')
 
 // file-related constants
 const checkList = require('./design/checks/checks.js')
@@ -48,9 +49,10 @@ class Maintain {
     
                 dataForChecks[fileName] = fileContent
     
-                //to get package and main name from package.json file
+                //to get package name from package.json file
                 if ("package.json" == fileName) {
                     dataForChecks.packageName = fileContent.name
+                    dataForChecks.repoURL = fileContent.repository.url
                 }
             }
     
@@ -263,6 +265,35 @@ class Maintain {
                       check: checkDetails.name,
                       kind: checkDetails.kind,
                       file: file,
+                      pass: pass,
+                      why: why,
+                    }
+                },
+
+                check_branch: async function(checkDetails,dataForChecks) {
+                    let branch = checkDetails.branch
+                    let branchCorrect = checkDetails.branch_is
+
+                    if ("default" == branch) {
+                        branch = await gitDefault(dataForChecks.repoURL)
+                    }
+                    let pass = (null != branch)
+                    let why = "branch_not_found"
+
+                    if (true == pass){
+                        if (branchCorrect == branch) {
+                            why = "branch_correct"
+                        }
+                        else {
+                            pass = false
+                            why = "branch_incorrect"
+                        }
+                    }
+        
+                    return {
+                      check: checkDetails.name,
+                      kind: checkDetails.kind,
+                      file: 'N/A',
                       pass: pass,
                       why: why,
                     }
