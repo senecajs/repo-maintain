@@ -64,6 +64,13 @@ module.exports = {
     file:'package.json',
     contains: ['scripts', 'test'],
     contains_type:'key'
+  },
+
+  check_default: {
+    config:'base',
+    kind:'check_branch',
+    branch:'default',
+    branch_is:'main'
   }
 
 }
