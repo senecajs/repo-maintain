@@ -5,6 +5,7 @@ const Filehound = require('filehound')
 const Path = require('path') 
 const jsonFile = require('jsonfile')
 const Hoek = require('@hapi/hoek')
+// hrm this is throwing an error
 const gitDefault = require('default-branch')
 
 // file-related constants
