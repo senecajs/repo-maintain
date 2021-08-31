@@ -5,6 +5,7 @@ const Filehound = require('filehound')
 const Path = require('path') 
 const jsonFile = require('jsonfile')
 const Hoek = require('@hapi/hoek')
+const gitDefault = require('default-branch')
 
 // file-related constants
 const checkList = require('../design/checks/checks.js')
@@ -229,7 +230,7 @@ function checkOperations() {
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
-            let contentType = checkDetails.content_type
+            let contentType = checkDetails.contains_type
             // let searchLevels = Object.values(searchContent)
             let why = "file_not_found"
 
@@ -261,6 +262,35 @@ function checkOperations() {
               check: checkDetails.name,
               kind: checkDetails.kind,
               file: file,
+              pass: pass,
+              why: why,
+            }
+        },
+
+        check_branch: async function(checkDetails,dataForChecks) {
+            let branch = checkDetails.branch
+            let branchCorrect = checkDetails.branch_is
+
+            if ("default" == branch) {
+                branch = await gitDefault(dataForChecks.repoURL)
+            }
+            let pass = (null != branch)
+            let why = "branch_not_found"
+
+            if (true == pass){
+                if (branchCorrect == branch) {
+                    why = "branch_correct"
+                }
+                else {
+                    pass = false
+                    why = "branch_incorrect"
+                }
+            }
+
+            return {
+              check: checkDetails.name,
+              kind: checkDetails.kind,
+              file: 'N/A',
               pass: pass,
               why: why,
             }
