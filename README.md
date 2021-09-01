@@ -8,7 +8,7 @@
 
 ## Description
 
-This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this plugin to scan your own prior to publishing to see if it meets our standardisation specifications.
+This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this to scan your own plugin prior to publishing to see if it meets our standardisation specifications.
 
 If you're using this module, and need help, you can:
 
@@ -39,14 +39,23 @@ This check looks for the existence of a LICENSE file. A LICENSE file saved under
 ### exist_codeconduct
 This checks looks for the existence of a CODE_OF_CONDUCT.md file. Details for this file can be found by visiting the [Contributor Covenant website](https://www.contributor-covenant.org/).
 
+### exist_entry
+This check searches for an entry.js file, where entry matches the value of "main" in the package.json file. An empty string or a value of "index.js" will cause the check to fail. This is a JavaScript-specific check.
+
+### exist_dist
+This check searches for an entry.ts file, where entry matches the value of "main" in the package.json file (in the format dist/entry.js). An empty string or a value of "dist/index.js" will cause the check to fail. This is a TypeScript-specific check.
+
 ### content_readme
 This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
 
 ### version_codeconduct
 This checks scans the content of the CODE_OF_CONTENT file for a mention of the latest version (v2.1). It searches for the keyword "version 2.1" and the [URL of the current version](https://www.contributor-covenant.org/version/2/1/), as described on the site.
 
-### content_pkgjson
+### test_pkgjson
 This check scans the content of the package.json file for the existence of a scripts.test value. The content of the value is not read. If the file does not exist, or if there is no "test" key, the check will fail.
+
+### check_default
+This check looks at the name of the default branch on GitHub. The check will fail if it is not named "main".
 
 ## Contributing
 The [Senecajs org](https://github.com/senecajs) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features, please get in touch.
