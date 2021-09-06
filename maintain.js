@@ -97,6 +97,7 @@ class Maintain {
         async function conclusion(checkResults) {
             let totalNb = 0
             let failNb = 0
+            let note = ""
             let fails = []
             for (const check in checkResults) {
                 totalNb++
@@ -105,9 +106,16 @@ class Maintain {
                 if (false == checkDetails.pass) {
                     failNb++
                     fails.push(checkDetails.check)
+                    // fails.push("\n")
                 }
             }
-            let message = `Total checks: ${totalNb}\nFailed checks: ${failNb}\n\t${fails}`
+            if (0 == failNb){
+                note = "Congratulations! Your plugin meets all of the current standards."
+            } else {
+                note = "Please refer to the README.md document for descriptions of all checks."
+            }
+            fails = fails.join('\n\t')
+            let message = `Total checks: ${totalNb}\nFailed checks: ${failNb}\n\t${fails}\n${note}`
             return message
         }
 
