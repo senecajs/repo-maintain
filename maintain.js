@@ -92,7 +92,7 @@ class Maintain {
             
             return results
 
-        } // end of runChecks()
+        }
 
         async function conclusion(checkResults) {
             let totalNb = 0
@@ -106,7 +106,6 @@ class Maintain {
                 if (false == checkDetails.pass) {
                     failNb++
                     fails.push(checkDetails.check)
-                    // fails.push("\n")
                 }
             }
             if (0 == failNb){
@@ -277,15 +276,15 @@ class Maintain {
                 },
         
             }
-        } // end of checkOperations()
+        }
         
         // -------------------------------------------------------
         runAll()
         // -------------------------------------------------------
 
-    } // end of run()
+    }
     
-} // end of Maintain class
+}
 
 module.exports = {
     Maintain
