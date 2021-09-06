@@ -19,8 +19,7 @@ class Maintain {
         const argArray = argString[0].split(',')
         console.log(argArray)
 
-        async function runChecks() {
-            let results = {}
+        async function runChecksPrep() {
             
             // reading client's JSON files in
             const jsonPromise = Filehound.create()
@@ -71,6 +70,18 @@ class Maintain {
                     relCheckList[checkName] = checkDetails
                 }
             }
+
+            return {
+                relCheckList: relCheckList,
+                dataForChecks: dataForChecks
+            }
+        }
+
+        async function runChecks() {
+            let prep = await runChecksPrep()
+            let relCheckList = prep.relCheckList
+            let dataForChecks = prep.dataForChecks
+            let results = {}
             
             for(const checkName in relCheckList) {
                 let checkDetails = checkList[checkName]
@@ -83,11 +94,8 @@ class Maintain {
                     // proceed to next check
                     continue
                 }
-                
                 let res = await checkKind(checkDetails,dataForChecks)
                 results[checkName] = res
-                
-                
             }   
             
             return results
