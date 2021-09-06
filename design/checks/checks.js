@@ -1,37 +1,16 @@
 module.exports = {
 
-  exist_readme: {
+  content_readme: { 
     config:'base',
-    kind:'file_exist',
-    file:'README.md'
+    kind:'content_contain_string', 
+    file:'README.md', 
+    contains: ['Voxgig']
   },
   
-  exist_pkgjson: { 
-    config:'base',
-    kind:'file_exist', 
-    file:'package.json' 
-  },
-
-  exist_license: { 
-    config:'base',
-    kind:'file_exist', 
-    file:'LICENSE' 
-  },
-
   exist_codeconduct: { 
     config:'base',
     kind:'file_exist', 
     file:'CODE_OF_CONDUCT.md' 
-  },
-
-  exist_entry: {
-    config:'js',
-    kind:'fileX_exist_if_contain_json',
-    file:'404',
-    if_file:'package.json',
-    contains:['main'],
-    contains_type:'key',
-    contains_is_not:'index.js'
   },
 
   exist_dist: {
@@ -44,11 +23,40 @@ module.exports = {
     contains_is_not:'dist/index.js'
   },
   
-  content_readme: { 
+  exist_entry: {
+    config:'js',
+    kind:'fileX_exist_if_contain_json',
+    file:'404',
+    if_file:'package.json',
+    contains:['main'],
+    contains_type:'key',
+    contains_is_not:'index.js'
+  },
+  
+  exist_license: { 
     config:'base',
-    kind:'content_contain_string', 
-    file:'README.md', 
-    contains: ['Voxgig']
+    kind:'file_exist', 
+    file:'LICENSE' 
+  },
+  
+  exist_pkgjson: { 
+    config:'base',
+    kind:'file_exist', 
+    file:'package.json' 
+  },
+  
+  exist_readme: {
+    config:'base',
+    kind:'file_exist',
+    file:'README.md'
+  },
+  
+  test_pkgjson: {
+    config:'base',
+    kind:'content_contain_json',
+    file:'package.json',
+    contains: ['scripts', 'test'],
+    contains_type:'key'
   },
 
   version_codeconduct: { 
@@ -56,16 +64,7 @@ module.exports = {
     kind:'content_contain_string', 
     file:'CODE_OF_CONDUCT.md',
     contains: ['version 2.1', 'https://www.contributor-covenant.org/version/2/1/']
-  },
-
-  test_pkgjson: {
-    config:'base',
-    kind:'content_contain_json',
-    file:'package.json',
-    contains: ['scripts', 'test'],
-    contains_type:'key'
   }
-
 }
 
 

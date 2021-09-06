@@ -27,26 +27,30 @@ See below for what each check means in the event of it failing.
 Please note: if your repository contains file name duplicates (for example, two package.json files), the module will return a SyntaxError. This is a known issue.
 
 ## Checks
-### exist_readme
-This check looks for the existence of a README.md file. A README saved under a different file name or extension will count as a fail.
-
-### exist_pkgjson
-This check looks for the existence of a package.json file. It does not scan for a package-lock.json file.
-
-### exist_license
-This check looks for the existence of a LICENSE file. A LICENSE file saved under a different name or with any file extension will count as a fail.
+### content_readme
+This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
 
 ### exist_codeconduct
 This checks looks for the existence of a CODE_OF_CONDUCT.md file. Details for this file can be found by visiting the [Contributor Covenant website](https://www.contributor-covenant.org/).
 
-### content_readme
-This check scans the content of the README.md file for the keyword "Voxgig". If the file does not exist, the check will fail.
+### exist_dist
+
+### exist_entry
+
+### exist_license
+This check looks for the existence of a LICENSE file. A LICENSE file saved under a different name or with any file extension will count as a fail.
+
+### exist_pkgjson
+This check looks for the existence of a package.json file. It does not scan for a package-lock.json file.
+
+### exist_readme
+This check looks for the existence of a README.md file. A README saved under a different file name or extension will count as a fail.
+
+### test_pkgjson
+This check scans the content of the package.json file for the existence of a scripts.test value. The content of the value is not read. If the file does not exist, or if there is no "test" key, the check will fail.
 
 ### version_codeconduct
 This checks scans the content of the CODE_OF_CONTENT file for a mention of the latest version (v2.1). It searches for the keyword "version 2.1" and the [URL of the current version](https://www.contributor-covenant.org/version/2/1/), as described on the site.
-
-### content_pkgjson
-This check scans the content of the package.json file for the existence of a scripts.test value. The content of the value is not read. If the file does not exist, or if there is no "test" key, the check will fail.
 
 ## Contributing
 The [Senecajs org](https://github.com/senecajs) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features, please get in touch.
