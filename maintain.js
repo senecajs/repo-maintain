@@ -113,7 +113,8 @@ class Maintain {
                 checkDetails.name = check
                 if (false == checkDetails.pass) {
                     failNb++
-                    fails.push(checkDetails.check)
+                    let failWhy = checkDetails.check + " (" + checkDetails.why + ")"
+                    fails.push(failWhy)
                 }
             }
             if (0 == failNb){
@@ -198,7 +199,7 @@ class Maintain {
                                 why = "file_not_found"
                             }
                         } else {
-                            why = "illegal_value"
+                            why = "incorrect_value"
                         }
 
                         
@@ -228,9 +229,9 @@ class Maintain {
                         }
                         
                         if (true == pass) {
-                            why = "found"
+                            why = "content_found"
                         } else {
-                            why = "not_found"
+                            why = "content_not_found"
                         }
                     }
         
@@ -268,9 +269,9 @@ class Maintain {
                         }
                         
                         if (true == pass) {
-                            why = "found"
+                            why = "content_found"
                         } else {
-                            why = "not_found"
+                            why = "content_not_found"
                         }
                     }
         
