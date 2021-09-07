@@ -17,7 +17,6 @@ class Maintain {
 
         const argString = process.argv.slice(2)
         const argArray = argString[0].split(',')
-        console.log(argArray)
 
         async function runChecksPrep() {
             
@@ -62,7 +61,7 @@ class Maintain {
                 dataForChecks[fileName] = fileContent
             }
 
-            // Filter checks object to configs
+            // Filter checks object for specific configuration
             const relCheckList = {}
             for (const checkName in checkList) {
                 let checkDetails = checkList[checkName]
@@ -113,7 +112,7 @@ class Maintain {
                 checkDetails.name = check
                 if (false == checkDetails.pass) {
                     failNb++
-                    let failWhy = checkDetails.check + " (" + checkDetails.why + ")"
+                    let failWhy = checkDetails.check + " (why: " + checkDetails.why + ")"
                     fails.push(failWhy)
                 }
             }
@@ -123,7 +122,9 @@ class Maintain {
                 note = "Please refer to the README.md document for descriptions of all checks."
             }
             fails = fails.join('\n\t')
-            let message = `Total checks: ${totalNb}\nFailed checks: ${failNb}\n\t${fails}\n${note}`
+            let message = `Total checks for this configuration: ${totalNb}
+            \nFailed checks: ${failNb}\n\t${fails}
+            \n${note}`
             return message
         }
 
