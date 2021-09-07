@@ -7,7 +7,7 @@ const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
 let checkResults = JSON.parse(checkResultsRaw)
 
 async function genHeadings(){
-    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars", "Open Issues", "Open PRs"]
+    let headings = ["Package", "PASS?", "orgRepo", "Fails", "forks_count", "stargazers_count", "open_issues_count"]
     // console.log(headings)
     console.log("Headings created.")
     return headings
@@ -35,9 +35,16 @@ async function genData(headings, object) {
             }
         }
 
+        await new Promise(resolve => setTimeout(resolve,1111))
+        let apiURL = "https://api.github.com/repos/"+repoName
+        const response = await Fetch(apiURL)
+        const body = await response.text()
+        const apiJSON = JSON.parse(body)
+
         for (let i = 4; i < headings.length; i++) {
             let title = headings[i]
-            repoData[title] = "apiData"
+            let apiData = apiJSON[title]
+            repoData[title] = apiData
         }
         var repoDataValues = Object.values(repoData)
         dataSet.push(repoDataValues)
