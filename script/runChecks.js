@@ -158,7 +158,8 @@ function checkOperations() {
                     var searchIs = Hoek.reach(ifFileContent,searchContent)
                     pass = (null != searchIs && searchIsNot != searchIs)
 
-                } else { // add in "else if" clause if searching for json value
+                }
+                else { // add in "else if" clause if searching for json value
                     console.log("Content type not recognised.")
                     pass = false
                 }
@@ -175,10 +176,12 @@ function checkOperations() {
 
                     if (true == pass) {
                     why = "file_found"
-                    } else {
+                    }
+                    else {
                         why = "file_not_found"
                     }
-                } else {
+                }
+                else {
                     why = "illegal_value"
                 }
 
@@ -210,7 +213,8 @@ function checkOperations() {
                 
                 if (true == pass) {
                     why = "found"
-                } else {
+                }
+                else {
                     why = "not_found"
                 }
             }
@@ -245,14 +249,16 @@ function checkOperations() {
                     // console.log(pass)
 
                     // add in else if clause for if searching for json value
-                } else {
+                }
+                else {
                     console.log("Content type not recognised.")
                     pass = false
                 }
                 
                 if (true == pass) {
                     why = "found"
-                } else {
+                }
+                else {
                     why = "not_found"
                 }
             }

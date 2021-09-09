@@ -118,7 +118,8 @@ class Maintain {
             }
             if (0 == failNb){
                 note = "Congratulations! Your plugin meets all of the current standards."
-            } else {
+            }
+            else {
                 note = "Please refer to the README.md document for descriptions of all checks."
             }
             fails = fails.join('\n\t')
@@ -179,7 +180,8 @@ class Maintain {
                             var searchIs = Hoek.reach(ifFileContent,searchContent)
                             pass = (null != searchIs && searchIsNot != searchIs)
         
-                        } else { // add in "else if" clause if searching for json value
+                        }
+                        else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
                             pass = false
                         }
@@ -196,10 +198,12 @@ class Maintain {
 
                             if (true == pass) {
                             why = "file_found"
-                            } else {
+                            }
+                            else {
                                 why = "file_not_found"
                             }
-                        } else {
+                        }
+                        else {
                             why = "incorrect_value"
                         }
 
@@ -231,7 +235,8 @@ class Maintain {
                         
                         if (true == pass) {
                             why = "content_found"
-                        } else {
+                        }
+                        else {
                             why = "content_not_found"
                         }
                     }
@@ -264,14 +269,16 @@ class Maintain {
                             // }
                             pass = (null != (Hoek.reach(fileContent,searchContent)))
         
-                        } else { // add in "else if" clause if searching for json value
+                        }
+                        else { // add in "else if" clause if searching for json value
                             console.log("Content type not recognised.")
                             pass = false
                         }
                         
                         if (true == pass) {
                             why = "content_found"
-                        } else {
+                        }
+                        else {
                             why = "content_not_found"
                         }
                     }
