@@ -14,7 +14,6 @@ const checkOps = checkOperations()
 
 const argString = process.argv.slice(2)
 const argArray = argString[0].split(',')
-console.log(argArray)
 //---------------------------------------------------------------
 
 const plugins = Filehound.create()
@@ -110,9 +109,9 @@ async function runChecks() {
 
 // --------------------------------------------------------------------
 async function run() {
-    console.log(Chalk.bold("\nAll Checks:"))
+    console.log("Running checks...")
     let checkResults = await runChecks()
-    console.log(Chalk.bold("\nChecks complete.\n"))
+    console.log("Checks complete. Run createReport.js to generate Markdown table of results.")
 }
 // --------------------------------------------------------------------
 
@@ -160,7 +159,7 @@ function checkOperations() {
 
                 }
                 else { // add in "else if" clause if searching for json value
-                    console.log("Content type not recognised.")
+                    console.log("Content type not recognised. fileXjson")
                     pass = false
                 }
 
@@ -233,7 +232,7 @@ function checkOperations() {
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
             let searchContent = checkDetails.contains
-            let contentType = checkDetails.content_type
+            let contentType = checkDetails.contains_type
             // let searchLevels = Object.values(searchContent)
             let why = "file_not_found"
 
@@ -251,7 +250,7 @@ function checkOperations() {
                     // add in else if clause for if searching for json value
                 }
                 else {
-                    console.log("Content type not recognised.")
+                    console.log("Content type not recognised. content json")
                     pass = false
                 }
                 
