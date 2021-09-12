@@ -16,6 +16,9 @@ class Maintain {
         const checkOps = checkOperations()
 
         const argString = process.argv.slice(2)
+        if (null == argString[0]) {
+            throw new Error("Configuration must be specified. See README.md for details.")
+        }
         const argArray = argString[0].split(',')
 
         async function runChecksPrep() {
