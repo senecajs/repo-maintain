@@ -5,6 +5,7 @@ const Filehound = require('filehound')
 const Path = require('path')
 const jsonFile = require('jsonfile') 
 const Hoek = require('@hapi/hoek')
+const Marked = require('marked')
 
 // file-related constants
 const checkList = require('./design/checks/checks.js')
@@ -242,6 +243,32 @@ class Maintain {
                         else {
                             why = "content_not_found"
                         }
+                    }
+        
+                    return {
+                      check: checkDetails.name,
+                      kind: checkDetails.kind,
+                      file: file,
+                      pass: pass,
+                      why: why,
+                    }
+                },
+
+                content_contain_markdown: async function(checkDetails,dataForChecks) {
+                    let file = checkDetails.file
+                    let pass = file in dataForChecks
+                    let why = "file_not_found"
+                    if (true == pass){
+                        why = "file_found"
+
+                        let searchObject = checkDetails.contains
+                        let fileContent = dataForChecks[file]
+                        const tokens = Marked.lexer(fileContent)
+                        console.log(tokens)
+                        // let loopRunning = true
+                        // while (true == loopRunning) {
+                            
+                        // }
                     }
         
                     return {
