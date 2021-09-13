@@ -50,6 +50,23 @@ module.exports = {
     kind:'file_exist',
     file:'README.md'
   },
+
+  readme_headings: {
+    config:'base',
+    kind:'content_contain_markdown',
+    file:'README.md',
+    contains: [
+      {type:'heading',depth:1,text:'<package.name>'},
+      {type:'heading',depth:2,text:'Install'},
+      {type:'heading',depth:2,text:'Quick Example'},
+      {type:'heading',depth:2,text:'More Examples'},
+      {type:'heading',depth:2,text:'Motivation'},
+      {type:'heading',depth:2,text:'Support'},
+      {type:'heading',depth:2,text:'API'},
+      {type:'heading',depth:2,text:'Contributing'},
+      {type:'heading',depth:2,text:'Background'}
+    ]
+  },
   
   test_pkgjson: {
     config:'base',
