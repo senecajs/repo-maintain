@@ -263,7 +263,9 @@ class Maintain {
 
                         let searchObject = checkDetails.contains
                         let fileContent = dataForChecks[file]
-                        const tokens = Marked.lexer(fileContent)
+
+                        const lexer = new Marked.Lexer()
+                        const tokens = lexer.lex(fileContent)
                         console.log(tokens)
                         // let loopRunning = true
                         // while (true == loopRunning) {
