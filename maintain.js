@@ -262,25 +262,21 @@ class Maintain {
                         why = "file_found"
 
                         let searchArray = checkDetails.contains
-                        // reassignment of #1 heading text
+                        // Reassignment of #1 heading text
                         searchArray[0].text = dataForChecks.packageName
                         console.log(searchArray[0].text)
 
                         let fileContent = dataForChecks[file]
+                        // Creating AST from file
                         const lexer = new Marked.Lexer()
                         const tokens = lexer.lex(fileContent)
-                        // console.log(tokens,"\n\n")
                         const headings = tokens.filter(token => "heading" == token.type 
                             	&& (1 == token.depth || 2 == token.depth))
-                        // console.log(headings)
+
                         if (headings.length == searchArray.length) {
                             console.log(searchArray.length)
                             for (let i = 0 ; i < searchArray.length; i++) {
                                 console.log(i)
-                                // console.log("headings[i].depth ",headings[i].depth)
-                                // console.log("searchArray[i].depth ",searchArray[i].depth)
-                                // console.log("headings[i].text ",headings[i].text)
-                                // console.log("searchArray[i].text ",searchArray[i].text)
                                 pass = ((headings[i].depth == searchArray[i].depth) 
                                     && (headings[i].text == searchArray[i].text))
                                 if (false == pass) {
@@ -294,19 +290,6 @@ class Maintain {
                             pass = false
                             why = "nb_headings_incorrect"
                         }
-                        
-
-                        // for (const token of tokens) {
-                        //     if ("heading" == token.type && 2 == token.depth) {
-                        //         console.log(token.text)
-                        //     }
-                        // }
-                        console.log("\n")
-                        
-                        // let loopRunning = true
-                        // while (true == loopRunning) {
-                            
-                        // }
                     }
         
                     return {
