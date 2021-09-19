@@ -269,7 +269,15 @@ class Maintain {
                         // console.log(typeof(fileString))
                         const lexer = new Marked.Lexer()
                         const tokens = lexer.lex(fileContent)
-                        console.log(Object.values(tokens))
+                        console.log(tokens,"\n\n")
+                        // order of tokens is important so for..in cannot be used
+                        for (const token of tokens) {
+                            if ("heading" == token.type && 2 == token.depth) {
+                                console.log(token.text)
+                            }
+                        }
+                        console.log("\n")
+                        
                         // let loopRunning = true
                         // while (true == loopRunning) {
                             
