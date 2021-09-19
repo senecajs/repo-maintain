@@ -60,7 +60,7 @@ class Maintain {
                 let filePath = stringFiles[s]
     
                 let fileName = Path.basename(filePath)
-                let fileContent = Fs.readFileSync(filePath)
+                let fileContent = Fs.readFileSync(filePath, 'utf-8')
     
                 dataForChecks[fileName] = fileContent
             }
@@ -262,11 +262,14 @@ class Maintain {
                         why = "file_found"
 
                         let searchObject = checkDetails.contains
+                        // fileContent can be interacted with as String
                         let fileContent = dataForChecks[file]
-
+                        // let fileString = toString(fileContent)
+                        // console.log(typeof(fileContent))
+                        // console.log(typeof(fileString))
                         const lexer = new Marked.Lexer()
                         const tokens = lexer.lex(fileContent)
-                        console.log(tokens)
+                        console.log(Object.values(tokens))
                         // let loopRunning = true
                         // while (true == loopRunning) {
                             
