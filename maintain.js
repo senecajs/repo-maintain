@@ -270,12 +270,15 @@ class Maintain {
                         const lexer = new Marked.Lexer()
                         const tokens = lexer.lex(fileContent)
                         console.log(tokens,"\n\n")
-                        // order of tokens is important so for..in cannot be used
-                        for (const token of tokens) {
-                            if ("heading" == token.type && 2 == token.depth) {
-                                console.log(token.text)
-                            }
-                        }
+                        const headings = tokens.filter(token => "heading" == token.type 
+                            	&& (1 == token.depth || 2 == token.depth))
+                        console.log(headings)
+
+                        // for (const token of tokens) {
+                        //     if ("heading" == token.type && 2 == token.depth) {
+                        //         console.log(token.text)
+                        //     }
+                        // }
                         console.log("\n")
                         
                         // let loopRunning = true
