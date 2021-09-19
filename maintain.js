@@ -275,7 +275,7 @@ class Maintain {
                         // console.log(headings)
                         if (headings.length == searchArray.length) {
                             console.log(searchArray.length)
-                            for (let i = searchArray.length-1 ; i >= 0; i--) {
+                            for (let i = 0 ; i < searchArray.length; i++) {
                                 console.log(i)
                                 // console.log("headings[i].depth ",headings[i].depth)
                                 // console.log("searchArray[i].depth ",searchArray[i].depth)
@@ -285,8 +285,8 @@ class Maintain {
                                     && (headings[i].text == searchArray[i].text))
                                 if (false == pass) {
                                     let nb = i+1
-                                    why = "heading_"+nb+"_incorrect"
-                                    console.log(why)
+                                    why = "heading_\""+searchArray[i].text+"\"_not_found"
+                                    break
                                 }
                             }
                         }
