@@ -74,7 +74,7 @@ async function runChecks() {
             let filePath = stringFiles[s]
 
             let fileName = Path.basename(filePath)
-            let fileContent = Fs.readFileSync(filePath)
+            let fileContent = Fs.readFileSync(filePath, 'utf-8')
 
             dataForChecks[fileName] = fileContent
         }
@@ -99,7 +99,7 @@ async function runChecks() {
                 continue
             }
 
-            let res = await checkKind(checkDetails, pluginRelPath)
+            let res = await checkKind(checkDetails, dataForChecks)
             results[checkName] = res
             
         }
@@ -121,9 +121,9 @@ async function run() {
 function checkOperations() {
 
     return {
-        file_exist: async function(checkDetails, pluginRelPath) {
+        file_exist: async function(checkDetails, dataForChecks) {
             let file = checkDetails.file
-            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
+            let pass = file in dataForChecks
             let why = "not_found"
             if (true == pass){
                 why = "found"
@@ -138,7 +138,7 @@ function checkOperations() {
             }
         },
 
-        fileX_exist_if_contain_json: async function(checkDetails,pluginRelPath) {
+        fileX_exist_if_contain_json: async function(checkDetails, dataForChecks) {
         
             let file = checkDetails.file
             let ifFile = checkDetails.if_file
@@ -199,7 +199,7 @@ function checkOperations() {
               }
         },
 
-        content_contain_string: async function(checkDetails, pluginRelPath) {
+        content_contain_string: async function(checkDetails, dataForChecks, pluginRelPath) {
 
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
@@ -230,7 +230,55 @@ function checkOperations() {
             }
         },
 
-        content_contain_json: async function(checkDetails, pluginRelPath) {
+        content_contain_markdown: async function(checkDetails, dataForChecks, pluginRelPath) {
+            let file = checkDetails.file
+            let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
+            let why = "file_not_found"
+            if (true == pass){
+                why = "file_found"
+
+                let searchArray = checkDetails.contains
+                // Reassignment of #1 heading text
+                searchArray[0].text = dataForChecks.packageName
+                console.log(searchArray[0].text)
+
+                const filePath = '../data/downloads/'+pluginRelPath+'/'+file
+                const fileContent = Fs.readFileSync(filePath)
+                // Creating AST from file
+                const lexer = new Marked.Lexer()
+                const tokens = lexer.lex(fileContent)
+                const headings = tokens.filter(token => "heading" == token.type 
+                        && (1 == token.depth || 2 == token.depth))
+
+                if (headings.length == searchArray.length) {
+                    console.log(searchArray.length)
+                    for (let i = 0 ; i < searchArray.length; i++) {
+                        console.log(i)
+                        pass = ((headings[i].depth == searchArray[i].depth) 
+                            && (headings[i].text == searchArray[i].text))
+                        if (false == pass) {
+                            let nb = i+1
+                            why = "heading_\""+searchArray[i].text+"\"_not_found"
+                            break
+                        }
+                    }
+                }
+                else {
+                    pass = false
+                    why = "nb_headings_incorrect"
+                }
+            }
+
+            return {
+              check: checkDetails.name,
+              kind: checkDetails.kind,
+              file: file,
+              pass: pass,
+              why: why,
+            }
+        },
+
+        content_contain_json: async function(checkDetails, dataForChecks, pluginRelPath) {
 
             let file = checkDetails.file
             let pass = Fs.existsSync('../data/downloads/'+pluginRelPath+'/'+file)
