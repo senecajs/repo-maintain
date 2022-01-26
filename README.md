@@ -1,14 +1,15 @@
 ![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
+
 > A module to help you standardize your [Seneca.js](https://www.npmjs.com/package/seneca) plugin.
 
 # repo-maintain
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
-|---|---|
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
 
 ## Description
 
-This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this plugin to scan your own prior to publishing to see if it meets our standardisation specifications.
+This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this to scan your own plugin prior to publishing to see if it meets our standardisation specifications.
 
 If you're using this module, and need help, you can:
 
@@ -20,7 +21,7 @@ If you are new to Seneca in general, please take a look at [senecajs.org](https:
 
 ## Installation and Usage
 
-__repo-maintain is not currently published as an npm package. Please check back regularly for updates.__
+**repo-maintain is not currently published as an npm package. Please check back regularly for updates.**
 
 See below for what each check means in the event of it failing.
 
@@ -40,9 +41,12 @@ Please note: if your repository contains file name duplicates (for example, two 
 | __readme_headings__ | Your README.md file should contain only one H1-level heading (denoted by a single hash (`#`) in Markdown), the value of which should be `<package.name>`, where `<package.name>` is the name taken from the "name" value in the package.json file. Additionally, your README.md file should contain eight and only eight H2-level headings (denoted by a double-hash (`##`) in Markdown). The values of these H2 headings should be the following (order must be conserved): Install, Quick Example, More Examples, Motivation, Support, API, Contributing, Background. You may include as many lower-level headings between these as you wish. |
 | __test_pkgjson__ | Your package.json file should include a `scripts.test` key, or a key named "test" nested within the "scripts" value. The value of this key is up to you. |
 | __version_codeconduct__ | Your CODE_OF_CONDUCT.md file should contain the latest version of Contributor Covenant's Code of Conduct, as it is [here](https://www.contributor-covenant.org/version/2/1/code_of_conduct/). |
+| __check_default__ | This check looks at the name of the default branch on GitHub. The check will fail if it is not named "main". |
 
 ## Contributing
+
 The [Senecajs org](https://github.com/senecajs) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features, please get in touch.
 
 ## License
+
 Licensed under [MIT](./LICENSE).
