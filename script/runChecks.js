@@ -2,7 +2,7 @@
 const Chalk = require('chalk')
 const Fs = require('fs')
 const Filehound = require('filehound')
-const Path = require('path') 
+const Path = require('path')
 const jsonFile = require('jsonfile')
 const Hoek = require('@hapi/hoek')
 // hrm this is throwing an error
@@ -16,352 +16,348 @@ const checkOps = checkOperations()
 
 const argString = process.argv.slice(2)
 if (null == argString[0]) {
-    throw new Error("Configuration must be specified. See README.md for details.")
+  throw new Error('Configuration must be specified. See README.md for details.')
 }
 const argArray = argString[0].split(',')
 //---------------------------------------------------------------
 
-const plugins = Filehound.create()
-    .path('../data/downloads')
-    .directory()
-    .find();
+const plugins = Filehound.create().path('../data/downloads').directory().find()
 
 // main function
 async function runChecks() {
-    const pluginList = await plugins
-    allChecks = {}
-    for (let i = 0; i < pluginList.length; i++) {
-        let plugin =  pluginList[i]
-        
-        results = {}
-        // relative path towards downloaded files - plugin specific
-        const pluginRelPath = Path.basename(plugin)
-        const orgRepo = pluginRelPath.replace('__','/')
-        // console.log("\n\n",Chalk.blue(orgRepo))
+  const pluginList = await plugins
+  allChecks = {}
+  for (let i = 0; i < pluginList.length; i++) {
+    let plugin = pluginList[i]
 
-        // JSON files
-        const jsonPromise = Filehound.create()
-            .paths('../data/downloads/'+pluginRelPath)
-            .ext('json')
-            .find();
-        const jsonFiles = await jsonPromise
+    results = {}
+    // relative path towards downloaded files - plugin specific
+    const pluginRelPath = Path.basename(plugin)
+    const orgRepo = pluginRelPath.replace('__', '/')
+    console.log('\n\n', Chalk.blue(orgRepo))
 
-        // non-JSON files
-        const stringPromise = Filehound.create()
-            .paths('../data/downloads/'+pluginRelPath)
-            .ext('json')
-            .not()
-            .find();
-        const stringFiles = await stringPromise
+    // JSON files
+    const jsonPromise = Filehound.create()
+      .paths('../data/downloads/' + pluginRelPath)
+      .ext('json')
+      .find()
+    const jsonFiles = await jsonPromise
 
-        dataForChecks = {}
-        dataForChecks.pluginPath = pluginRelPath
-        dataForChecks.orgRepo = orgRepo
+    // non-JSON files
+    const stringPromise = Filehound.create()
+      .paths('../data/downloads/' + pluginRelPath)
+      .ext('json')
+      .not()
+      .find()
+    const stringFiles = await stringPromise
 
-        for (let j = 0; j < jsonFiles.length; j++) {
-            let filePath = jsonFiles[j]
+    dataForChecks = {}
+    dataForChecks.pluginPath = pluginRelPath
+    dataForChecks.orgRepo = orgRepo
 
-            let fileName = Path.basename(filePath)
-            let fileContent = require(filePath)
+    for (let j = 0; j < jsonFiles.length; j++) {
+      let filePath = jsonFiles[j]
 
-            dataForChecks[fileName] = fileContent
+      let fileName = Path.basename(filePath)
+      let fileContent = require(filePath)
 
-            //to get package name from package.json file
-            if ("package.json" == fileName) {
-                dataForChecks.packageName = fileContent.name
-                // can't use this, contrib don't all have valid URLs in their package.json files
-                // dataForChecks.repoURL = fileContent.repository.url
-                // console.log(dataForChecks.repoURL)
-            }
-        }
+      dataForChecks[fileName] = fileContent
 
-        for (let s = 0; s < stringFiles.length; s++) {
-            let filePath = stringFiles[s]
-
-            let fileName = Path.basename(filePath)
-            let fileContent = Fs.readFileSync(filePath, 'utf-8')
-
-            dataForChecks[fileName] = fileContent
-        }
-
-        // Filter checks object to configs
-        const relCheckList = {}
-        for (const checkName in checkList) {
-            let checkDetails = checkList[checkName]
-            if (argArray.includes(checkDetails.config)){
-                relCheckList[checkName] = checkDetails
-            }
-        }
-        
-        for(const checkName in relCheckList) {
-            let checkDetails = checkList[checkName]
-            checkDetails.name = checkName
-
-            // make sure operation of function is detailed below
-            let checkKind = checkOps[checkDetails.kind]
-            if(null == checkKind) {
-                console.log('WARNING', 'Check does not exist', checkName, checkDetails.kind)
-                continue
-            }
-
-            let res = await checkKind(checkDetails, dataForChecks)
-            results[checkName] = res
-            
-        }
-
-        let nameOfObj = orgRepo+"##"+dataForChecks.packageName
-        allChecks[nameOfObj] = results
+      //to get package name from package.json file
+      if ('package.json' == fileName) {
+        dataForChecks.packageName = fileContent.name
+        // can't use this, contrib don't all have valid URLs in their package.json files
+        // dataForChecks.repoURL = fileContent.repository.url
+        // console.log(dataForChecks.repoURL)
+        console.log(dataForChecks.packageName)
+      }
     }
-    Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
+
+    for (let s = 0; s < stringFiles.length; s++) {
+      let filePath = stringFiles[s]
+
+      let fileName = Path.basename(filePath)
+      let fileContent = Fs.readFileSync(filePath, 'utf-8')
+
+      dataForChecks[fileName] = fileContent
+    }
+
+    // Filter checks object to configs
+    const relCheckList = {}
+    for (const checkName in checkList) {
+      let checkDetails = checkList[checkName]
+      if (argArray.includes(checkDetails.config)) {
+        relCheckList[checkName] = checkDetails
+      }
+    }
+
+    for (const checkName in relCheckList) {
+      let checkDetails = checkList[checkName]
+      checkDetails.name = checkName
+
+      // make sure operation of function is detailed below
+      let checkKind = checkOps[checkDetails.kind]
+      if (null == checkKind) {
+        console.log(
+          'WARNING',
+          'Check does not exist',
+          checkName,
+          checkDetails.kind
+        )
+        continue
+      }
+
+      let res = await checkKind(checkDetails, dataForChecks)
+      results[checkName] = res
+    }
+
+    let nameOfObj = orgRepo + '##' + dataForChecks.packageName
+    allChecks[nameOfObj] = results
+  }
+  Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
 }
 
 // --------------------------------------------------------------------
 async function run() {
-    console.log("Running checks...")
-    let checkResults = await runChecks()
-    console.log("Checks complete. Run createReport.js to generate Markdown table of results.")
+  console.log('Running checks...')
+  let checkResults = await runChecks()
+  console.log(
+    'Checks complete. Run createReport.js to generate Markdown table of results.'
+  )
 }
 // --------------------------------------------------------------------
 
 function checkOperations() {
+  return {
+    file_exist: async function (checkDetails, dataForChecks) {
+      let file = checkDetails.file
+      let path = dataForChecks.pluginPath
+      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let why = 'not_found'
+      if (true == pass) {
+        why = 'found'
+      }
 
-    return {
-        file_exist: async function(checkDetails, dataForChecks) {
-            let file = checkDetails.file
-            let path = dataForChecks.pluginPath
-            let pass = Fs.existsSync('../data/downloads/'+path+'/'+file)
-            let why = "not_found"
-            if (true == pass){
-                why = "found"
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: file,
+        pass: pass,
+        why: why,
+      }
+    },
+
+    fileX_exist_if_contain_json: async function (checkDetails, dataForChecks) {
+      let file = checkDetails.file
+      let ifFile = checkDetails.if_file
+      let path = dataForChecks.pluginPath
+      let pass = Fs.existsSync('../data/downloads/' + path + '/' + ifFile)
+      let why = 'json_file_not_found'
+      let searchContent = checkDetails.contains
+      let searchIsNot = checkDetails.contains_is_not
+      let containsType = checkDetails.contains_type
+      let config = checkDetails.config
+
+      if (true == pass) {
+        const ifFilePath = '../data/downloads/' + path + '/' + ifFile
+        const ifFileContent = Fs.readFileSync(ifFilePath)
+        if ('key' == containsType) {
+          // let chain = []
+          // for (let i = 0; i < searchContent.length; i++) {
+          //     chain.push(searchContent[i])
+          // }
+          var searchIs = Hoek.reach(ifFileContent, searchContent)
+          pass = null != searchIs && searchIsNot != searchIs
+        } else {
+          // add in "else if" clause if searching for json value
+          console.log('Content type not recognised. fileXjson')
+          pass = false
+        }
+
+        if (true == pass) {
+          if ('js' == config) {
+            file = searchIs
+            pass = file in dataForChecks
+          }
+          if ('ts' == config) {
+            file = Path.basename(searchIs, '.js') + '.ts'
+            pass = file in dataForChecks
+          }
+
+          if (true == pass) {
+            why = 'file_found'
+          } else {
+            why = 'file_not_found'
+          }
+        } else {
+          why = 'illegal_value'
+        }
+      }
+
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: file,
+        pass: pass,
+        why: why,
+      }
+    },
+
+    content_contain_string: async function (checkDetails, dataForChecks) {
+      let file = checkDetails.file
+      let path = dataForChecks.pluginPath
+      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let searchContent = checkDetails.contains
+      let why = 'file_not_found'
+
+      if (true == pass) {
+        const filePath = '../data/downloads/' + path + '/' + file
+        const fileContent = Fs.readFileSync(filePath)
+        for (let i = 0; i < searchContent.length; i++) {
+          pass = fileContent.includes(searchContent[i])
+        }
+
+        if (true == pass) {
+          why = 'found'
+        } else {
+          why = 'not_found'
+        }
+      }
+
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: file,
+        pass: pass,
+        why: why,
+      }
+    },
+
+    content_contain_markdown: async function (checkDetails, dataForChecks) {
+      let file = checkDetails.file
+      let path = dataForChecks.pluginPath
+      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let why = 'file_not_found'
+      if (true == pass) {
+        why = 'file_found'
+
+        let searchArray = checkDetails.contains
+        // Reassignment of #1 heading text
+        searchArray[0].text = dataForChecks.packageName
+        console.log(searchArray[0].text)
+
+        const filePath = '../data/downloads/' + pluginRelPath + '/' + file
+        const fileContent = Fs.readFileSync(filePath)
+        // Creating AST from file
+        const lexer = new Marked.Lexer()
+        const tokens = lexer.lex(fileContent)
+        const headings = tokens.filter(
+          (token) =>
+            'heading' == token.type && (1 == token.depth || 2 == token.depth)
+        )
+
+        if (headings.length == searchArray.length) {
+          console.log(searchArray.length)
+          for (let i = 0; i < searchArray.length; i++) {
+            console.log(i)
+            pass =
+              headings[i].depth == searchArray[i].depth &&
+              headings[i].text == searchArray[i].text
+            if (false == pass) {
+              let nb = i + 1
+              why = 'heading_"' + searchArray[i].text + '"_not_found'
+              break
             }
+          }
+        } else {
+          pass = false
+          why = 'nb_headings_incorrect'
+        }
+      }
 
-            return {
-              check: checkDetails.name,
-              kind: checkDetails.kind,
-              file: file,
-              pass: pass,
-              why: why,
-            }
-        },
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: file,
+        pass: pass,
+        why: why,
+      }
+    },
 
-        fileX_exist_if_contain_json: async function(checkDetails,dataForChecks) {
-        
-            let file = checkDetails.file
-            let ifFile = checkDetails.if_file
-            let path = dataForChecks.pluginPath
-            let pass = Fs.existsSync('../data/downloads/'+path+'/'+ifFile)
-            let why = "json_file_not_found"
-            let searchContent = checkDetails.contains
-            let searchIsNot = checkDetails.contains_is_not
-            let containsType = checkDetails.contains_type
-            let config = checkDetails.config
+    content_contain_json: async function (
+      checkDetails,
+      dataForChecks,
+      pluginRelPath
+    ) {
+      let file = checkDetails.file
+      let path = dataForChecks.pluginPath
+      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let searchContent = checkDetails.contains
+      let contentType = checkDetails.contains_type
+      // let searchLevels = Object.values(searchContent)
+      let why = 'file_not_found'
 
-            if (true == pass) {
-                const ifFilePath = '../data/downloads/'+path+'/'+ifFile
-                const ifFileContent = Fs.readFileSync(ifFilePath)
-                if ("key" == containsType) {
-                    // let chain = []
-                    // for (let i = 0; i < searchContent.length; i++) {
-                    //     chain.push(searchContent[i])
-                    // }
-                    var searchIs = Hoek.reach(ifFileContent,searchContent)
-                    pass = (null != searchIs && searchIsNot != searchIs)
+      if (true == pass) {
+        const filePath = '../data/downloads/' + path + '/' + file
+        const fileContent = require(filePath)
+        if ('key' == contentType) {
+          let chain = []
+          for (let i = 0; i < searchContent.length; i++) {
+            chain.push(searchContent[i])
+          }
+          pass = null != Hoek.reach(fileContent, chain)
+          // console.log(pass)
 
-                }
-                else { // add in "else if" clause if searching for json value
-                    console.log("Content type not recognised. fileXjson")
-                    pass = false
-                }
+          // add in else if clause for if searching for json value
+        } else {
+          console.log('Content type not recognised. content json')
+          pass = false
+        }
 
-                if (true == pass) {
-                    if ("js" == config) {
-                        file = searchIs
-                        pass = file in dataForChecks
-                    }
-                    if ("ts" == config) {
-                        file = Path.basename(searchIs,'.js')+'.ts'
-                        pass = file in dataForChecks
-                    }
+        if (true == pass) {
+          why = 'found'
+        } else {
+          why = 'not_found'
+        }
+      }
 
-                    if (true == pass) {
-                    why = "file_found"
-                    }
-                    else {
-                        why = "file_not_found"
-                    }
-                }
-                else {
-                    why = "illegal_value"
-                }
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: file,
+        pass: pass,
+        why: why,
+      }
+    },
 
-                
-            }
+    check_branch: async function (checkDetails, dataForChecks) {
+      let branch = checkDetails.branch
+      let branchCorrect = checkDetails.branch_is
 
-            return {
-                check: checkDetails.name,
-                kind: checkDetails.kind,
-                file: file,
-                pass: pass,
-                why: why,
-              }
-        },
+      if ('default' == branch) {
+        branch = await gitDefault('https://github.com/' + dataForChecks.orgRepo)
+      }
+      let pass = null != branch
+      let why = 'branch_not_found'
 
-        content_contain_string: async function(checkDetails, dataForChecks) {
+      if (true == pass) {
+        if (branchCorrect == branch) {
+          why = 'branch_correct'
+        } else {
+          pass = false
+          why = 'branch_incorrect'
+        }
+      }
 
-            let file = checkDetails.file
-            let path = dataForChecks.pluginPath
-            let pass = Fs.existsSync('../data/downloads/'+path+'/'+file)
-            let searchContent = checkDetails.contains
-            let why = "file_not_found"
-
-            if (true == pass) {
-                const filePath = '../data/downloads/'+path+'/'+file
-                const fileContent = Fs.readFileSync(filePath)
-                for (let i = 0; i < searchContent.length; i++) {
-                    pass = fileContent.includes(searchContent[i])
-                }
-                
-                if (true == pass) {
-                    why = "found"
-                }
-                else {
-                    why = "not_found"
-                }
-            }
-
-            return {
-              check: checkDetails.name,
-              kind: checkDetails.kind,
-              file: file,
-              pass: pass,
-              why: why,
-            }
-        },
-
-        content_contain_markdown: async function(checkDetails, dataForChecks) {
-            let file = checkDetails.file
-            let path = dataForChecks.pluginPath
-            let pass = Fs.existsSync('../data/downloads/'+path+'/'+file)
-            let why = "file_not_found"
-            if (true == pass){
-                why = "file_found"
-
-                let searchArray = checkDetails.contains
-                // Reassignment of #1 heading text
-                searchArray[0].text = dataForChecks.packageName
-                console.log(searchArray[0].text)
-
-                const filePath = '../data/downloads/'+pluginRelPath+'/'+file
-                const fileContent = Fs.readFileSync(filePath)
-                // Creating AST from file
-                const lexer = new Marked.Lexer()
-                const tokens = lexer.lex(fileContent)
-                const headings = tokens.filter(token => "heading" == token.type 
-                        && (1 == token.depth || 2 == token.depth))
-
-                if (headings.length == searchArray.length) {
-                    console.log(searchArray.length)
-                    for (let i = 0 ; i < searchArray.length; i++) {
-                        console.log(i)
-                        pass = ((headings[i].depth == searchArray[i].depth) 
-                            && (headings[i].text == searchArray[i].text))
-                        if (false == pass) {
-                            let nb = i+1
-                            why = "heading_\""+searchArray[i].text+"\"_not_found"
-                            break
-                        }
-                    }
-                }
-                else {
-                    pass = false
-                    why = "nb_headings_incorrect"
-                }
-            }
-
-            return {
-              check: checkDetails.name,
-              kind: checkDetails.kind,
-              file: file,
-              pass: pass,
-              why: why,
-            }
-        },
-
-        content_contain_json: async function(checkDetails, dataForChecks, pluginRelPath) {
-
-            let file = checkDetails.file
-            let path = dataForChecks.pluginPath
-            let pass = Fs.existsSync('../data/downloads/'+path+'/'+file)
-            let searchContent = checkDetails.contains
-            let contentType = checkDetails.contains_type
-            // let searchLevels = Object.values(searchContent)
-            let why = "file_not_found"
-
-            if (true == pass) {
-                const filePath = '../data/downloads/'+path+'/'+file
-                const fileContent = require(filePath)
-                if ("key" == contentType) {
-                    let chain = []
-                    for (let i = 0; i < searchContent.length; i++) {
-                        chain.push(searchContent[i])
-                    }
-                    pass = (null != (Hoek.reach(fileContent,chain)))
-                    // console.log(pass)
-
-                    // add in else if clause for if searching for json value
-                }
-                else {
-                    console.log("Content type not recognised. content json")
-                    pass = false
-                }
-                
-                if (true == pass) {
-                    why = "found"
-                }
-                else {
-                    why = "not_found"
-                }
-            }
-
-            return {
-              check: checkDetails.name,
-              kind: checkDetails.kind,
-              file: file,
-              pass: pass,
-              why: why,
-            }
-        },
-
-        check_branch: async function(checkDetails,dataForChecks) {
-            let branch = checkDetails.branch
-            let branchCorrect = checkDetails.branch_is
-
-            if ("default" == branch) {
-                branch = await gitDefault("https://github.com/"+dataForChecks.orgRepo)
-            }
-            let pass = (null != branch)
-            let why = "branch_not_found"
-
-            if (true == pass){
-                if (branchCorrect == branch) {
-                    why = "branch_correct"
-                }
-                else {
-                    pass = false
-                    why = "branch_incorrect"
-                }
-            }
-
-            return {
-              check: checkDetails.name,
-              kind: checkDetails.kind,
-              file: 'N/A',
-              pass: pass,
-              why: why,
-            }
-        },
-
-    }
+      return {
+        check: checkDetails.name,
+        kind: checkDetails.kind,
+        file: 'N/A',
+        pass: pass,
+        why: why,
+      }
+    },
+  }
 }
 
 // --------------------------------------------------------------------

@@ -1,8 +1,7 @@
-const x = "mario yahoo"
+const x = 'mario yahoo'
 
-if ("mario yahoo" == x) {
-    console.log("itsa me")
-}
-else {
-    console.log("its nota me :(")
+if ('mario yahoo' == x) {
+  console.log('itsa me')
+} else {
+  console.log('its nota me :(')
 }

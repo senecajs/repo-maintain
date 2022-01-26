@@ -1,0 +1,46 @@
+{
+  "name": "seneca-allow",
+  "version": "0.0.1",
+  "description": "Seneca plugin for user and group permissions.",
+  "main": "allow.js",
+  "scripts": {
+    "test": "lab -P test -t 80 -I URL,URLSearchParams",
+    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voxgig/seneca-allow.git"
+  },
+  "author": "Richard Rodger (richardrodger.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voxgig/seneca-allow/issues"
+  },
+  "homepage": "https://github.com/voxgig/seneca-allow#readme",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "allow.js",
+    "lib/errors.js",
+    "lib/store.js"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "lodash": "4.17",
+    "optioner": "1.1",
+    "patrun": "1.0"
+  },
+  "devDependencies": {
+    "code": "4",
+    "coveralls": "3",
+    "joi": "12",
+    "lab": "14",
+    "prettier": "1",
+    "seneca": "github:senecajs/seneca",
+    "seneca-entity": "2",
+    "seneca-plugin-validator": "0"
+  }
+}

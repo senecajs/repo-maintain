@@ -1,0 +1,55 @@
+{
+  "name": "seneca-basic",
+  "version": "1.0.0",
+  "description": "Seneca utility plugin.",
+  "main": "basic.js",
+  "scripts": {
+    "test": "lab -v -P test -L -t 80 -I URL,URLSearchParams",
+    "prettier": "prettier --write *.js lib/*.js bin/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov  -I URL,URLSearchParams | coveralls",
+    "coverage": "lab -v -P test -L -t 80 -r html > coverage.html",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "reset": "npm run clean && npm i && npm test",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run clean && npm i --registry http://registry.npmjs.org && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run prettier && npm test && npm run repo-tag && npm publish --access public --registry=http://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senecajs/seneca-basic"
+  },
+  "keywords": [
+    "seneca",
+    "plugin",
+    "util",
+    "utility",
+    "basic"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "contributors": [
+    "Richard Rodger (http://richardrodger.com)",
+    "Bogdan Rotund"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "async": "^3.1.1",
+    "lodash": "^4.17.15",
+    "nid": "^0.3.2"
+  },
+  "devDependencies": {
+    "@hapi/lab": "^22.0.3",
+    "coveralls": "^3.0.9",
+    "prettier": "^1.19.1",
+    "seneca": "^3.20.0",
+    "seneca-entity": "^7.0.0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "basic.js",
+    "lib/common.js",
+    "lib/entity.js",
+    "lib/note.js",
+    "lib/uniqueid.js"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "seneca-promisify",
+  "version": "2.0.0",
+  "description": "Seneca plugin for user and promisify permissions.",
+  "main": "promisify.js",
+  "scripts": {
+    "test": "lab -v -P test -t 90 -r console -o stdout -r html -o test/coverage.html",
+    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "reset": "npm run clean && npm i && npm test",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run clean && npm i --registry=http://registry.npmjs.org && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run prettier && npm run test && npm run repo-tag && npm publish --access public --registry=http://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voxgig/seneca-promisify.git"
+  },
+  "author": "Richard Rodger (richardrodger.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voxgig/seneca-promisify/issues"
+  },
+  "homepage": "https://github.com/voxgig/seneca-promisify#readme",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "promisify.js",
+    "lib/errors.js"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "optioner": "^5.0.1"
+  },
+  "devDependencies": {
+    "@hapi/code": "^8.0.1",
+    "@hapi/lab": "^22.0.4",
+    "coveralls": "^3.1.0",
+    "jsonic": "^0.3.1",
+    "prettier": "^2.0.5",
+    "seneca": "plugin",
+    "seneca-entity": "^9.0.1",
+    "seneca-joi": "^7.0.2",
+    "seneca-plugin-validator": "0.6.1"
+  }
+}

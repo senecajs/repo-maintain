@@ -6,44 +6,42 @@ const getCode = require('github-download')
 const Plugins = require('../data/json/plugins.json')
 const checkList = require('../design/checks/checks.js')
 
-
 async function doDownloadPlugins() {
-    console.log("Download function initiated.")
+  console.log('Download function initiated.')
 
-    objKeys = Object.keys(Plugins)
-    for (let i = 0; i < objKeys.length; i++) {
+  objKeys = Object.keys(Plugins)
+  for (let i = 0; i < objKeys.length; i++) {
+    // namespacing
+    const orgRepo = objKeys[i].replace('/', '__')
 
-        // namespacing
-        const orgRepo = objKeys[i].replace('/','__')
-        console.log(objKeys[i]) // with single forward slash
-        console.log(orgRepo) // with double underscore
+    // wait for new directory creation before proceeding
+    const createDir = await Fs.ensureDir('../data/downloads/' + orgRepo)
+    console.log(Chalk.cyan(objKeys[i]))
 
-        // wait for new directory creation before proceeding
-        let dir = '../data/downloads/'+orgRepo
-        const createDir = await Fs.ensureDir(dir)
-        
-        // let params = "https://github.com"+objKeys[i]+".git"
-        // console.log(Chalk.cyan(objKeys[i]))
+    for (checkName in checkList) {
+      let checkDetails = checkList[checkName]
+      if (checkDetails.kind != 'file_exist') {
+        continue
+      }
+      let file = checkDetails.file
 
-        // getCode(params,dir)
-        // .on('dir', function(dir) {
-        //     console.log(dir)
-        // })
-        // .on('file', function(file) {
-        //     console.log(file)
-        // })
-        // .on('zip', function(zipUrl) { //only emitted if Github API limit is reached and the zip file is downloaded
-        //     console.log(zipUrl)
-        // })
-        // .on('error', function(err) {
-        //     console.error(err)
-        // })
-        // .on('end', function() {
-        //     exec('tree', function(err, stdout, sderr) {
-        //         console.log(stdout)
-        //     })
-        // })
+      // URL is valid even if master branch is named "main"
+      let url =
+        'https://raw.githubusercontent.com/' + objKeys[i] + '/master/' + file
+
+      const fileRaw = await Fetch(url)
+      let fileOK = fileRaw.ok
+
+      if (false == fileOK) {
+        console.log(Chalk.red(file), 'File not found.')
+        continue
+      }
+
+      let fileContent = await fileRaw.text()
+      Fs.writeFileSync('../data/downloads/' + orgRepo + '/' + file, fileContent)
+      console.log(file, 'File created.')
     }
+  }
 }
 
 doDownloadPlugins()
