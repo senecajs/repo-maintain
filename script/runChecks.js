@@ -28,7 +28,7 @@ async function runChecks() {
   const pluginList = await plugins
   allChecks = {}
   // for (let i = 0; i < pluginList.length; i++) {
-  for (let i = 100; i < 101; i++) {
+  for (let i = 511; i < 521; i++) {
     let plugin = pluginList[i]
 
     results = {}
@@ -243,10 +243,10 @@ function checkOperations() {
         let searchArray = checkDetails.contains
         // Reassignment of #1 heading text
         searchArray[0].text = dataForChecks.packageName
-        console.log(searchArray[0].text)
+        // console.log(searchArray[0].text)
 
         const filePath = './data/downloads/' + path + '/' + file
-        const fileContent = Fs.readFileSync(filePath)
+        const fileContent = Fs.readFileSync(filePath, 'utf-8')
         // Creating AST from file
         const lexer = new Marked.Lexer()
         const tokens = lexer.lex(fileContent)
@@ -256,9 +256,9 @@ function checkOperations() {
         )
 
         if (headings.length == searchArray.length) {
-          console.log(searchArray.length)
+          // console.log(searchArray.length)
           for (let i = 0; i < searchArray.length; i++) {
-            console.log(i)
+            // console.log(i)
             pass =
               headings[i].depth == searchArray[i].depth &&
               headings[i].text == searchArray[i].text
@@ -286,14 +286,17 @@ function checkOperations() {
     content_contain_json: async function (checkDetails, dataForChecks) {
       let file = checkDetails.file
       let path = dataForChecks.pluginPath
-      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let pass = Fs.existsSync('./data/downloads/' + path + '/' + file)
+      console.log('../data/downloads/' + path + '/' + file)
+      console.log(Fs.existsSync('./data/downloads/' + path + '/' + file))
+      console.log(checkDetails.name, pass)
       let searchContent = checkDetails.contains
       let contentType = checkDetails.contains_type
       // let searchLevels = Object.values(searchContent)
       let why = 'file_not_found'
 
       if (true == pass) {
-        const filePath = './data/downloads/' + path + '/' + file
+        const filePath = '../data/downloads/' + path + '/' + file
         const fileContent = require(filePath)
         if ('key' == contentType) {
           let chain = []
@@ -301,7 +304,7 @@ function checkOperations() {
             chain.push(searchContent[i])
           }
           pass = null != Hoek.reach(fileContent, chain)
-          // console.log(pass)
+          console.log('Under Hoek.reach', checkDetails.name, pass)
 
           // add in else if clause for if searching for json value
         } else {

@@ -81,7 +81,7 @@ async function genReport(headings, data) {
   }
 
   let report = reportArray.join('\n')
-  console.log(report)
+  // console.log(report)
   return report
 }
 
