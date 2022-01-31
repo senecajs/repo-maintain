@@ -3,20 +3,20 @@ const Fetch = require('node-fetch')
 const Fs = require('fs-extra')
 const getCode = require('github-download')
 
-const Plugins = require('../data/json/plugins.json')
+const Plugins = require('../data/json/filter.json')
 const checkList = require('../design/checks/checks.js')
 
 async function doDownloadPlugins() {
   console.log('Download function initiated.')
 
-  objKeys = Object.keys(Plugins)
-  for (let i = 0; i < objKeys.length; i++) {
+  let totalScanned = 0
+  for (let i = 0; i < Plugins.length; i++) {
     // namespacing
-    const orgRepo = objKeys[i].replace('/', '__')
+    const orgRepo = Plugins[i].full_name.replace('/', '__')
 
     // wait for new directory creation before proceeding
-    const createDir = await Fs.ensureDir('../data/downloads/' + orgRepo)
-    console.log(Chalk.cyan(objKeys[i]))
+    const createDir = await Fs.ensureDir('./data/downloads/' + orgRepo)
+    console.log(Chalk.cyan(Plugins[i].full_name))
 
     for (checkName in checkList) {
       let checkDetails = checkList[checkName]
@@ -27,7 +27,10 @@ async function doDownloadPlugins() {
 
       // URL is valid even if master branch is named "main"
       let url =
-        'https://raw.githubusercontent.com/' + objKeys[i] + '/master/' + file
+        'https://raw.githubusercontent.com/' +
+        Plugins[i].full_name +
+        '/master/' +
+        file
 
       const fileRaw = await Fetch(url)
       let fileOK = fileRaw.ok
@@ -38,10 +41,13 @@ async function doDownloadPlugins() {
       }
 
       let fileContent = await fileRaw.text()
-      Fs.writeFileSync('../data/downloads/' + orgRepo + '/' + file, fileContent)
+      Fs.writeFileSync('./data/downloads/' + orgRepo + '/' + file, fileContent)
       console.log(file, 'File created.')
     }
+    totalScanned++
   }
+  console.log('TOTAL ASSUMED : ', Plugins.length)
+  console.log('TOTAL ACTUAL : ', totalScanned)
 }
 
 doDownloadPlugins()

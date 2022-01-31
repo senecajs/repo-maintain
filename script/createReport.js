@@ -3,7 +3,7 @@ const Path = require('path')
 const Fetch = require('node-fetch')
 const checkList = require('../design/checks/checks.js')
 
-const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
+const checkResultsRaw = Fs.readFileSync('./data/json/allChecks.json')
 let checkResults = JSON.parse(checkResultsRaw)
 
 async function genHeadings() {
@@ -90,7 +90,7 @@ async function run() {
   let data = await genData(headings, checkResults)
   let createReport = await genReport(headings, data)
 
-  Fs.writeFileSync('../REPORT.md', createReport)
+  Fs.writeFileSync('./REPORT.md', createReport)
 }
 
 run()

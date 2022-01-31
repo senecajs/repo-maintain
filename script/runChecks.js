@@ -5,7 +5,7 @@ const Filehound = require('filehound')
 const Path = require('path')
 const jsonFile = require('jsonfile')
 const Hoek = require('@hapi/hoek')
-// hrm this is throwing an error
+const Marked = require('marked')
 const gitDefault = require('default-branch')
 
 // file-related constants
@@ -21,13 +21,14 @@ if (null == argString[0]) {
 const argArray = argString[0].split(',')
 //---------------------------------------------------------------
 
-const plugins = Filehound.create().path('../data/downloads').directory().find()
+const plugins = Filehound.create().path('./data/downloads').directory().find()
 
 // main function
 async function runChecks() {
   const pluginList = await plugins
   allChecks = {}
-  for (let i = 0; i < pluginList.length; i++) {
+  // for (let i = 0; i < pluginList.length; i++) {
+  for (let i = 100; i < 101; i++) {
     let plugin = pluginList[i]
 
     results = {}
@@ -38,14 +39,14 @@ async function runChecks() {
 
     // JSON files
     const jsonPromise = Filehound.create()
-      .paths('../data/downloads/' + pluginRelPath)
+      .paths('./data/downloads/' + pluginRelPath)
       .ext('json')
       .find()
     const jsonFiles = await jsonPromise
 
     // non-JSON files
     const stringPromise = Filehound.create()
-      .paths('../data/downloads/' + pluginRelPath)
+      .paths('./data/downloads/' + pluginRelPath)
       .ext('json')
       .not()
       .find()
@@ -56,10 +57,10 @@ async function runChecks() {
     dataForChecks.orgRepo = orgRepo
 
     for (let j = 0; j < jsonFiles.length; j++) {
-      let filePath = jsonFiles[j]
+      let filePath = '../' + jsonFiles[j]
 
       let fileName = Path.basename(filePath)
-      let fileContent = require(filePath)
+      let fileContent = require(filePath) // cannot find package.json?
 
       dataForChecks[fileName] = fileContent
 
@@ -69,7 +70,6 @@ async function runChecks() {
         // can't use this, contrib don't all have valid URLs in their package.json files
         // dataForChecks.repoURL = fileContent.repository.url
         // console.log(dataForChecks.repoURL)
-        console.log(dataForChecks.packageName)
       }
     }
 
@@ -114,7 +114,7 @@ async function runChecks() {
     let nameOfObj = orgRepo + '##' + dataForChecks.packageName
     allChecks[nameOfObj] = results
   }
-  Fs.writeFileSync('../data/json/allChecks.json', JSON.stringify(allChecks))
+  Fs.writeFileSync('./data/json/allChecks.json', JSON.stringify(allChecks))
 }
 
 // --------------------------------------------------------------------
@@ -132,12 +132,11 @@ function checkOperations() {
     file_exist: async function (checkDetails, dataForChecks) {
       let file = checkDetails.file
       let path = dataForChecks.pluginPath
-      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let pass = Fs.existsSync('./data/downloads/' + path + '/' + file)
       let why = 'not_found'
       if (true == pass) {
         why = 'found'
       }
-
       return {
         check: checkDetails.name,
         kind: checkDetails.kind,
@@ -151,7 +150,7 @@ function checkOperations() {
       let file = checkDetails.file
       let ifFile = checkDetails.if_file
       let path = dataForChecks.pluginPath
-      let pass = Fs.existsSync('../data/downloads/' + path + '/' + ifFile)
+      let pass = Fs.existsSync('./data/downloads/' + path + '/' + ifFile)
       let why = 'json_file_not_found'
       let searchContent = checkDetails.contains
       let searchIsNot = checkDetails.contains_is_not
@@ -159,7 +158,7 @@ function checkOperations() {
       let config = checkDetails.config
 
       if (true == pass) {
-        const ifFilePath = '../data/downloads/' + path + '/' + ifFile
+        const ifFilePath = './data/downloads/' + path + '/' + ifFile
         const ifFileContent = Fs.readFileSync(ifFilePath)
         if ('key' == containsType) {
           // let chain = []
@@ -206,12 +205,12 @@ function checkOperations() {
     content_contain_string: async function (checkDetails, dataForChecks) {
       let file = checkDetails.file
       let path = dataForChecks.pluginPath
-      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let pass = Fs.existsSync('./data/downloads/' + path + '/' + file)
       let searchContent = checkDetails.contains
       let why = 'file_not_found'
 
       if (true == pass) {
-        const filePath = '../data/downloads/' + path + '/' + file
+        const filePath = './data/downloads/' + path + '/' + file
         const fileContent = Fs.readFileSync(filePath)
         for (let i = 0; i < searchContent.length; i++) {
           pass = fileContent.includes(searchContent[i])
@@ -236,7 +235,7 @@ function checkOperations() {
     content_contain_markdown: async function (checkDetails, dataForChecks) {
       let file = checkDetails.file
       let path = dataForChecks.pluginPath
-      let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
+      let pass = Fs.existsSync('./data/downloads/' + path + '/' + file)
       let why = 'file_not_found'
       if (true == pass) {
         why = 'file_found'
@@ -246,7 +245,7 @@ function checkOperations() {
         searchArray[0].text = dataForChecks.packageName
         console.log(searchArray[0].text)
 
-        const filePath = '../data/downloads/' + pluginRelPath + '/' + file
+        const filePath = './data/downloads/' + path + '/' + file
         const fileContent = Fs.readFileSync(filePath)
         // Creating AST from file
         const lexer = new Marked.Lexer()
@@ -284,11 +283,7 @@ function checkOperations() {
       }
     },
 
-    content_contain_json: async function (
-      checkDetails,
-      dataForChecks,
-      pluginRelPath
-    ) {
+    content_contain_json: async function (checkDetails, dataForChecks) {
       let file = checkDetails.file
       let path = dataForChecks.pluginPath
       let pass = Fs.existsSync('../data/downloads/' + path + '/' + file)
@@ -298,7 +293,7 @@ function checkOperations() {
       let why = 'file_not_found'
 
       if (true == pass) {
-        const filePath = '../data/downloads/' + path + '/' + file
+        const filePath = './data/downloads/' + path + '/' + file
         const fileContent = require(filePath)
         if ('key' == contentType) {
           let chain = []

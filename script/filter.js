@@ -17,7 +17,8 @@ async function doFilter() {
       collegeDash.test(item.name) |
       collegeUnderscore.test(item.name) |
       collegeDesc.test(item.description) |
-      uniDesc.test(item.description)
+      uniDesc.test(item.description) |
+      (0 == item.size)
     ) {
       console.log(item.name)
     } else {
