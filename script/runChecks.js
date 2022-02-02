@@ -1,30 +1,249 @@
 module.exports = {
-  Checks: function () {
+  runChecks: function () {
     // Node modules
-    const Fs = require('fs')
     const Path = requires('path')
 
     // External modules
-    const Filehound = require('filehound')
     const Hoek = require('@hapi/hoek')
     const Marked = require('marked')
 
     // Internal modules
+    const Plugins = require('../data/json/filter.json')
     const { checkList } = require('../design/checks/checks')
+    const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 
-    async function runChecks(config) {}
+    async function runChecks() {
+      let allResults = {}
+      Plugins.forEach((item) => {
+        let results = {}
+        let plugin = gatherData(item, checkList)
+        for (checkName in plugin.checks) {
+          let checkDetails = plugin.checks[checkName]
+          checkDetails.name = checkName
 
-    async function runChecksPrep(config) {}
+          let checkKind = defineChecks[checkDetails.kind]
+          if (null == checkKind) {
+            console.log(
+              'WARNING',
+              'Check does not exist',
+              checkName,
+              checkDetails.kind
+            )
+            continue
+          }
+          let res = await checkKind(checkDetails, plugin.data)
+          results[checkName] = res
+        }
+        allResults[item.full_name] = results
+      })
+      return allResults
+    }
 
-    runAll()
+    function checkOperations() {
+      return {
+        file_exist: async function (checkDetails, pluginData) {
+          let file = checkDetails.file
+          let pass = pluginData.includes(file)
+          let why = 'file_not_found'
+          if (pass) {
+            why = 'file_found'
+          }
 
-    async function runAll() {}
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
 
-    async function configDef() {} // this will become redundant
+        fileX_exist_if_contain_json: async function (checkDetails, pluginData) {
+          let file = checkDetails.file
+          let fileX = checkDetails.fileX
+          let pass = pluginData.includes(file)
+          let why = 'json_file_not_found'
+          let searchContent = checkDetails.contains
+          let searchIsNot = checkDetails.contains_is_not
+          let containsType = checkDetails.contains_type
+          let config = checkDetails.config
 
-    // no need for conclusion() - it's only console output
+          if (pass) {
+            let fileContent = pluginData[file]
+            if ('key' == containstype) {
+              let searchIs = Hoek.reach(fileContent, searchContent)
+              pass = null != searchIs && searchIsNot != searchIs
+            } else {
+              // extensibility goes here - searching for value and not key
+              console.log('Content type not recognised. ', checkDetails.name)
+              pass = false
+            }
 
-    function checkOperations() {}
+            if (pass) {
+              switch (config) {
+                case 'js':
+                  fileX = searchIs
+                  pass = pluginData.includes(fileX)
+                  break
+
+                case 'ts':
+                  fileX = Path.basename(searchIs, '.js') + '.ts'
+                  pass = pluginData.includes(fileX)
+                  break
+              }
+
+              if (pass) {
+                why = 'fileX_found'
+              } else {
+                why = 'fileX_not_found'
+              }
+            } else {
+              why = 'illegal_value'
+            }
+          }
+
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
+
+        content_contain_string: async function (checkDetails, pluginData) {
+          let file = checkDetails.file
+          let pass = pluginData.includes(file)
+          let searchContent = checkDetails.contains
+          let why = 'file_not_found'
+
+          if (pass) {
+            let fileContent = pluginData[file]
+            for (let i = 0; i < searchContent.length; i++) {
+              pass = fileContent.includes(searchContent[i])
+            }
+
+            if (pass) {
+              why = 'content_found'
+            } else {
+              why = 'content_not_found'
+            }
+          }
+
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
+
+        content_contain_markdown: async function (checkDetails, pluginData) {
+          let file = checkDetails.file
+          let pass = pluginData.includes(file)
+          let why = 'file_not_found'
+
+          // Currently check def is quite specific to readme_headings check
+          if (pass) {
+            why = 'file_found'
+            let searchArray = checkDetails.contains
+            // Reassignement of #1 heading text
+            searchArray[0].text = pluginData.package_name
+
+            let fileContent = pluginData[file]
+            // Creating AST from file
+            let lexer = new Marked.Lexer()
+            let tokens = lexer.lex(fileContent)
+            let headings = tokens.filter(
+              (token) =>
+                'heading' == token.type &&
+                (1 == token.depth || 2 == token.depth)
+            )
+
+            if (headings.length == searchArray.length) {
+              for (let i = 0; i < searchArray.length; i++) {
+                pass =
+                  headings[i].depth == searchArray[i].depth &&
+                  heading[i].text == searchArray[i].text
+                if (!pass) {
+                  let nb = i + 1
+                  why = 'heading_"' + searchArray[i].text + '"_not_found'
+                  break
+                }
+              }
+            } else {
+              pass = false
+              why = 'nb_headings_incorrect'
+            }
+          }
+
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
+
+        content_contain_json: async function (checkDetails, pluginData) {
+          let file = checkDetails.file
+          let pass = pluginData.includes(file)
+          let searchContent = checkDetails.contains
+          let contentType = checkDetails.contains_type
+          let why = 'file_not_found'
+
+          if (pass) {
+            let fileCOntent = pluginData[file]
+            if ('key' == contentType) {
+              let chain = []
+              for (let i = 0; i < searchContent.length; i++) {
+                chain.push(searchContent[i])
+              }
+              pass = null != Hoek.reach(fileContent, chain)
+            } else {
+              // extensibility goes here - searching for value and not key
+              console.log('Content type not recognised. ', checkDetails.name)
+              pass = false
+            }
+
+            if (pass) {
+              why = 'content_found'
+            } else {
+              why = 'content_not_found'
+            }
+          }
+
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
+
+        check_branch: async function (checkDetails, pluginData) {
+          let branch = checkDetails.branch
+          let pass = branch == pluginData.default_branch
+          let why = 'branch_incorrect'
+          let file = 'N/A'
+
+          if (pass) {
+            why = 'branch_correct'
+          }
+
+          return {
+            check: checkDetails.name,
+            kind: checkDetails.kind,
+            file: file,
+            pass: pass,
+            why: why,
+          }
+        },
+      }
+    }
   },
 }

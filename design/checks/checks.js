@@ -16,8 +16,8 @@ module.exports = {
     exist_dist: {
       config: 'ts',
       kind: 'fileX_exist_if_contain_json',
-      file: '404',
-      if_file: 'package.json',
+      fileX: '',
+      file: 'package.json',
       contains: ['main'],
       contains_type: 'key',
       contains_is_not: 'dist/index.js',
@@ -26,8 +26,8 @@ module.exports = {
     exist_entry: {
       config: 'js',
       kind: 'fileX_exist_if_contain_json',
-      file: '404',
-      if_file: 'package.json',
+      fileX: '',
+      file: 'package.json',
       contains: ['main'],
       contains_type: 'key',
       contains_is_not: 'index.js',
@@ -79,8 +79,7 @@ module.exports = {
     check_default: {
       config: 'base',
       kind: 'check_branch',
-      branch: 'default',
-      branch_is: 'main',
+      branch: 'main',
     },
 
     version_codeconduct: {

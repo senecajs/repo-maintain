@@ -13,6 +13,8 @@ async function testFetch() {
   console.log('fileRaw : ', fileRaw)
   console.log('fileRawOK : ', fileRaw.ok)
   console.log('fileRawSTATUS : ', fileRaw.status)
-  let fileContent = await fileRaw.text()
+  let fileContent = await fileRaw.json()
   console.log('fileContent : ', fileContent)
+  console.log('fileContentTYPE : ', typeof fileContent)
+  console.log('packageNAME : ', fileContent.name)
 }
