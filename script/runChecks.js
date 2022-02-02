@@ -13,6 +13,7 @@ module.exports = {
     const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 
+    runChecks()
     async function runChecks() {
       let allResults = {}
       Plugins.forEach((item) => {
@@ -35,7 +36,10 @@ module.exports = {
           let res = await checkKind(checkDetails, plugin.data)
           results[checkName] = res
         }
-        allResults[item.full_name] = results
+        allResults[item.full_name] = {
+          data: plugin.data,
+          checks: results,
+        }
       })
       return allResults
     }

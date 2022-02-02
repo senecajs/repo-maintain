@@ -1,96 +1,94 @@
-const Fs = require('fs')
-const Path = require('path')
-const Fetch = require('node-fetch')
-const checkList = require('../design/checks/checks.js')
+module.exports = {
+  createReport: function (results) {
+    // Node modules
+    const Fs = require('fs')
+    const Path = require('path')
 
-const checkResultsRaw = Fs.readFileSync('./data/json/allChecks.json')
-let checkResults = JSON.parse(checkResultsRaw)
+    // External modules
+    const Fetch = require('node-fetch')
 
-async function genHeadings() {
-  let headings = [
-    'Package',
-    'PASS?',
-    'orgRepo',
-    'Fails',
-    'forks_count',
-    'stargazers_count',
-    'open_issues_count',
-  ]
-  // console.log(headings)
-  console.log('Headings created.')
-  return headings
-}
+    run()
+    async function run() {
+      let headings = await genHeadings()
+      let data = await genData(headings, checkResults)
+      let createReport = await genReport(headings, data)
 
-async function genData(headings, object) {
-  dataSet = []
-  for (repo in object) {
-    repoData = {}
-    let orgRepo = object[repo]
-    let names = repo.split('##')
-    let repoName = names[0]
-    let pkgName = names[1]
-    repoData.package =
-      '[' + pkgName + '](https://www.npmjs.com/package/' + pkgName + ')'
-    repoData.PASS = 'pass'
-    repoData.orgRepo = '[' + repoName + '](https://github.com/' + repoName + ')'
+      Fs.writeFileSync('./REPORT.md', createReport)
+    }
+    async function genHeadings() {
+      let headings = [
+        'Package',
+        'PASS?',
+        'orgRepo',
+        'Fails',
+        'forks_count',
+        'stargazers_count',
+        'open_issues_count',
+      ]
+      return headings
+    }
 
-    repoData.fails = ''
-    for (check in orgRepo) {
-      checkDetails = orgRepo[check]
-      if (false == checkDetails.pass) {
-        repoData.fails += '[' + check + '] '
-        repoData.PASS = 'FAIL'
+    async function genData(headings, results) {
+      dataSet = []
+      let pluginData = results.data
+      let checkResults = results.checks
+      for (plugin in results) {
+        pluginReport = {}
+        pluginReport.package =
+          '[' +
+          pluginData.package_name +
+          '](https://www.npmjs.com/package/' +
+          pluginData.package_name +
+          ')'
+        pluginReport.PASS = 'pass'
+        pluginReport.full_name =
+          '[' +
+          pluginData.full_name +
+          '](https://github.com/' +
+          pluginData.full_name +
+          ')'
+
+        pluginReport.fails = ''
+        for (check in checkResults) {
+          checkDetails = checkResults[check]
+          if (false == checkDetails.pass) {
+            pluginReport.fails += '[' + check + '] '
+            pluginReport.PASS = 'FAIL'
+          }
+        }
+
+        for (let i = 4; i < headings.length; i++) {
+          let title = headings[i]
+          pluginReport[title] = pluginData[title]
+        }
+        let pluginReportValues = Object.values(pluginReport)
+        dataSet.push(pluginReportValues)
       }
+      return dataSet
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1111))
-    let apiURL = 'https://api.github.com/repos/' + repoName
-    const response = await Fetch(apiURL)
-    const body = await response.text()
-    const apiJSON = JSON.parse(body)
+    async function genReport(headings, data) {
+      let reportArray = []
 
-    for (let i = 4; i < headings.length; i++) {
-      let title = headings[i]
-      let apiData = apiJSON[title]
-      repoData[title] = apiData
+      let head = headings.join('|')
+      reportArray.push(head)
+
+      let sepLine = []
+      for (let i = 0; i < headings.length; i++) {
+        sepLine.push('---')
+      }
+      let sep = sepLine.join('|')
+      reportArray.push(sep)
+
+      for (let j = 0; j < data.length; j++) {
+        let plugin = data[j]
+        let formatted = plugin.join('|')
+        reportArray.push(formatted)
+      }
+
+      let report = reportArray.join('\n')
+      // console.log(report)
+      return report
     }
-    var repoDataValues = Object.values(repoData)
-    dataSet.push(repoDataValues)
-  }
-  console.log('Data generated.')
-  return dataSet
+  },
 }
-
-async function genReport(headings, data) {
-  let reportArray = []
-
-  let head = headings.join('|')
-  reportArray.push(head)
-
-  let sepLine = []
-  for (let i = 0; i < headings.length; i++) {
-    sepLine.push('---')
-  }
-  let sep = sepLine.join('|')
-  reportArray.push(sep)
-
-  for (let j = 0; j < data.length; j++) {
-    let plugin = data[j]
-    let formatted = plugin.join('|')
-    reportArray.push(formatted)
-  }
-
-  let report = reportArray.join('\n')
-  // console.log(report)
-  return report
-}
-
-async function run() {
-  let headings = await genHeadings()
-  let data = await genData(headings, checkResults)
-  let createReport = await genReport(headings, data)
-
-  Fs.writeFileSync('./REPORT.md', createReport)
-}
-
-run()
