@@ -38,7 +38,7 @@ async function genData(headings, object) {
     for (check in orgRepo) {
       checkDetails = orgRepo[check]
       if (false == checkDetails.pass) {
-        repoData.fails += check + ' '
+        repoData.fails += '[' + check + '] '
         repoData.PASS = 'FAIL'
       }
     }
