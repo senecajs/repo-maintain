@@ -1,11 +1,20 @@
-/**
-~1500 RESULTS - GITHUB SEARCH API 
+// console.log('\n\n#######       REPO_MAINTAIN       #######\n\n')
+const { search } = require('./search')
+const { filter } = require('./filter')
+const { runChecks } = require('./runChecks')
+const { createReport } = require('./createReport')
 
-This is the main script that will run the others in the following order:
-1) search.js
-2) filter.js
-3) download.js
-4) runChecks.js
-5) createReport.js
-
-*/
+repoMaintain()
+async function repoMaintain() {
+  let searchResults = await search()
+  // console.log(
+  //   '\n\n#######       SearchResults       #######\n\n',
+  //   searchResults
+  // )
+  let Plugins = await filter(searchResults)
+  // console.log('\n\n#######       Plugins       #######\n\n', Plugins)
+  let checkResults = await runChecks(Plugins)
+  // console.log('\n\n#######       checkResults       #######\n\n', checkResults)
+  let Report = await createReport(checkResults)
+  // console.log('\n\n#######       POST CREATE REPORT       #######\n\n')
+}

@@ -1,48 +1,48 @@
 module.exports = {
-  runChecks: function () {
+  runChecks: async function (Plugins) {
     // Node modules
-    const Path = requires('path')
+    const Path = require('path')
 
     // External modules
     const Hoek = require('@hapi/hoek')
     const Marked = require('marked')
 
     // Internal modules
-    const Plugins = require('../data/json/filter.json')
     const { checkList } = require('../design/checks/checks')
     const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 
-    runChecks()
-    async function runChecks() {
-      let allResults = {}
-      Plugins.forEach((item) => {
-        let results = {}
-        let plugin = gatherData(item, checkList)
-        for (checkName in plugin.checks) {
-          let checkDetails = plugin.checks[checkName]
-          checkDetails.name = checkName
+    // runChecks()
+    // async function runChecks() {
+    let allResults = {}
+    for (let i = 0; i < Object.keys(Plugins).length; i++) {
+      let item = Plugins[i]
+      let results = {}
+      let plugin = gatherData(item, checkList)
+      for (checkName in plugin.checks) {
+        let checkDetails = plugin.checks[checkName]
+        checkDetails.name = checkName
 
-          let checkKind = defineChecks[checkDetails.kind]
-          if (null == checkKind) {
-            console.log(
-              'WARNING',
-              'Check does not exist',
-              checkName,
-              checkDetails.kind
-            )
-            continue
-          }
-          let res = await checkKind(checkDetails, plugin.data)
-          results[checkName] = res
+        let checkKind = defineChecks[checkDetails.kind]
+        if (null == checkKind) {
+          console.log(
+            'WARNING',
+            'Check does not exist',
+            checkName,
+            checkDetails.kind
+          )
+          continue
         }
-        allResults[item.full_name] = {
-          data: plugin.data,
-          checks: results,
-        }
-      })
-      return allResults
+        let res = await checkKind(checkDetails, plugin.data)
+        results[checkName] = res
+      }
+      allResults[item.full_name] = {
+        data: plugin.data,
+        checks: results,
+      }
     }
+    return allResults
+    // }
 
     function checkOperations() {
       return {

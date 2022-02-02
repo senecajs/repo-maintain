@@ -1,5 +1,5 @@
 module.exports = {
-  createReport: function (results) {
+  createReport: async function (results) {
     // Node modules
     const Fs = require('fs')
     const Path = require('path')
@@ -10,11 +10,12 @@ module.exports = {
     run()
     async function run() {
       let headings = await genHeadings()
-      let data = await genData(headings, checkResults)
+      let data = await genData(headings, results)
       let createReport = await genReport(headings, data)
 
       Fs.writeFileSync('./REPORT.md', createReport)
     }
+
     async function genHeadings() {
       let headings = [
         'Package',
