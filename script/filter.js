@@ -5,17 +5,14 @@ module.exports = {
 
     // return doFilter()
     // async function doFilter() {
-    console.log('SEARCH RESULTS\n', searchResults[0])
-    let filter = {}
+    let filter = []
     console.log('ITEMS TO FILTER : ', searchResults.length)
     let collegeDash = /-college/i
     let collegeUnderscore = /_college/i
     let collegeDesc = /college/i
     let uniDesc = /university/i
-    console.log('wahee')
 
-    for (i = 0; i < searchResults; i++) {
-      console.log('wahoo')
+    for (let i = 0; i < searchResults.length; i++) {
       let item = searchResults[i]
       if (
         collegeDash.test(item.name) |
@@ -26,11 +23,9 @@ module.exports = {
       ) {
         console.log(item.name)
       } else {
-        filter[item.name] = item
+        filter.push(item)
       }
     }
-
-    console.log('wahee')
 
     // Fs.writeFileSync('./data/json/filter.json', JSON.stringify(filter))
 

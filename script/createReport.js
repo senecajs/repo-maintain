@@ -24,17 +24,18 @@ module.exports = {
         'Fails',
         'forks_count',
         'stargazers_count',
-        'open_issues_count',
+        'open_issues',
       ]
       return headings
     }
 
     async function genData(headings, results) {
       dataSet = []
-      let pluginData = results.data
-      let checkResults = results.checks
       for (plugin in results) {
-        pluginReport = {}
+        let pluginReport = {}
+        let pluginData = results[plugin].data
+        let checkResults = results[plugin].checks
+
         pluginReport.package =
           '[' +
           pluginData.package_name +

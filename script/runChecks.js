@@ -15,10 +15,12 @@ module.exports = {
     // runChecks()
     // async function runChecks() {
     let allResults = {}
-    for (let i = 0; i < Object.keys(Plugins).length; i++) {
+    for (let i = 0; i < Plugins.length; i++) {
       let item = Plugins[i]
       let results = {}
-      let plugin = gatherData(item, checkList)
+      // console.log('[[ gatherData ]]')
+      let plugin = await gatherData(item, checkList)
+      console.log(plugin.data.full_name)
       for (checkName in plugin.checks) {
         let checkDetails = plugin.checks[checkName]
         checkDetails.name = checkName
@@ -48,7 +50,7 @@ module.exports = {
       return {
         file_exist: async function (checkDetails, pluginData) {
           let file = checkDetails.file
-          let pass = pluginData.includes(file)
+          let pass = Object.keys(pluginData).includes(file)
           let why = 'file_not_found'
           if (pass) {
             why = 'file_found'
@@ -66,17 +68,18 @@ module.exports = {
         fileX_exist_if_contain_json: async function (checkDetails, pluginData) {
           let file = checkDetails.file
           let fileX = checkDetails.fileX
-          let pass = pluginData.includes(file)
+          let pass = Object.keys(pluginData).includes(file)
           let why = 'json_file_not_found'
           let searchContent = checkDetails.contains
           let searchIsNot = checkDetails.contains_is_not
           let containsType = checkDetails.contains_type
           let config = checkDetails.config
+          let searchIs = ''
 
           if (pass) {
             let fileContent = pluginData[file]
-            if ('key' == containstype) {
-              let searchIs = Hoek.reach(fileContent, searchContent)
+            if ('key' == containsType) {
+              searchIs = Hoek.reach(fileContent, searchContent)
               pass = null != searchIs && searchIsNot != searchIs
             } else {
               // extensibility goes here - searching for value and not key
@@ -88,12 +91,12 @@ module.exports = {
               switch (config) {
                 case 'js':
                   fileX = searchIs
-                  pass = pluginData.includes(fileX)
+                  pass = Object.keys(pluginData).includes(fileX)
                   break
 
                 case 'ts':
                   fileX = Path.basename(searchIs, '.js') + '.ts'
-                  pass = pluginData.includes(fileX)
+                  pass = Object.keys(pluginData).includes(fileX)
                   break
               }
 
@@ -118,7 +121,7 @@ module.exports = {
 
         content_contain_string: async function (checkDetails, pluginData) {
           let file = checkDetails.file
-          let pass = pluginData.includes(file)
+          let pass = Object.keys(pluginData).includes(file)
           let searchContent = checkDetails.contains
           let why = 'file_not_found'
 
@@ -146,7 +149,7 @@ module.exports = {
 
         content_contain_markdown: async function (checkDetails, pluginData) {
           let file = checkDetails.file
-          let pass = pluginData.includes(file)
+          let pass = Object.keys(pluginData).includes(file)
           let why = 'file_not_found'
 
           // Currently check def is quite specific to readme_headings check
@@ -170,7 +173,7 @@ module.exports = {
               for (let i = 0; i < searchArray.length; i++) {
                 pass =
                   headings[i].depth == searchArray[i].depth &&
-                  heading[i].text == searchArray[i].text
+                  headings[i].text == searchArray[i].text
                 if (!pass) {
                   let nb = i + 1
                   why = 'heading_"' + searchArray[i].text + '"_not_found'
@@ -194,13 +197,13 @@ module.exports = {
 
         content_contain_json: async function (checkDetails, pluginData) {
           let file = checkDetails.file
-          let pass = pluginData.includes(file)
+          let pass = Object.keys(pluginData).includes(file)
           let searchContent = checkDetails.contains
           let contentType = checkDetails.contains_type
           let why = 'file_not_found'
 
           if (pass) {
-            let fileCOntent = pluginData[file]
+            let fileContent = pluginData[file]
             if ('key' == contentType) {
               let chain = []
               for (let i = 0; i < searchContent.length; i++) {

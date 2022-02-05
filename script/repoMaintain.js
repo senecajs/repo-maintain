@@ -6,15 +6,16 @@ const { createReport } = require('./createReport')
 
 repoMaintain()
 async function repoMaintain() {
+  console.log('\n\n#######       Search       #######\n\n')
   let searchResults = await search()
-  // console.log(
-  //   '\n\n#######       SearchResults       #######\n\n',
-  //   searchResults
-  // )
+
+  console.log('\n\n#######       Filter       #######\n\n')
   let Plugins = await filter(searchResults)
-  // console.log('\n\n#######       Plugins       #######\n\n', Plugins)
+
+  console.log('\n\n#######       checkResults       #######\n\n')
   let checkResults = await runChecks(Plugins)
-  // console.log('\n\n#######       checkResults       #######\n\n', checkResults)
+
+  console.log('\n\n#######       PRE CREATE REPORT       #######\n\n')
   let Report = await createReport(checkResults)
-  // console.log('\n\n#######       POST CREATE REPORT       #######\n\n')
+  console.log('\n\n#######       POST CREATE REPORT       #######\n\n')
 }

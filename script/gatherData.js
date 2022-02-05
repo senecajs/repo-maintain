@@ -28,30 +28,48 @@ module.exports = {
         break
     }
 
-    let filesReq = []
+    let filesReq = {}
     let relCheckList = {}
     for (checkName in checkList) {
       let checkDetails = checkList[checkName]
       if (config.includes(checkDetails.config)) {
-        filesReq.push(checkDetails.file)
+        filesReq[checkDetails.file] = null
         relCheckList[checkName] = checkDetails
       }
     }
-
-    for (let i = 0; i < filesReq; i++) {
-      let fileName = filesReq[i]
+    for (let i = 0; i < Object.keys(filesReq).length; i++) {
+      let fileName = Object.keys(filesReq)[i]
+      let fileContent = null
+      if (null == fileName) continue
       let url =
         'https://raw.githubusercontent.com/' +
         apiData.full_name +
         '/master/' +
         fileName
 
-      const fileRaw = await Fetch(url)
+      // DNS lookup errors at random causing stop to program
+      // If fetch request fails, wait - try again - move on if unsuccessful
+      let fileRaw = Promise
+      try {
+        fileRaw = await Fetch(url)
+      } catch (err) {
+        await new Promise((resolve) => setTimeout(resolve, 7777))
+        try {
+          fileRaw = await Fetch(url)
+        } catch (err) {
+          continue
+        }
+      }
+
       if (fileRaw.ok) {
-        if ('json' == Path.extname(url)) {
-          let fileContent = await fileRaw.json()
+        if ('.json' == Path.extname(url)) {
+          try {
+            fileContent = await fileRaw.json()
+          } catch (err) {
+            continue
+          }
         } else {
-          let fileContent = await fileRaw.text()
+          fileContent = await fileRaw.text()
         }
         reqData[fileName] = fileContent
 

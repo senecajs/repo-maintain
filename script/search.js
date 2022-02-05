@@ -16,11 +16,12 @@ module.exports = {
     let nbRepos = 0
 
     // increment year to search (start: 2010)
-    // for (let year = 2010; year <= thisYear; year++) {
-    for (let year = 2010; year <= 2010; year++) {
+    for (let year = 2010; year <= thisYear; year++) {
+      // for (let year = 2022; year <= 2022; year++) {
       // increment page of search results + reset nbRepos for each year
       nbRepos = 0
       for (let page = 1; page <= 10; page++) {
+        // for (let page = 1; page <= 1; page++) {
         await new Promise((resolve) => setTimeout(resolve, 7777))
 
         let searchURL =
