@@ -1,14 +1,13 @@
 ![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
-> A module to help you standardize your [Seneca.js](https://www.npmjs.com/package/seneca) plugin.
+
+> Search GitHub for all [Seneca.js](https://www.npmjs.com/package/seneca) plugins and run standardisation tests on them.
 
 # repo-maintain
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
-|---|---|
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
 
-## Description
-
-This module is designed for contributors to the Seneca family of plugins. If you wish, you may use this plugin to scan your own prior to publishing to see if it meets our standardisation specifications.
+This module is designed to give an overview of the Seneca family of plugins in relation to an evolving series of standardisation checks. The report generated is in the form of a Markdown table - please refer to your IDE documentation for how to preview MD files within the editor.
 
 If you're using this module, and need help, you can:
 
@@ -18,34 +17,67 @@ If you're using this module, and need help, you can:
 
 If you are new to Seneca in general, please take a look at [senecajs.org](https://www.npmjs.com/package/seneca). We have everything from tutorials to sample apps to help get you up and running quickly.
 
-## Installation and Usage
+## Install
 
-**repo-maintain is not currently published as an npm package. Please check back regularly for updates.**
+### Clone with SSH
 
-See below for what each check means in the event of it failing.
+```bash
+$ git clone git@github.com:senecajs/repo-maintain.git
+```
 
-Please note: if your repository contains file name duplicates (for example, two package.json files), the module will return a SyntaxError. This is a known issue.
+Run the above command in the directory of your choice. You will be prompted to input your SSH key password. A repo-maintain subdirectory will be created for you.
 
-## Checks Descriptions
+This is the preferred cloning method, as it is more secure. Don't know what an SSH key is/don't have one yet? Check out the GitHub docs on SSH keys [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
-| Name | Description |
-|---|---|
-| __content_readme__ | Your README.md file should contain the word "Voxgig" somewhere in it. [Voxgig](https://www.voxgig.com) are the sponsors and supporters of many Seneca modules. |
-| __exist_codeconduct__ | Your plugin should contain a CODE_OF_CONDUCT.md file. Please refer to [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) for further details.
-| __exist_dist__ | This is a TypeScript configuration check. Your plugin should contain a top-level file named `<plugin>.ts`, where <plugin> matches `"main": "dist/<plugin>.js"` in your package.json. Eg: a file named `maintain.ts` and a package.json main value of `dist/maintain.js`. Instances where <plugin> is equal to "index" are not accepted. |
-| __exist_entry__ | This is a JavaScript configuration check. Your plugin should contain a top-level file named `<plugin>.js`, where <plugin> matches `"main": "<plugin>.js"` in your package.json. Eg: a file named `maintain.js` and a package.json main value of `maintain.js`. Instances where <plugin> is equal to "index" are not accepted. |
-| __exist_license__ | Your plugin should include a license file, simply named `LICENSE` - no file extension. |
-| __exist_pkgjson__ | Your plugin should include a package.json file, at the top-level. This check simply scans for its existence. |
-| __exist_readme__ | Your plugin should contain a README.md file at the top level, named exactly `README.md`. |
-| __readme_headings__ | Your README.md file should contain only one H1-level heading (denoted by a single hash (`#`) in Markdown), the value of which should be `<package.name>`, where `<package.name>` is the name taken from the "name" value in the package.json file. Additionally, your README.md file should contain eight and only eight H2-level headings (denoted by a double-hash (`##`) in Markdown). The values of these H2 headings should be the following (order must be conserved): Install, Quick Example, More Examples, Motivation, Support, API, Contributing, Background. You may include as many lower-level headings between these as you wish. |
-| __test_pkgjson__ | Your package.json file should include a `scripts.test` key, or a key named "test" nested within the "scripts" value. The value of this key is up to you. |
-| __version_codeconduct__ | Your CODE_OF_CONDUCT.md file should contain the latest version of Contributor Covenant's Code of Conduct, as it is [here](https://www.contributor-covenant.org/version/2/1/code_of_conduct/). |
-| __check_default__ | Your default GitHub branchs should be named "main". |
+### Clone with HTTPS
+
+```bash
+$ git clone https://github.com/senecajs/repo-maintain.git
+```
+
+If you would prefer to use HTTPS cloning, run the above command in your directory of choice instead. A repo-maintain subdirectory will be created here too.
+
+## Quick Example
+
+This tool uses **[NodeJS](https://nodejs.org/en/)**. Please download and verify installation (using `node -v`) before proceeding.
+
+```bash
+$ node scripts/repoMaintain.js
+```
+
+From the repo-maintain directory, run the above command. The .js file extension may be ommitted.
+
+Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md at the top-level.
+
+## More Examples
+
+Configurations are used to run additional checks based on the architecture of your specific plugin. At the moment, we have three configs - Base, JavaScript, and TypeScript. The base configuration is run by default, and the tool will apply language specific configurations based on the language of each plugin. No action on your part is necessary.
+
+## Motivation
+
+## Support
+
+### Check Descriptions
+
+| Name                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **content_readme**      | The README.md file should contain the word "Voxgig" somewhere in it. [Voxgig](https://www.voxgig.com) are the sponsors and supporters of many Seneca modules.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **exist_codeconduct**   | The plugin should contain a CODE_OF_CONDUCT.md file. Please refer to [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) for further details.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **exist_dist**          | This is a TypeScript configuration check. The plugin should contain a top-level file named `<plugin>.ts`, where <plugin> matches `"main": "dist/<plugin>.js"` in the package.json. Eg: a file named `maintain.ts` and a package.json main value of `dist/maintain.js`. Instances where <plugin> is equal to "index" are not accepted.                                                                                                                                                                                                                                                                                                                                                                                         |
+| **exist_entry**         | This is a JavaScript configuration check. The plugin should contain a top-level file named `<plugin>.js`, where <plugin> matches `"main": "<plugin>.js"` in the package.json. Eg: a file named `maintain.js` and a package.json main value of `maintain.js`. Instances where <plugin> is equal to "index" are not accepted.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **exist_license**       | The plugin should include a license file, simply named `LICENSE` - no file extension.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **exist_pkgjson**       | The plugin should include a package.json file, at the top-level. This check simply scans for its existence.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **exist_readme**        | The plugin should contain a README.md file at the top level, named exactly `README.md`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **readme_headings**     | The README.md file should contain only one H1-level heading (denoted by a single hash (`#`) in Markdown), the value of which should be `<package.name>`, where `<package.name>` is the name taken from the "name" value in the package.json file. Additionally, the README.md file should contain eight and only eight H2-level headings (denoted by a double-hash (`##`) in Markdown). The values of these H2 headings should be the following (order must be conserved): Install, Quick Example, More Examples, Motivation, Support, API, Contributing, Background. There is no limit as to how many lower-level headings can be included between these. This README.md document passes this check - refer to it if needed. |
+| **test_pkgjson**        | The package.json file should include a `scripts.test` key, or a key named "test" nested within the "scripts" value. The value of this key is up to the author.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **version_codeconduct** | The CODE_OF_CONDUCT.md file should contain the latest version of Contributor Covenant's Code of Conduct, as denoted [here](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+
+## API
 
 ## Contributing
 
-The [Senecajs org](https://github.com/senecajs) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features, please get in touch.
+## Background
 
-## License
+### License
 
 Licensed under [MIT](./LICENSE).
