@@ -12,22 +12,27 @@ module.exports = {
     const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 
-    // runChecks()
-    // async function runChecks() {
+    console.log('\nChecks function initiated.\n')
     let allResults = {}
-    for (let i = 0; i < Plugins.length; i++) {
+    for (let i = 8; i < Plugins.length; i++) {
       let item = Plugins[i]
       let results = {}
-      // console.log('[[ gatherData ]]')
       let plugin = await gatherData(item, checkList)
-      console.log(plugin.data.full_name)
+      console.log(
+        '[',
+        i + 1,
+        ' of ',
+        Plugins.length,
+        ']',
+        plugin.data.full_name
+      )
       for (checkName in plugin.checks) {
         let checkDetails = plugin.checks[checkName]
         checkDetails.name = checkName
 
         let checkKind = defineChecks[checkDetails.kind]
         if (null == checkKind) {
-          console.log(
+          console.info(
             'WARNING',
             'Check does not exist',
             checkName,
@@ -43,8 +48,8 @@ module.exports = {
         checks: results,
       }
     }
+    console.log('Checks complete.')
     return allResults
-    // }
 
     function checkOperations() {
       return {
@@ -82,8 +87,6 @@ module.exports = {
               searchIs = Hoek.reach(fileContent, searchContent)
               pass = null != searchIs && searchIsNot != searchIs
             } else {
-              // extensibility goes here - searching for value and not key
-              console.log('Content type not recognised. ', checkDetails.name)
               pass = false
             }
 

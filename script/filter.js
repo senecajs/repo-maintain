@@ -1,12 +1,8 @@
 module.exports = {
   filter: async function (searchResults) {
-    // Node modules
-    // const Fs = require('fs')
-
-    // return doFilter()
-    // async function doFilter() {
+    console.log('\nFilter function initiated.\n')
     let filter = []
-    console.log('ITEMS TO FILTER : ', searchResults.length)
+    console.log('Total items before filter : ', searchResults.length)
     let collegeDash = /-college/i
     let collegeUnderscore = /_college/i
     let collegeDesc = /college/i
@@ -21,19 +17,14 @@ module.exports = {
         uniDesc.test(item.description) |
         (0 == item.size)
       ) {
-        console.log(item.name)
       } else {
         filter.push(item)
       }
     }
 
-    // Fs.writeFileSync('./data/json/filter.json', JSON.stringify(filter))
-
-    console.log('ITEMS TO FILTER : ', searchResults.length)
-    console.log('ITEMS AFTER FILTER : ', filter.length)
-    console.log('REMOVED : ', searchResults.length - filter.length)
+    console.log('Removed : ', searchResults.length - filter.length)
+    console.log('Total items after filter : ', filter.length)
 
     return filter
-    // }
   },
 }

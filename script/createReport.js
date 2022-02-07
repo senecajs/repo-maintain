@@ -7,6 +7,8 @@ module.exports = {
     // External modules
     const Fetch = require('node-fetch')
 
+    console.log('\nCreating report...\n')
+
     run()
     async function run() {
       let headings = await genHeadings()
@@ -89,7 +91,6 @@ module.exports = {
       }
 
       let report = reportArray.join('\n')
-      // console.log(report)
       return report
     }
   },

@@ -6,22 +6,18 @@ module.exports = {
 
     // External modules
     const Fetch = require('node-fetch')
-    const jsonFile = require('jsonfile')
 
-    // doSearch()
-    // async function doSearch() {
-    // console.log('Search function initiated.')
+    console.log('\nSearch function initiated.\n')
 
     let searchResults = []
     let nbRepos = 0
 
     // increment year to search (start: 2010)
-    for (let year = 2010; year <= thisYear; year++) {
-      // for (let year = 2022; year <= 2022; year++) {
+    // for (let year = 2010; year <= thisYear; year++) {
+    for (let year = 2010; year <= 2012; year++) {
       // increment page of search results + reset nbRepos for each year
       nbRepos = 0
       for (let page = 1; page <= 10; page++) {
-        // for (let page = 1; page <= 1; page++) {
         await new Promise((resolve) => setTimeout(resolve, 7777))
 
         let searchURL =
@@ -35,9 +31,9 @@ module.exports = {
         const body = await response.text()
         const json = JSON.parse(body)
         // catching error
-        const ok = response.ok
-        if (null == json.items) {
-          console.log('BAD json ', json)
+        if (!response.ok) {
+          console.info('Error fetching results from ', year, ' page ', page)
+          continue
         }
 
         console.log(
@@ -47,8 +43,7 @@ module.exports = {
           page,
           ']',
           json.items.length,
-          'results fetched... ',
-          ok
+          'results fetched... '
         )
 
         json.items.forEach((item) => {
@@ -68,9 +63,8 @@ module.exports = {
       console.log('[', year, ':', nbRepos, 'results mapped. ]')
     }
 
-    console.log('Search completed.', searchResults.length, 'repos total.')
+    console.log('\nSearch completed.', searchResults.length, 'repos total.')
 
     return searchResults
-    // }
   },
 }
