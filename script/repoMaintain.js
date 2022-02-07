@@ -14,5 +14,7 @@ async function repoMaintain() {
   let checkResults = await runChecks(Plugins)
   let Report = await createReport(checkResults)
 
-  console.info('Process complete. See REPORT.md for details.')
+  console.info(
+    'Process complete. See REPORT files for details - available in Markdown and CSV formats.'
+  )
 }

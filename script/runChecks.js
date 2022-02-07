@@ -14,7 +14,7 @@ module.exports = {
 
     console.log('\nChecks function initiated.\n')
     let allResults = {}
-    for (let i = 8; i < Plugins.length; i++) {
+    for (let i = 0; i < Plugins.length; i++) {
       let item = Plugins[i]
       let results = {}
       let plugin = await gatherData(item, checkList)
