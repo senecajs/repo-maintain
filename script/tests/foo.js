@@ -1,20 +1,10 @@
-const Fetch = require('node-fetch')
+testLog('silent')
+async function testLog(...arg) {
+  if ('silent' == arg[0]) {
+    // there is param silent
+    console.log = function () {}
+  }
 
-testFetch()
-async function testFetch() {
-  let url =
-    'https://raw.githubusercontent.com/' +
-    'senecajs/seneca-gateway' +
-    '/master/' +
-    'package.json'
-
-  console.log('URL : ', url)
-  const fileRaw = await Fetch(url)
-  console.log('fileRaw : ', fileRaw)
-  console.log('fileRawOK : ', fileRaw.ok)
-  console.log('fileRawSTATUS : ', fileRaw.status)
-  let fileContent = await fileRaw.json()
-  console.log('fileContent : ', fileContent)
-  console.log('fileContentTYPE : ', typeof fileContent)
-  console.log('packageNAME : ', fileContent.name)
+  // no params
+  console.log('hellO tHere')
 }
