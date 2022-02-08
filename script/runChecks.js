@@ -8,7 +8,7 @@ module.exports = {
     const Marked = require('marked')
 
     // Internal modules
-    const { checkList } = require('../design/checks/checks')
+    const { checkList } = require('../checks/checks')
     const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 

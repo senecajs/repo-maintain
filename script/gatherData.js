@@ -1,7 +1,6 @@
 module.exports = {
   gatherData: async function (apiData, checkList) {
     // Node modules
-    const Fs = require('fs')
     const Path = require('path')
 
     // External modules

@@ -1,5 +1,3 @@
-const { report } = require('process')
-
 module.exports = {
   createReport: async function (results) {
     // Node modules
