@@ -1,6 +1,7 @@
 module.exports = {
   filter: async function (searchResults) {
     console.log('\nFilter function initiated.\n')
+    let filterObj = {}
     let filter = []
     console.log('Total items before filter : ', searchResults.length)
     let collegeDash = /-college/i
@@ -18,11 +19,20 @@ module.exports = {
         (0 == item.size)
       ) {
       } else {
-        filter.push(item)
+        // Remove duplicates after filter to cut down on for loop iterations
+        filterObj[item.full_name] = item
       }
     }
 
-    console.log('Removed : ', searchResults.length - filter.length)
+    let objValues = Object.values(filterObj)
+    for (let i = 0; i < objValues.length; i++) {
+      filter.push(objValues[i])
+    }
+
+    console.log(
+      'Removed (incl duplicates) : ',
+      searchResults.length - filter.length
+    )
     console.log('Total items after filter : ', filter.length)
 
     return filter

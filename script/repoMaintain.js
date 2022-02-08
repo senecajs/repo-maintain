@@ -12,7 +12,7 @@ async function repoMaintain() {
   let searchResults = await search()
   let Plugins = await filter(searchResults)
   let checkResults = await runChecks(Plugins)
-  let Report = await createReport(checkResults)
+  await createReport(checkResults)
 
   console.info(
     'Process complete. See REPORT files for details - available in Markdown and CSV formats.'
