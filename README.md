@@ -1,13 +1,13 @@
 ![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
 
-> Search GitHub for all [Seneca.js](https://www.npmjs.com/package/seneca) plugins and run standardisation tests on them.
+> Run standardisation tests on the [Seneca.js](https://www.npmjs.com/package/seneca) ecosystem of plugins here on GitHub.
 
 # repo-maintain
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
 
-This module is designed to give an overview of the Seneca family of plugins in relation to an evolving series of standardisation checks. The report generated is in the form of a Markdown table - please refer to your IDE documentation for how to preview MD files within the editor.
+This module is designed to give an overview of the Seneca family of plugins in relation to an evolving series of standardisation checks. The report is generated under two file formats - Markdown and Comma Separated Values (CSV). This is for legibility and post-report analysis purposes.
 
 If you're using this module, and need help, you can:
 
@@ -42,12 +42,12 @@ If you would prefer to use HTTPS cloning, run the above command in your director
 This tool uses **[NodeJS](https://nodejs.org/en/)**. Please download and verify installation (using `node -v`) before proceeding.
 
 ```bash
-$ node scripts/repoMaintain.js
+$ node repoMaintain [silent]
 ```
 
-From the repo-maintain directory, run the above command. The .js file extension may be ommitted.
+From the repo-maintain directory, run the above command. By default, output to console is permitted - this is so you can follow the tool's progress in real time. The optional `silent` parameter will block output to console, with the exception of any errors that may arise during runtime.
 
-Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md at the top-level.
+Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level.
 
 ## More Examples
 
@@ -55,7 +55,11 @@ Configurations are used to run additional checks based on the architecture of yo
 
 ## Motivation
 
+This tool was created in order to maintain the Seneca ecosystem, in a legible and accessible way. Want your plugin to be part of the family? Check out our individual standardisation tool on npm [here](https://www.npmjs.com/package/@seneca/maintain)!
+
 ## Support
+
+Check out our sponsors and supporters, Voxgig, on their website [here](https://www.voxgig.com).
 
 ### Check Descriptions
 
@@ -74,9 +78,18 @@ Configurations are used to run additional checks based on the architecture of yo
 
 ## API
 
+No API functionality is currently shipped with this tool.
+
 ## Contributing
 
+The [SenecaJS org](http://senecajs.org/) encourages participation. If you feel you can help in any way, be
+it with bug reporting, documentation, examples, extra testing, or new features, feel free
+to [create an issue](https://github.com/senecajs/repo-maintain/issues/new), or better yet - [submit a Pull Request](https://github.com/senecajs/repo-maintain/pulls). For more
+information on contribution, please see our [Contributing Guide](http://senecajs.org/contribute).
+
 ## Background
+
+Check out the SenecaJS roadmap [here](https://senecajs.org/roadmap/)!
 
 ### License
 
