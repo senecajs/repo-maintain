@@ -49,6 +49,10 @@ From the repo-maintain directory, run the above command. By default, output to c
 
 Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level.
 
+**_Markdown -_** Check your IDE documentation for how to preview .md files within the editor (ctrl+shift+v for VSCode).
+
+**_CSV -_** Open this file in your preferred spreadsheet application (LibreOffice Calc, Microsfot Excel, Google Sheets, etc) to take full advantage of their filter and sort functionalities.
+
 ## More Examples
 
 Configurations are used to run additional checks based on the architecture of your specific plugin. At the moment, we have three configs - Base, JavaScript, and TypeScript. The base configuration is run by default, and the tool will apply language specific configurations based on the language of each plugin. No action on your part is necessary.
