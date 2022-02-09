@@ -13,7 +13,8 @@ module.exports = {
     let nbRepos = 0
 
     // increment year to search (start: 2010)
-    for (let year = 2010; year <= thisYear; year++) {
+    // for (let year = 2010; year <= thisYear; year++) {
+    for (let year = 2010; year <= 2012; year++) {
       // increment page of search results + reset nbRepos for each year
       nbRepos = 0
       for (let page = 1; page <= 10; page++) {

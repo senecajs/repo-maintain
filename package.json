@@ -2,7 +2,7 @@
   "name": "repo-maintain",
   "version": "0.0.1",
   "description": "Maintain the Seneca ecosystem.",
-  "main": "./script/search.js",
+  "main": "repoMaintain.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   },
   "author": "Ríona Stokes (https://github.com/stokesriona)",
   "contributors": [
+    "Ríona Stokes (https://github.com/stokesriona)",
     "Richard Rodger (http://richardrodger.com/)"
   ],
   "license": "MIT",

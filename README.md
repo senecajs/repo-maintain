@@ -55,7 +55,19 @@ Presently, the tool takes approx. 110 minutes to complete. All results can be fo
 
 ## More Examples
 
+### Configurations
+
 Configurations are used to run additional checks based on the architecture of your specific plugin. At the moment, we have three configs - Base, JavaScript, and TypeScript. The base configuration is run by default, and the tool will apply language specific configurations based on the language of each plugin. No action on your part is necessary.
+
+### Adding checks
+
+There are two parts to each check: the specific named check including all of its components in [checks.js](./checks/checks.js), and the definition of the operation of the check in [runChecks.js](./script/runChecks.js). The latter part is separate due to the fact that some checks are of the same kind and share the same operation - for example, the exist_readme and exist_license checks.
+
+To add a check with an already established operation, only the [checks/checks.js](./checks/checks.js) file must be modified. Any checks added to here will be included in the run. Any file under the `file` key will have its content fetched and stored in the `pluginData` object for use during operations. Refer to the existing checks for what other data to include in the check object, cross-referencing as necessary with checkOperations() ([starts line 54 in script/runChecks.js](./script/runChecks.js)).
+
+To add a check with a new operation, you must edit both files. The `kind` value in each check object refers to the name of the operation function in [runChecks.js](./script/runChecks.js). This function is where you will detail how exactly the program executes the check - remember to `require` any external modules you may need at the top of the file. Each of these operation functions have access to the list of checks (parameter checkDetails) as well as a `pluginData` object, which contains repo-specific file content as well as API data - check out the [gatherData script](./script/gatherData.js) for exact details.
+
+Remember to add your check description to this README!
 
 ## Motivation
 
