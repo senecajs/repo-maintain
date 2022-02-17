@@ -1,82 +1,127 @@
-const Fs = require('fs')
-const Path = require('path')
-const Fetch = require('node-fetch')
-const checkList = require('../design/checks/checks.js')
+module.exports = {
+  createReport: async function (results) {
+    // Node modules
+    const Fs = require('fs')
 
-const checkResultsRaw = Fs.readFileSync('../data/json/allChecks.json')
-let checkResults = JSON.parse(checkResultsRaw)
+    console.log('\nCreating report...\n')
 
-async function genHeadings(){
-    let headings = ["Package", "PASS?", "orgRepo", "Fails", "Forks", "Stars", "Open Issues", "Open PRs"]
-    // console.log(headings)
-    console.log("Headings created.")
-    return headings
-}
+    run()
+    async function run() {
+      let headings = await genHeadings()
+      let data = await genData(headings, results)
+      let createReport = await genReport(headings, data.md)
+      let createCSV = await genCSV(headings, data.csv)
 
+      Fs.writeFileSync('./REPORT.md', createReport)
+      Fs.writeFileSync('./REPORT.csv', createCSV)
+    }
 
-async function genData(headings, object) {
-    dataSet = []
-    for(repo in object) {
-        repoData = {}
-        let orgRepo = object[repo]
-        let names = repo.split('##')
-        let repoName = names[0]
-        let pkgName = names[1]
-        repoData.package = "["+pkgName+"](https://www.npmjs.com/package/"+pkgName+")"
-        repoData.PASS = "pass"
-        repoData.orgRepo = "["+repoName+"](https://github.com/"+repoName+")"
+    async function genHeadings() {
+      let headings = [
+        'Package',
+        'PASS?',
+        'orgRepo',
+        'Fails',
+        'forks_count',
+        'stargazers_count',
+        'open_issues',
+      ]
+      return headings
+    }
 
-        repoData.fails = ""
-        for (check in orgRepo) {
-            checkDetails = orgRepo[check]
-            if (false == checkDetails.pass) {
-                repoData.fails += check+" "
-                repoData.PASS = "FAIL"
-            }
+    async function genData(headings, results) {
+      dataSet = []
+      dataSetCSV = []
+      let npm = 'https://www.npmjs.com/package/'
+      let github = 'https://github.com/'
+      for (plugin in results) {
+        let pluginReport = {}
+        let reportCSV = {}
+        let pluginData = results[plugin].data
+        let checkResults = results[plugin].checks
+        let npmURL = npm + pluginData.package_name
+        let githubURL = github + pluginData.full_name
+
+        pluginReport.package =
+          '[' + pluginData.package_name + '](' + npmURL + ')'
+        reportCSV.package =
+          '"=HYPERLINK(""' + npmURL + '"",""' + pluginData.package_name + '"")"'
+
+        pluginReport.PASS = 'pass'
+        reportCSV.PASS = 'pass'
+
+        pluginReport.full_name =
+          '[' + pluginData.full_name + '](' + githubURL + ')'
+        reportCSV.full_name =
+          '"=HYPERLINK(""' + githubURL + '"",""' + pluginData.full_name + '"")"'
+
+        pluginReport.fails = ''
+        reportCSV.fails = ''
+
+        for (check in checkResults) {
+          checkDetails = checkResults[check]
+          if (false == checkDetails.pass) {
+            pluginReport.fails += '[' + check + '] '
+            reportCSV.fails += '[' + check + '] '
+
+            pluginReport.PASS = 'FAIL'
+            reportCSV.PASS = 'FAIL'
+          }
         }
 
         for (let i = 4; i < headings.length; i++) {
-            let title = headings[i]
-            repoData[title] = "apiData"
+          let title = headings[i]
+          pluginReport[title] = pluginData[title]
+          reportCSV[title] = pluginData[title]
         }
-        var repoDataValues = Object.values(repoData)
-        dataSet.push(repoDataValues)
+        let pluginReportValues = Object.values(pluginReport)
+        let csvValues = Object.values(reportCSV)
+        dataSet.push(pluginReportValues)
+        dataSetCSV.push(csvValues)
+      }
+      return {
+        md: dataSet,
+        csv: dataSetCSV,
+      }
     }
-    console.log("Data generated.")
-    return dataSet
-    
-}
 
-async function genReport(headings, data) {
-    let reportArray = []
+    async function genReport(headings, data) {
+      let reportArray = []
 
-    let head = headings.join("|")
-    reportArray.push(head)
+      let head = headings.join('|')
+      reportArray.push(head)
 
-    let sepLine = []
-    for (let i = 0; i < headings.length; i++) {
-        sepLine.push("---")
-    }
-    let sep = sepLine.join("|")
-    reportArray.push(sep)
+      let sepLine = []
+      for (let i = 0; i < headings.length; i++) {
+        sepLine.push('---')
+      }
+      let sep = sepLine.join('|')
+      reportArray.push(sep)
 
-    for (let j = 0; j < data.length; j++) {
+      for (let j = 0; j < data.length; j++) {
         let plugin = data[j]
-        let formatted = plugin.join("|")
+        let formatted = plugin.join('|')
         reportArray.push(formatted)
+      }
+
+      let report = reportArray.join('\n')
+      return report
     }
 
-    let report = reportArray.join("\n")
-    console.log(report)
-    return report
-}
+    async function genCSV(headings, data) {
+      let csvArray = []
 
-async function run() {
-    let headings = await genHeadings()
-    let data = await genData(headings, checkResults)
-    let createReport = await genReport(headings,data)
-    
-    Fs.writeFileSync('../REPORT.md', createReport)
-}
+      let head = headings.join(',')
+      csvArray.push(head)
 
-run()
+      for (let j = 0; j < data.length; j++) {
+        let plugin = data[j]
+        let formatted = plugin.join(',')
+        csvArray.push(formatted)
+      }
+
+      let CSVreport = csvArray.join('\n')
+      return CSVreport
+    }
+  },
+}

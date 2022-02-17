@@ -1,22 +1,40 @@
-const Fs = require('fs')
-const _ = require('underscore')
+module.exports = {
+  filter: async function (searchResults) {
+    console.log('\nFilter function initiated.\n')
+    let filterObj = {}
+    let filter = []
+    console.log('Total items before filter : ', searchResults.length)
+    let collegeDash = /-college/i
+    let collegeUnderscore = /_college/i
+    let collegeDesc = /college/i
+    let uniDesc = /university/i
 
-const results = require('../data/json/results.json')
+    for (let i = 0; i < searchResults.length; i++) {
+      let item = searchResults[i]
+      if (
+        collegeDash.test(item.name) |
+        collegeUnderscore.test(item.name) |
+        collegeDesc.test(item.description) |
+        uniDesc.test(item.description) |
+        (0 == item.size)
+      ) {
+      } else {
+        // Remove duplicates after filter to cut down on for loop iterations
+        filterObj[item.full_name] = item
+      }
+    }
 
-let filter = []
+    let objValues = Object.values(filterObj)
+    for (let i = 0; i < objValues.length; i++) {
+      filter.push(objValues[i])
+    }
 
-async function doFilter() {
-  console.log("ITEMS TO FILTER : ", results.length)
-  let filterList = _.where(results, {name : "seneca"})
+    console.log(
+      'Removed (incl duplicates) : ',
+      searchResults.length - filter.length
+    )
+    console.log('Total items after filter : ', filter.length)
 
-  filterList.forEach(item => {
-    filter.push(item)
-  });
-
-  Fs.writeFileSync("../data/json/filter.json", JSON.stringify(filter))
-
-  console.log("FILTERED ITEMS : ", filter.length)
-  
+    return filter
+  },
 }
-
-doFilter()

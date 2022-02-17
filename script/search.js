@@ -1,63 +1,69 @@
-const Fetch = require('node-fetch')
-const Fs = require('fs')
-const jsonFile = require ('jsonfile')
+module.exports = {
+  search: async function () {
+    // Node modules
+    const today = new Date()
+    const thisYear = today.getFullYear()
 
-const today = new Date()
-const thisYear = today.getFullYear()
+    // External modules
+    const Fetch = require('node-fetch')
 
+    console.log('\nSearch function initiated.\n')
 
-async function doSearch() {
-  console.log("Search function initiated.")
+    let searchResults = []
+    let nbRepos = 0
 
-  let obj = {}
-  let nbRepos = 0
+    // increment year to search (start: 2010)
+    for (let year = 2010; year <= thisYear; year++) {
+      // increment page of search results + reset nbRepos for each year
+      nbRepos = 0
+      for (let page = 1; page <= 10; page++) {
+        await new Promise((resolve) => setTimeout(resolve, 7777))
 
-  // increment year to search
-  for (let year = 2010; year <= thisYear; year++) {
+        let searchURL =
+          'https://api.github.com/search/repositories?q=seneca-+created:%3C' +
+          year +
+          '-01-01&page=' +
+          page +
+          '&per_page=100'
 
-    // increment page of search results + reset nbRepos for each year
-    nbRepos = 0
-    for (let page = 1; page <= 10; page++) {
+        const response = await Fetch(searchURL)
+        const body = await response.text()
+        const json = JSON.parse(body)
+        // catching error
+        if (!response.ok) {
+          console.info('Error fetching results from ', year, ' page ', page)
+          continue
+        }
 
-      await new Promise(resolve => setTimeout(resolve,7777))
+        console.log(
+          '[',
+          year,
+          '| pg',
+          page,
+          ']',
+          json.items.length,
+          'results fetched... '
+        )
 
-      let searchURL = "https://api.github.com/search/repositories?q=seneca-+created:%3C" + year + "-01-01&page=" + page + "&per_page=100"
-      
-      const response = await Fetch(searchURL)
-      const body = await response.text()
-      const json = JSON.parse(body)
-      // catching error
-      const ok = response.ok
-      if(null == json.items) {
-        console.log("BAD json!!! :(", json)
+        json.items.forEach((item) => {
+          searchResults.push(item)
+          nbRepos++
+        })
+
+        if (json.total_count <= 100) {
+          break
+        }
+
+        if (json.items.length == 0) {
+          break
+        }
       }
 
-      console.log("[", year, "| pg", page, "]", json.items.length, "results fetched... ", ok)
-      
-      json.items.forEach(item => {
-        obj[item.full_name] = item
-        nbRepos++
-      });
-
-
-      if(json.total_count <= 100){
-        break
-      }
-
-      if(json.items.length == 0){
-        break
-      }
+      console.log('[', year, ':', nbRepos, 'results mapped. ]')
     }
 
-    console.log("[", year, ":", nbRepos, "results mapped. ]")
+    console.log('\nSearch completed.', searchResults.length, 'repos total.')
 
-  }
-
-  var objValues = Object.values(obj)
- 
-  jsonFile.writeFileSync("../data/json/results.json", objValues, {flag: 'a', EOL: ',', finalEOL: false})
-
-  console.log("Search completed.", objValues.length, "repos total. See results.json file for logged data.")
+    return searchResults
+  },
 }
-
-doSearch()
