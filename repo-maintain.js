@@ -4,6 +4,7 @@ const { runChecks } = require('./script/runChecks')
 const { createReport } = require('./script/createReport')
 
 repoMaintain()
+
 async function repoMaintain() {
   if (2 < process.argv.length && 'silent' == process.argv[2]) {
     console.log = function () {}
