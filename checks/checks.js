@@ -76,7 +76,7 @@ module.exports = {
       contains_type: 'key',
     },
 
-    check_default: {
+    branch_default: {
       config: 'base',
       kind: 'check_branch',
       branch: 'main',
