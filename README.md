@@ -42,16 +42,16 @@ If you would prefer to use HTTPS cloning, run the above command in your director
 This tool uses **[NodeJS](https://nodejs.org/en/)**. Please download and verify installation (using `node -v`) before proceeding.
 
 ```bash
-$ node repoMaintain [silent]
+$ node repo-maintain [silent] [short]
 ```
 
 From the repo-maintain directory, run the above command. By default, output to console is permitted - this is so you can follow the tool's progress in real time. The optional `silent` parameter will block output to console, with the exception of any errors that may arise during runtime.
 
-Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level.
+Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level. To run a one-minute version of the tool for testing purposes, include the `short` argument.
 
 **_Markdown -_** Check your IDE documentation for how to preview .md files within the editor (ctrl+shift+v for VSCode).
 
-**_CSV -_** Open this file in your preferred spreadsheet application (LibreOffice Calc, Microsfot Excel, Google Sheets, etc) to take full advantage of their filter and sort functionalities.
+**_CSV -_** Preview within your IDE, or open file in your preferred spreadsheet application (LibreOffice Calc, Microsfot Excel, Google Sheets, etc) to take full advantage of their filter and sort functionalities.
 
 ## More Examples
 

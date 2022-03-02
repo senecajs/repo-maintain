@@ -6,8 +6,10 @@ const { createReport } = require('./script/createReport')
 repoMaintain()
 
 async function repoMaintain() {
-  if (2 < process.argv.length && 'silent' == process.argv[2]) {
-    console.log = function () {}
+  global.short = false
+  if (2 < process.argv.length) {
+    if (process.argv.slice(2).includes('silent')) console.log = function () {}
+    if (process.argv.slice(2).includes('short')) short = true
   }
 
   let searchResults = await search()

@@ -1,8 +1,8 @@
 module.exports = {
   search: async function () {
     // Node modules
-    const today = new Date()
-    const thisYear = today.getFullYear()
+    let today = new Date()
+    let thisYear = today.getFullYear()
 
     // External modules
     const Fetch = require('node-fetch')
@@ -11,6 +11,7 @@ module.exports = {
 
     let searchResults = []
     let nbRepos = 0
+    if (short) thisYear = 2012
 
     // increment year to search (start: 2010)
     for (let year = 2010; year <= thisYear; year++) {
