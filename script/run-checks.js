@@ -9,7 +9,7 @@ module.exports = {
 
     // Internal modules
     const { checkList } = require('../checks/checks')
-    const { gatherData } = require('./gatherData')
+    const { gatherData } = require('./gather-data')
     const defineChecks = checkOperations()
 
     console.log('\nChecks function initiated.\n')

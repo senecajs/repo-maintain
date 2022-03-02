@@ -1,7 +1,7 @@
 const { search } = require('./script/search')
 const { filter } = require('./script/filter')
-const { runChecks } = require('./script/runChecks')
-const { createReport } = require('./script/createReport')
+const { runChecks } = require('./script/run-checks')
+const { createReport } = require('./script/create-report')
 
 repoMaintain()
 
