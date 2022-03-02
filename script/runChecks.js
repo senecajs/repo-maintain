@@ -43,9 +43,12 @@ module.exports = {
         let res = await checkKind(checkDetails, plugin.data)
         results[checkName] = res
       }
-      allResults[item.full_name] = {
-        data: plugin.data,
-        checks: results,
+      // Filtering out those without package.json files
+      if (results.exist_pkgjson.pass) {
+        allResults[item.full_name] = {
+          data: plugin.data,
+          checks: results,
+        }
       }
     }
     console.log('Checks complete.')

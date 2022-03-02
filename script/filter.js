@@ -11,12 +11,15 @@ module.exports = {
 
     for (let i = 0; i < searchResults.length; i++) {
       let item = searchResults[i]
+      console.log(item.contents_url)
       if (
         collegeDash.test(item.name) |
         collegeUnderscore.test(item.name) |
         collegeDesc.test(item.description) |
         uniDesc.test(item.description) |
         (0 == item.size)
+        // Below is possibilty for filtering repos without package.json, currently done on line 47 of run-checks.js
+        // (item.contents_url + '/package.json').message exists && == "Not Found"
       ) {
       } else {
         // Remove duplicates after filter to cut down on for loop iterations
