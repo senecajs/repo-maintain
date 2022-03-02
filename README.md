@@ -39,7 +39,7 @@ If you would prefer to use HTTPS cloning, run the above command in your director
 
 ## Quick Example
 
-This tool uses **[NodeJS](https://nodejs.org/en/)**. Please download and verify installation (using `node -v`) before proceeding.
+This tool uses **[NodeJS](https://nodejs.org/en/)** and **[npm](https://www.npmjs.com/)**. Please [download](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and verify installation (using `node -v` and `npm -v`) before proceeding.
 
 ```bash
 $ node repo-maintain [silent] [short]
@@ -65,7 +65,7 @@ There are two parts to each check: the specific named check including all of its
 
 To add a check with an already established operation, only the [checks/checks.js](./checks/checks.js) file must be modified. Any checks added to here will be included in the run. Any file under the `file` key will have its content fetched and stored in the `pluginData` object for use during operations. Refer to the existing checks for what other data to include in the check object, cross-referencing as necessary with checkOperations() ([starts line 54 in script/runChecks.js](./script/runChecks.js)).
 
-To add a check with a new operation, you must edit both files. The `kind` value in each check object refers to the name of the operation function in [runChecks.js](./script/runChecks.js). This function is where you will detail how exactly the program executes the check - remember to `require` any external modules you may need at the top of the file. Each of these operation functions have access to the list of checks (parameter checkDetails) as well as a `pluginData` object, which contains repo-specific file content as well as API data - check out the [gatherData script](./script/gatherData.js) for exact details.
+To add a check with a new operation, you must edit both files. The `kind` value in each check object refers to the name of the operation function in [runChecks.js](./script/runChecks.js). This function is where you will detail how exactly the program executes the check - remember to `require` any external modules you may need at the top of the file. Each of these operation functions have access to the list of checks (parameter checkDetails) as well as a `pluginData` object, which contains repo-specific file content including API data - check out the [gatherData script](./script/gatherData.js) for exact details.
 
 Remember to add your check description to this README!
 
