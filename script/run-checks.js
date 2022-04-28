@@ -1,11 +1,6 @@
 module.exports = {
   runChecks: async function (Plugins) {
-    // Node modules
-    const Path = require('path')
-
     // External modules
-    const Hoek = require('@hapi/hoek')
-    const Marked = require('marked')
     const { defineChecks } = require('@seneca/maintain')
     const { checkList } = require('@seneca/maintain')
 
@@ -51,7 +46,11 @@ module.exports = {
         }
       }
     }
-    console.log('Checks complete.')
+    console.log(
+      '\nChecks complete. ' +
+        Object.keys(allResults).length +
+        ' items sent for formatting.'
+    )
     return allResults
   },
 }
