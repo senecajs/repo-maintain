@@ -25,11 +25,9 @@
   "homepage": "https://github.com/senecajs/repo-maintain#readme",
   "dependencies": {
     "@hapi/hoek": "^9.2.1",
+    "@seneca/maintain": "^0.0.21",
     "chalk": "^5.0.0",
     "marked": "^4.0.12",
     "node-fetch": "^2.6.7"
-  },
-  "workspaces": [
-    "script/pluginCLI"
-  ]
+  }
 }
