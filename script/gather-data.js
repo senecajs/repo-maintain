@@ -75,6 +75,7 @@ module.exports = {
         // getting package name
         if ('package.json' == fileName) {
           reqData.package_name = fileContent.name
+          reqData.org_name = fileContent.repository.url.split('/')[3]
         }
       }
     }

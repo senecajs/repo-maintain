@@ -35,7 +35,19 @@ module.exports = {
           )
           continue
         }
-        let res = await checkKind(checkDetails, plugin.data)
+        let res = null
+        if (
+          checkDetails.include[0].test(
+            plugin.data.org_name.concat('/', plugin.data.package_name)
+          ) &&
+          !checkDetails.exclude[0].test(
+            plugin.data.org_name.concat('/', plugin.data.package_name)
+          )
+        ) {
+          res = await checkKind(checkDetails, plugin.data)
+        } else {
+          continue
+        }
         results[checkName] = res
       }
       // Filtering out those without package.json files
