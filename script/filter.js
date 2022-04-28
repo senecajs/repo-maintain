@@ -11,7 +11,6 @@ module.exports = {
 
     for (let i = 0; i < searchResults.length; i++) {
       let item = searchResults[i]
-      console.log(item.contents_url)
       if (
         collegeDash.test(item.name) |
         collegeUnderscore.test(item.name) |
