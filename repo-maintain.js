@@ -1,13 +1,15 @@
 const { search } = require('./script/search')
 const { filter } = require('./script/filter')
-const { runChecks } = require('./script/runChecks')
-const { createReport } = require('./script/createReport')
+const { runChecks } = require('./script/run-checks')
+const { createReport } = require('./script/create-report')
 
 repoMaintain()
 
 async function repoMaintain() {
-  if (2 < process.argv.length && 'silent' == process.argv[2]) {
-    console.log = function () {}
+  global.short = false
+  if (2 < process.argv.length) {
+    if (process.argv.slice(2).includes('silent')) console.log = function () {}
+    if (process.argv.slice(2).includes('short')) short = true
   }
 
   let searchResults = await search()
