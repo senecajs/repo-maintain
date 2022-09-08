@@ -1,8 +1,11 @@
 module.exports = {
-  runChecks: async function (Plugins) {
+  runChecks: async function ({
+    Plugins,
+    exclChecks = [],
+    inclChecks = [],
+  } = {}) {
     // External modules
     const { defineChecks } = require('@seneca/maintain')
-    const { checkList } = require('@seneca/maintain')
 
     // Internal modules
     const { gatherData } = require('./gather-data')
@@ -12,7 +15,8 @@ module.exports = {
     for (let i = 0; i < Plugins.length; i++) {
       let item = Plugins[i]
       let results = {}
-      let plugin = await gatherData(item, checkList())
+      let plugin = await gatherData(item, exclChecks, inclChecks)
+      // console.log(plugin)
       console.log(
         '[',
         i + 1,
@@ -59,7 +63,7 @@ module.exports = {
       }
     }
     console.log(
-      '\nChecks complete. ' +
+      '\nChecks complete. \nRemoved packages without package.json files. \n' +
         Object.keys(allResults).length +
         ' items sent for formatting.'
     )

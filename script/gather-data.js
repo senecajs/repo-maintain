@@ -1,13 +1,16 @@
 module.exports = {
-  gatherData: async function (apiData, checkList) {
+  gatherData: async function (apiData, exclChecks, inclChecks) {
     // Node modules
     const Path = require('path')
 
     // External modules
+    const { checkList } = require('@seneca/maintain')
     const Fetch = require('node-fetch') // v3 only supports ESM - switch?
 
     let reqData = {}
     reqData.full_name = apiData.full_name
+    reqData.org_name = apiData.owner.login
+    reqData.package_name = apiData.name
     reqData.html_url = apiData.html_url
     reqData.language = apiData.language
     reqData.default_branch = apiData.default_branch
@@ -27,14 +30,16 @@ module.exports = {
         break
     }
 
+    let relCheckList = checkList({
+      config: config,
+      inclChecks: inclChecks,
+      exclChecks: exclChecks,
+    })
+
     let filesReq = {}
-    let relCheckList = {}
-    for (checkName in checkList) {
-      let checkDetails = checkList[checkName]
-      if (config.includes(checkDetails.config)) {
-        filesReq[checkDetails.file] = null
-        relCheckList[checkName] = checkDetails
-      }
+    for (checkName in relCheckList) {
+      let checkDetails = relCheckList[checkName]
+      filesReq[checkDetails.file] = null
     }
     for (let i = 0; i < Object.keys(filesReq).length; i++) {
       let fileName = Object.keys(filesReq)[i]
@@ -71,12 +76,6 @@ module.exports = {
           fileContent = await fileRaw.text()
         }
         reqData[fileName] = fileContent
-
-        // getting package name
-        if ('package.json' == fileName) {
-          reqData.package_name = fileContent.name
-          reqData.org_name = fileContent.repository.url.split('/')[3]
-        }
       }
     }
 

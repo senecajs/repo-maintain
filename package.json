@@ -28,6 +28,7 @@
     "@seneca/maintain": "^0.0.21",
     "chalk": "^5.0.0",
     "marked": "^4.0.12",
+    "minimist": "^1.2.6",
     "node-fetch": "^2.6.7"
   }
 }
