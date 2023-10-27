@@ -39,19 +39,19 @@ If you would prefer to use HTTPS cloning, run the above command in your director
 
 ## Quick Example
 
-This tool uses **[NodeJS](https://nodejs.org/en/)**. Please download and verify installation (using `node -v`) before proceeding.
+This tool uses **[NodeJS](https://nodejs.org/en/)** and **[npm](https://www.npmjs.com/)**. Please [download](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and verify installation (using `node -v` and `npm -v`) before proceeding.
 
 ```bash
-$ node repoMaintain [silent]
+$ node repo-maintain [silent] [short]
 ```
 
 From the repo-maintain directory, run the above command. By default, output to console is permitted - this is so you can follow the tool's progress in real time. The optional `silent` parameter will block output to console, with the exception of any errors that may arise during runtime.
 
-Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level.
+Presently, the tool takes approx. 110 minutes to complete. All results can be found in the REPORT.md and REPORT.csv files at the top-level. To run a one-minute version of the tool for testing purposes, include the `short` argument.
 
 **_Markdown -_** Check your IDE documentation for how to preview .md files within the editor (ctrl+shift+v for VSCode).
 
-**_CSV -_** Open this file in your preferred spreadsheet application (LibreOffice Calc, Microsfot Excel, Google Sheets, etc) to take full advantage of their filter and sort functionalities.
+**_CSV -_** Preview within your IDE, or open file in your preferred spreadsheet application (LibreOffice Calc, Microsfot Excel, Google Sheets, etc) to take full advantage of their filter and sort functionalities.
 
 ## More Examples
 
@@ -65,7 +65,7 @@ There are two parts to each check: the specific named check including all of its
 
 To add a check with an already established operation, only the [checks/checks.js](./checks/checks.js) file must be modified. Any checks added to here will be included in the run. Any file under the `file` key will have its content fetched and stored in the `pluginData` object for use during operations. Refer to the existing checks for what other data to include in the check object, cross-referencing as necessary with checkOperations() ([starts line 54 in script/runChecks.js](./script/runChecks.js)).
 
-To add a check with a new operation, you must edit both files. The `kind` value in each check object refers to the name of the operation function in [runChecks.js](./script/runChecks.js). This function is where you will detail how exactly the program executes the check - remember to `require` any external modules you may need at the top of the file. Each of these operation functions have access to the list of checks (parameter checkDetails) as well as a `pluginData` object, which contains repo-specific file content as well as API data - check out the [gatherData script](./script/gatherData.js) for exact details.
+To add a check with a new operation, you must edit both files. The `kind` value in each check object refers to the name of the operation function in [runChecks.js](./script/runChecks.js). This function is where you will detail how exactly the program executes the check - remember to `require` any external modules you may need at the top of the file. Each of these operation functions have access to the list of checks (parameter checkDetails) as well as a `pluginData` object, which contains repo-specific file content including API data - check out the [gatherData script](./script/gatherData.js) for exact details.
 
 Remember to add your check description to this README!
 
@@ -90,6 +90,7 @@ Check out our sponsors and supporters, Voxgig, on their website [here](https://w
 | **exist_readme**        | The plugin should contain a README.md file at the top level, named exactly `README.md`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **readme_headings**     | The README.md file should contain only one H1-level heading (denoted by a single hash (`#`) in Markdown), the value of which should be `<package.name>`, where `<package.name>` is the name taken from the "name" value in the package.json file. Additionally, the README.md file should contain eight and only eight H2-level headings (denoted by a double-hash (`##`) in Markdown). The values of these H2 headings should be the following (order must be conserved): Install, Quick Example, More Examples, Motivation, Support, API, Contributing, Background. There is no limit as to how many lower-level headings can be included between these. This README.md document passes this check - refer to it if needed. |
 | **test_pkgjson**        | The package.json file should include a `scripts.test` key, or a key named "test" nested within the "scripts" value. The value of this key is up to the author.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **branch_default**      | The default branch of the repository should be named `main`, as opposed to perhaps "master" - the old standard.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | **version_codeconduct** | The CODE_OF_CONDUCT.md file should contain the latest version of Contributor Covenant's Code of Conduct, as denoted [here](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 
 ## API
