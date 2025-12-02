@@ -39,7 +39,7 @@
     "git-default-branch": "^1.0.0",
     "github-download": "^0.5.0",
     "github-search-api": "^0.0.3",
-    "googleapis": "^95.0.0",
+    "googleapis": "^124.0.0",
     "gs": "^0.0.2",
     "jsonexport": "^3.2.0",
     "jsonfile": "^6.1.0",
