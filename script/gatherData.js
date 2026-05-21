@@ -43,7 +43,7 @@ module.exports = {
       let url =
         'https://raw.githubusercontent.com/' +
         apiData.full_name +
-        '/master/' +
+        '/' + apiData.default_branch + '/' +   // ← dinâmico!
         fileName
 
       // DNS lookup errors at random causing stop to program
@@ -52,7 +52,7 @@ module.exports = {
       try {
         fileRaw = await Fetch(url)
       } catch (err) {
-        await new Promise((resolve) => setTimeout(resolve, 7777))
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         try {
           fileRaw = await Fetch(url)
         } catch (err) {
