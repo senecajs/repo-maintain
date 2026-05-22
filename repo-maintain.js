@@ -10,7 +10,8 @@ async function repoMaintain() {
     console.log = function () {}
   }
 
-  let searchResults = await search()
+  const githubToken = process.env.GITHUB_TOKEN || null
+  let searchResults = await search(githubToken)
   let Plugins = await filter(searchResults)
   let checkResults = await runChecks(Plugins)
   await createReport(checkResults)
