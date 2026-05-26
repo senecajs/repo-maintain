@@ -1,10 +1,7 @@
 module.exports = {
   gatherData: async function (apiData, checkList) {
-    // Node modules
     const Path = require('path')
-
-    // External modules
-    const Fetch = require('node-fetch') // v3 only supports ESM - switch?
+    const Fetch = require('node-fetch')
 
     let reqData = {}
     reqData.full_name = apiData.full_name
@@ -21,7 +18,6 @@ module.exports = {
       case 'JavaScript':
         config.push('js')
         break
-
       case 'TypeScript':
         config.push('ts')
         break
@@ -36,48 +32,60 @@ module.exports = {
         relCheckList[checkName] = checkDetails
       }
     }
-    for (let i = 0; i < Object.keys(filesReq).length; i++) {
-      let fileName = Object.keys(filesReq)[i]
-      let fileContent = null
-      if (null == fileName) continue
-      let url =
+
+    // Fetches a single file and returns { fileName, fileContent } or null on failure
+    const fetchFile = async (fileName) => {
+      if (null == fileName) return null
+
+      const url =
         'https://raw.githubusercontent.com/' +
         apiData.full_name +
-        '/' + apiData.default_branch + '/' +   // ← dinâmico!
+        '/' + apiData.default_branch + '/' +
         fileName
 
-      // DNS lookup errors at random causing stop to program
-      // If fetch request fails, wait - try again - move on if unsuccessful
-      let fileRaw = Promise
+      let fileRaw
       try {
         fileRaw = await Fetch(url)
       } catch (err) {
+        // DNS lookup errors may occur randomly - wait and retry once before giving up
         await new Promise((resolve) => setTimeout(resolve, 1000))
         try {
           fileRaw = await Fetch(url)
         } catch (err) {
-          continue
+          return null
         }
       }
 
-      if (fileRaw.ok) {
-        if ('.json' == Path.extname(url)) {
-          try {
-            fileContent = await fileRaw.json()
-          } catch (err) {
-            continue
-          }
-        } else {
-          fileContent = await fileRaw.text()
-        }
-        reqData[fileName] = fileContent
+      if (!fileRaw.ok) return null
 
-        // getting package name
-        if ('package.json' == fileName) {
-          reqData.package_name = fileContent.name
+      let fileContent
+      if ('.json' == Path.extname(url)) {
+        try {
+          fileContent = await fileRaw.json()
+        } catch (err) {
+          return null
         }
+      } else {
+        fileContent = await fileRaw.text()
       }
+
+      return { fileName, fileContent }
     }
+
+    // Fetch all files in parallel instead of sequentially
+    const fileNames = Object.keys(filesReq)
+    const results = await Promise.all(fileNames.map(fetchFile))
+
+    // Process results and populate reqData
+    results.forEach((result) => {
+      if (result == null) return
+      reqData[result.fileName] = result.fileContent
+
+      // Extract package name from package.json
+      if ('package.json' == result.fileName) {
+        reqData.package_name = result.fileContent.name
+      }
+    })
 
     return {
       data: reqData,
