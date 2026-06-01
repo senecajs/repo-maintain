@@ -2,6 +2,7 @@ const { search } = require('./script/search')
 const { filter } = require('./script/filter')
 const { runChecks } = require('./script/runChecks')
 const { createReport } = require('./script/createReport')
+const { createHTML } = require('./script/createHTML')
 
 repoMaintain()
 
@@ -17,6 +18,7 @@ async function repoMaintain() {
   let Plugins = await filter(searchResults)
   let checkResults = await runChecks(Plugins)
   await createReport(checkResults)
+  await createHTML(checkResults)
 
   const elapsed = ((Date.now() - startTime) / 1000 / 60).toFixed(1)
   console.info(
