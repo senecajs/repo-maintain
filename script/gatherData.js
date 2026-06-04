@@ -43,7 +43,7 @@ module.exports = {
       let url =
         'https://raw.githubusercontent.com/' +
         apiData.full_name +
-        '/' + apiData.default_branch + '/' +   // ← dinâmico!
+        '/' + apiData.default_branch + '/' +
         fileName
 
       // DNS lookup errors at random causing stop to program
