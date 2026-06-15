@@ -23,12 +23,10 @@ module.exports = {
 
     exist_entry: {
       config: 'js',
-      kind: 'fileX_exist_if_contain_json',
-      fileX: '',
+      kind: 'content_contain_json',
       file: 'package.json',
       contains: ['main'],
       contains_type: 'key',
-      contains_is_not: 'index.js',
     },
 
     exist_license: {
