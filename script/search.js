@@ -26,7 +26,7 @@ module.exports = {
 
         const searchURL =
           `https://api.github.com/search/repositories` +
-          `?q=seneca-+created:${year}-01-01..${year}-12-31` +
+          `?q=seneca-+fork:true+created:${year}-01-01..${year}-12-31` +
           `&page=${page}&per_page=100`
 
         let response
