@@ -34,11 +34,11 @@ module.exports = {
 
     const forkStatusCell = (data) => {
       if (data.fork_status === 'merged') {
-        return '<div class="fork-status"><a href="' + data.fork_pr_url + '" target="_blank">✅ #' + data.fork_pr_number + '</a><span class="tooltip">Fork merged by Richard</span></div>'
+        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">✅ #' + data.fork_pr_number + '</a><span class="tip">Merged by Richard</span></div>'
       } else if (data.fork_status === 'pr_open') {
-        return '<div class="fork-status"><a href="' + data.fork_pr_url + '" target="_blank">⏳ #' + data.fork_pr_number + '</a><span class="tooltip">PR open — awaiting review</span></div>'
+        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">⏳ #' + data.fork_pr_number + '</a><span class="tip">Open — awaiting review</span></div>'
       } else {
-        return '<div class="fork-status">➖<span class="tooltip">Not started yet</span></div>'
+        return '<div class="fork-status">➖<span class="tip">Not started yet</span></div>'
       }
     }
 
@@ -117,6 +117,12 @@ module.exports = {
     .badge-fork { background: #1a3326; color: #56d364; }
     .badge-community { background: #2d2033; color: #d2a8ff; }
     .hidden { display: none; }
+    /* Fork status */
+    .fork-status { position: relative; cursor: default; display: inline-block; }
+    .fork-status .tip { display: none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1c2128; border: 1px solid #30363d; border-radius: 6px; padding: 4px 10px; font-size: 11px; white-space: nowrap; color: #c9d1d9; z-index: 99; }
+    .fork-status:hover .tip { display: block; }
+    .legend { display: flex; align-items: center; gap: 16px; padding: 0 32px 14px; flex-wrap: wrap; font-size: 12px; color: #8b949e; }
+    .legend strong { margin-right: 4px; }
   </style>
 </head>
 <body>
@@ -142,12 +148,11 @@ module.exports = {
   </div>
 
   <div class="legend">
-    <span style="font-size:12px;color:#8b949e;font-weight:500;margin-right:4px;">PR Status:</span>
-    <div class="legend-item">✅ <span>Fork merged by Richard</span></div>
-    <div class="legend-item">⏳ <span>PR open — awaiting review</span></div>
-    <div class="legend-item">➖ <span>Not started yet</span></div>
+    <strong>PR Status:</strong>
+    ✅ Merged by Richard &nbsp;|&nbsp;
+    ⏳ Open — awaiting review &nbsp;|&nbsp;
+    ➖ Not started
   </div>
-
   <div class="controls">
     <input type="search" id="search" placeholder="Search plugins..." oninput="filterTable()">
     <select id="statusFilter" onchange="filterTable()">
