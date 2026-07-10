@@ -47,6 +47,7 @@ module.exports = {
           <td><a href="${plugin.data.html_url}" target="_blank">${plugin.data.full_name}</a><span class="badge badge-${owner}">${badgeLabel}</span></td>
           <td>${plugin.data.language || 'N/A'}</td>
           <td>⭐ ${plugin.data.stargazers_count}</td>
+          <td>${plugin.data.open_prs > 0 ? '<a href="https://github.com/senecajs/' + plugin.data.full_name.split('/')[1] + '/pulls" target="_blank">🔗 ' + plugin.data.open_prs + '</a>' : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
         </tr>`
