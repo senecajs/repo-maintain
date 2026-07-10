@@ -47,7 +47,15 @@ module.exports = {
           <td><a href="${plugin.data.html_url}" target="_blank">${plugin.data.full_name}</a><span class="badge badge-${owner}">${badgeLabel}</span></td>
           <td>${plugin.data.language || 'N/A'}</td>
           <td>⭐ ${plugin.data.stargazers_count}</td>
-          <td>${plugin.data.open_prs > 0 ? '<a href="https://github.com/senecajs/' + plugin.data.full_name.split('/')[1] + '/pulls" target="_blank">🔗 ' + plugin.data.open_prs + '</a>' : '—'}</td>
+          <td>
+            \${plugin.data.fork_status === 'merged'
+              ? \`<div class="fork-status"><a href="\${plugin.data.fork_pr_url}" target="_blank">✅ #\${plugin.data.fork_pr_number}</a><span class="tooltip">Fork merged by Richard</span></div>\`
+              : plugin.data.fork_status === 'pr_open'
+              ? \`<div class="fork-status"><a href="\${plugin.data.fork_pr_url}" target="_blank">⏳ #\${plugin.data.fork_pr_number}</a><span class="tooltip">PR open — awaiting review</span></div>\`
+              : '<div class="fork-status">➖<span class="tooltip">Not started yet</span></div>'
+            }
+          </td>
+          <td>\${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
         </tr>`
@@ -128,6 +136,13 @@ module.exports = {
     <div class="tab" onclick="setTab('official', this)">Official (senecajs/*) <span class="count">${officialTotal}</span></div>
     <div class="tab" onclick="setTab('fork', this)">Forks in review (luiz-justino/*) <span class="count">${forkTotal}</span></div>
     <div class="tab" onclick="setTab('community', this)">Community <span class="count">${communityTotal}</span></div>
+  </div>
+
+  <div class="legend">
+    <span style="font-size:12px;color:#8b949e;font-weight:500;margin-right:4px;">PR Status:</span>
+    <div class="legend-item">✅ <span>Fork merged by Richard</span></div>
+    <div class="legend-item">⏳ <span>PR open — awaiting review</span></div>
+    <div class="legend-item">➖ <span>Not started yet</span></div>
   </div>
 
   <div class="controls">
