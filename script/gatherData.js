@@ -12,61 +12,6 @@ module.exports = {
     reqData.stargazers_count = apiData.stargazers_count
     reqData.open_issues = apiData.open_issues
 
-    // Fetch open PRs and fork status from official senecajs repo
-    try {
-      const repoName = apiData.full_name.split('/')[1]
-      const owner = apiData.full_name.split('/')[0]
-
-      // Check open PRs on official repo
-      const prUrl = `https://api.github.com/repos/senecajs/${repoName}/pulls?state=open&per_page=100`
-      const prRes = await Fetch(prUrl, {
-        headers: {
-          'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      })
-      const prData = await prRes.json()
-      const openPrs = Array.isArray(prData) ? prData : []
-      reqData.open_prs = openPrs.length
-
-      // Check if fork from luiz-justino has open PR on official repo
-      const luizPr = openPrs.find(pr => pr.head && pr.head.label && pr.head.label.startsWith('luiz-justino:'))
-
-      if (luizPr) {
-        reqData.fork_status = 'pr_open'
-        reqData.fork_pr_url = luizPr.html_url
-        reqData.fork_pr_number = luizPr.number
-      } else {
-        // Check if there's a merged PR from luiz-justino
-        const mergedUrl = `https://api.github.com/repos/senecajs/${repoName}/pulls?state=closed&per_page=10`
-        const mergedRes = await Fetch(mergedUrl, {
-          headers: {
-            'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github.v3+json'
-          }
-        })
-        const mergedData = await mergedRes.json()
-        const mergedPrs = Array.isArray(mergedData) ? mergedData : []
-        const mergedLuiz = mergedPrs.find(pr =>
-          pr.head && pr.head.label && pr.head.label.startsWith('luiz-justino:') && pr.merged_at
-        )
-        if (mergedLuiz) {
-          reqData.fork_status = 'merged'
-          reqData.fork_pr_url = mergedLuiz.html_url
-          reqData.fork_pr_number = mergedLuiz.number
-        } else {
-          reqData.fork_status = 'not_started'
-          reqData.fork_pr_url = null
-          reqData.fork_pr_number = null
-        }
-      }
-    } catch (e) {
-      reqData.open_prs = 0
-      reqData.fork_status = 'not_started'
-      reqData.fork_pr_url = null
-    }
-
-
     let config = ['base']
     let lang = apiData.language
     switch (lang) {
@@ -148,3 +93,61 @@ module.exports = {
     }
   },
 }
+
+    // Fetch PR status from official senecajs repo
+    try {
+      const repoName = apiData.full_name.split('/')[1]
+      const headers = {
+        'Authorization': 'token ' + process.env.GITHUB_TOKEN,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+
+      // Check open PRs from luiz-justino
+      const openRes = await Fetch(
+        'https://api.github.com/repos/senecajs/' + repoName + '/pulls?state=open&per_page=100',
+        { headers }
+      )
+      const openPrs = await openRes.json()
+      reqData.open_prs = Array.isArray(openPrs) ? openPrs.length : 0
+
+      const luizOpen = Array.isArray(openPrs)
+        ? openPrs.find(pr => pr.head && pr.head.label && pr.head.label.startsWith('luiz-justino:'))
+        : null
+
+      if (luizOpen) {
+        reqData.fork_status = 'pr_open'
+        reqData.fork_pr_url = luizOpen.html_url
+        reqData.fork_pr_number = luizOpen.number
+      } else {
+        // Check closed/merged PRs from luiz-justino
+        const closedRes = await Fetch(
+          'https://api.github.com/repos/senecajs/' + repoName + '/pulls?state=closed&per_page=20',
+          { headers }
+        )
+        const closedPrs = await closedRes.json()
+        const luizMerged = Array.isArray(closedPrs)
+          ? closedPrs.find(pr =>
+              pr.head && pr.head.label &&
+              pr.head.label.startsWith('luiz-justino:') &&
+              pr.merged_at !== null
+            )
+          : null
+
+        if (luizMerged) {
+          reqData.fork_status = 'merged'
+          reqData.fork_pr_url = luizMerged.html_url
+          reqData.fork_pr_number = luizMerged.number
+        } else {
+          reqData.fork_status = 'not_started'
+          reqData.fork_pr_url = null
+          reqData.fork_pr_number = null
+        }
+      }
+    } catch (e) {
+      reqData.open_prs = 0
+      reqData.fork_status = 'not_started'
+      reqData.fork_pr_url = null
+      reqData.fork_pr_number = null
+    }
+
+    return {
