@@ -121,7 +121,7 @@ module.exports = {
     .fork-status { position: relative; cursor: default; display: inline-block; }
     .fork-status .tip { display: none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1c2128; border: 1px solid #30363d; border-radius: 6px; padding: 4px 10px; font-size: 11px; white-space: nowrap; color: #c9d1d9; z-index: 99; }
     .fork-status:hover .tip { display: block; }
-    .legend { display: flex; align-items: center; gap: 16px; padding: 0 32px 14px; flex-wrap: wrap; font-size: 12px; color: #8b949e; }
+    .legend { display: flex; align-items: center; gap: 16px; padding: 12px 32px 14px; flex-wrap: wrap; font-size: 12px; color: #8b949e; border-bottom: 1px solid #21262d; margin-bottom: 8px; }
     .legend strong { margin-right: 4px; }
   </style>
 </head>
