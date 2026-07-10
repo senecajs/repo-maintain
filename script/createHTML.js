@@ -32,7 +32,17 @@ module.exports = {
     const forkTotal = plugins.filter(p => getOwner(p.data.full_name) === 'fork').length
     const communityTotal = plugins.filter(p => getOwner(p.data.full_name) === 'community').length
 
-    const rows = plugins.map(plugin => {
+    const forkStatusCell = (data) => {
+      if (data.fork_status === 'merged') {
+        return '<div class="fork-status"><a href="' + data.fork_pr_url + '" target="_blank">✅ #' + data.fork_pr_number + '</a><span class="tooltip">Fork merged by Richard</span></div>'
+      } else if (data.fork_status === 'pr_open') {
+        return '<div class="fork-status"><a href="' + data.fork_pr_url + '" target="_blank">⏳ #' + data.fork_pr_number + '</a><span class="tooltip">PR open — awaiting review</span></div>'
+      } else {
+        return '<div class="fork-status">➖<span class="tooltip">Not started yet</span></div>'
+      }
+    }
+
+        const rows = plugins.map(plugin => {
       const checks = Object.values(plugin.checks)
       const allPass = checks.every(c => c.pass)
       const checkCells = checks.map(c =>
@@ -47,15 +57,8 @@ module.exports = {
           <td><a href="${plugin.data.html_url}" target="_blank">${plugin.data.full_name}</a><span class="badge badge-${owner}">${badgeLabel}</span></td>
           <td>${plugin.data.language || 'N/A'}</td>
           <td>⭐ ${plugin.data.stargazers_count}</td>
-          <td>
-            \${plugin.data.fork_status === 'merged'
-              ? \`<div class="fork-status"><a href="\${plugin.data.fork_pr_url}" target="_blank">✅ #\${plugin.data.fork_pr_number}</a><span class="tooltip">Fork merged by Richard</span></div>\`
-              : plugin.data.fork_status === 'pr_open'
-              ? \`<div class="fork-status"><a href="\${plugin.data.fork_pr_url}" target="_blank">⏳ #\${plugin.data.fork_pr_number}</a><span class="tooltip">PR open — awaiting review</span></div>\`
-              : '<div class="fork-status">➖<span class="tooltip">Not started yet</span></div>'
-            }
-          </td>
-          <td>\${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
+          <td>${forkStatusCell(plugin.data)}</td>
+          <td>${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
         </tr>`
