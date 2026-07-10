@@ -12,6 +12,29 @@ module.exports = {
     reqData.stargazers_count = apiData.stargazers_count
     reqData.open_issues = apiData.open_issues
 
+    // Fetch open PRs count from official senecajs repo
+    try {
+      const repoName = apiData.full_name.split('/')[1]
+      const prUrl = `https://api.github.com/repos/senecajs/${repoName}/pulls?state=open&per_page=1`
+      const prRes = await Fetch(prUrl, {
+        headers: {
+          'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      })
+      const linkHeader = prRes.headers.get('link') || ''
+      if (linkHeader.includes('rel="last"')) {
+        const match = linkHeader.match(/page=(\d+)>; rel="last"/)
+        reqData.open_prs = match ? parseInt(match[1]) : 0
+      } else {
+        const prData = await prRes.json()
+        reqData.open_prs = Array.isArray(prData) ? prData.length : 0
+      }
+    } catch (e) {
+      reqData.open_prs = 0
+    }
+
+
     let config = ['base']
     let lang = apiData.language
     switch (lang) {
