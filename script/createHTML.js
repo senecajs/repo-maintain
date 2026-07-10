@@ -169,6 +169,8 @@ module.exports = {
           <th>Plugin</th>
           <th>Language</th>
           <th>Stars</th>
+          <th>PR Status</th>
+          <th>Open PRs</th>
           <th>Branch</th>
           ${checkHeaders}
         </tr>
