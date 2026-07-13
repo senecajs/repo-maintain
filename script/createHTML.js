@@ -32,7 +32,17 @@ module.exports = {
     const forkTotal = plugins.filter(p => getOwner(p.data.full_name) === 'fork').length
     const communityTotal = plugins.filter(p => getOwner(p.data.full_name) === 'community').length
 
-    const rows = plugins.map(plugin => {
+    const forkStatusCell = (data) => {
+      if (data.fork_status === 'merged') {
+        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">✅ #' + data.fork_pr_number + '</a><span class="tip">Merged by Richard</span></div>'
+      } else if (data.fork_status === 'pr_open') {
+        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">⏳ #' + data.fork_pr_number + '</a><span class="tip">Open — awaiting review</span></div>'
+      } else {
+        return '<div class="fork-status">➖<span class="tip">Not started yet</span></div>'
+      }
+    }
+
+        const rows = plugins.map(plugin => {
       const checks = Object.values(plugin.checks)
       const allPass = checks.every(c => c.pass)
       const checkCells = checks.map(c =>
@@ -47,6 +57,8 @@ module.exports = {
           <td><a href="${plugin.data.html_url}" target="_blank">${plugin.data.full_name}</a><span class="badge badge-${owner}">${badgeLabel}</span></td>
           <td>${plugin.data.language || 'N/A'}</td>
           <td>⭐ ${plugin.data.stargazers_count}</td>
+          <td>${forkStatusCell(plugin.data)}</td>
+          <td>${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
         </tr>`
@@ -105,6 +117,12 @@ module.exports = {
     .badge-fork { background: #1a3326; color: #56d364; }
     .badge-community { background: #2d2033; color: #d2a8ff; }
     .hidden { display: none; }
+    /* Fork status */
+    .fork-status { position: relative; cursor: default; display: inline-block; }
+    .fork-status .tip { display: none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1c2128; border: 1px solid #30363d; border-radius: 6px; padding: 4px 10px; font-size: 11px; white-space: nowrap; color: #c9d1d9; z-index: 99; }
+    .fork-status:hover .tip { display: block; }
+    .legend { display: flex; align-items: center; gap: 16px; padding: 12px 32px 14px; flex-wrap: wrap; font-size: 12px; color: #8b949e; border-bottom: 1px solid #21262d; margin-bottom: 8px; }
+    .legend strong { margin-right: 4px; }
   </style>
 </head>
 <body>
@@ -129,6 +147,12 @@ module.exports = {
     <div class="tab" onclick="setTab('community', this)">Community <span class="count">${communityTotal}</span></div>
   </div>
 
+  <div class="legend">
+    <strong>PR Status:</strong>
+    ✅ Merged by Richard &nbsp;|&nbsp;
+    ⏳ Open — awaiting review &nbsp;|&nbsp;
+    ➖ Not started
+  </div>
   <div class="controls">
     <input type="search" id="search" placeholder="Search plugins..." oninput="filterTable()">
     <select id="statusFilter" onchange="filterTable()">
@@ -145,6 +169,8 @@ module.exports = {
           <th>Plugin</th>
           <th>Language</th>
           <th>Stars</th>
+          <th>PR Status</th>
+          <th>Open PRs</th>
           <th>Branch</th>
           ${checkHeaders}
         </tr>
