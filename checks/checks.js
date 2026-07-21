@@ -15,12 +15,10 @@ module.exports = {
 
     exist_dist: {
       config: 'ts',
-      kind: 'fileX_exist_if_contain_json',
-      fileX: '',
+      kind: 'content_contain_json',
       file: 'package.json',
-      contains: ['main'],
+      contains: ['types'],
       contains_type: 'key',
-      contains_is_not: 'dist/index.js',
     },
 
     exist_entry: {
