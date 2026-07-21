@@ -1,53 +1,52 @@
 module.exports = {
-  runChecks: async function (Plugins) {
-    // Node modules
+  runChecks: async function (Plugins, concurrency = 5) {
     const Path = require('path')
-
-    // External modules
     const Hoek = require('@hapi/hoek')
     const Marked = require('marked')
-
-    // Internal modules
     const { checkList } = require('../checks/checks')
     const { gatherData } = require('./gatherData')
     const defineChecks = checkOperations()
 
     console.log('\nChecks function initiated.\n')
     let allResults = {}
-    for (let i = 0; i < Plugins.length; i++) {
-      let item = Plugins[i]
+
+    // Process a single plugin and return its results
+    const processPlugin = async (item, index) => {
       let results = {}
       let plugin = await gatherData(item, checkList)
-      console.log(
-        '[',
-        i + 1,
-        ' of ',
-        Plugins.length,
-        ']',
-        plugin.data.full_name
-      )
+
+      console.log(`[ ${index + 1} of ${Plugins.length} ] ${plugin.data.full_name}`)
+
       for (checkName in plugin.checks) {
         let checkDetails = plugin.checks[checkName]
         checkDetails.name = checkName
 
         let checkKind = defineChecks[checkDetails.kind]
         if (null == checkKind) {
-          console.info(
-            'WARNING',
-            'Check does not exist',
-            checkName,
-            checkDetails.kind
-          )
+          console.info('WARNING', 'Check does not exist', checkName, checkDetails.kind)
           continue
         }
         let res = await checkKind(checkDetails, plugin.data)
         results[checkName] = res
       }
-      allResults[item.full_name] = {
-        data: plugin.data,
-        checks: results,
-      }
+
+      return { full_name: item.full_name, data: plugin.data, checks: results }
     }
+
+    // Process plugins in batches to avoid overwhelming the GitHub API
+    for (let i = 0; i < Plugins.length; i += concurrency) {
+      const batch = Plugins.slice(i, i + concurrency)
+      const batchResults = await Promise.all(
+        batch.map((item, idx) => processPlugin(item, i + idx))
+      )
+      batchResults.forEach((result) => {
+        allResults[result.full_name] = {
+          data: result.data,
+          checks: result.checks,
+        }
+      })
+    }
+
     console.log('Checks complete.')
     return allResults
 
@@ -159,11 +158,11 @@ module.exports = {
           if (pass) {
             why = 'file_found'
             let searchArray = checkDetails.contains
-            // Reassignement of #1 heading text
+            // Reassignment of #1 heading text to match package name
             searchArray[0].text = pluginData.package_name
 
             let fileContent = pluginData[file]
-            // Creating AST from file
+            // Create AST from markdown file
             let lexer = new Marked.Lexer()
             let tokens = lexer.lex(fileContent)
             let headings = tokens.filter(
@@ -178,7 +177,6 @@ module.exports = {
                   headings[i].depth == searchArray[i].depth &&
                   headings[i].text == searchArray[i].text
                 if (!pass) {
-                  let nb = i + 1
                   why = 'heading_"' + searchArray[i].text + '"_not_found'
                   break
                 }
@@ -214,7 +212,7 @@ module.exports = {
               }
               pass = null != Hoek.reach(fileContent, chain)
             } else {
-              // extensibility goes here - searching for value and not key
+              // Extensibility point: searching by value instead of key
               console.log('Content type not recognised. ', checkDetails.name)
               pass = false
             }
