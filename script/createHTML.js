@@ -32,16 +32,6 @@ module.exports = {
     const forkTotal = plugins.filter(p => getOwner(p.data.full_name) === 'fork').length
     const communityTotal = plugins.filter(p => getOwner(p.data.full_name) === 'community').length
 
-    const forkStatusCell = (data) => {
-      if (data.fork_status === 'merged') {
-        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">✅ #' + data.fork_pr_number + '</a><span class="tip">Merged by Richard</span></div>'
-      } else if (data.fork_status === 'pr_open') {
-        return '<div class="fork-status"><a href="' + (data.fork_pr_url || '#') + '" target="_blank">⏳ #' + data.fork_pr_number + '</a><span class="tip">Open — awaiting review</span></div>'
-      } else {
-        return '<div class="fork-status">➖<span class="tip">Not started yet</span></div>'
-      }
-    }
-
         const rows = plugins.map(plugin => {
       const checks = Object.values(plugin.checks)
       const allPass = checks.every(c => c.pass)
@@ -57,8 +47,6 @@ module.exports = {
           <td><a href="${plugin.data.html_url}" target="_blank">${plugin.data.full_name}</a><span class="badge badge-${owner}">${badgeLabel}</span></td>
           <td>${plugin.data.language || 'N/A'}</td>
           <td>⭐ ${plugin.data.stargazers_count}</td>
-          <td>${forkStatusCell(plugin.data)}</td>
-          <td>${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
           <td style="min-width:20px;padding:0;border:none;"></td>
@@ -160,21 +148,6 @@ module.exports = {
     <div class="tab" onclick="setTab('community', this)">Community <span class="count">${communityTotal}</span></div>
   </div>
 
-  <div class="legend">
-    <strong>PR Status:</strong>
-    ✅ Merged by Richard &nbsp;|&nbsp;
-    ⏳ Open — awaiting review &nbsp;|&nbsp;
-    ➖ Not started
-  </div>
-  <div class="controls">
-    <input type="search" id="search" placeholder="Search plugins..." oninput="filterTable()">
-    <select id="statusFilter" onchange="filterTable()">
-      <option value="all">All</option>
-      <option value="pass">Passing only</option>
-      <option value="fail">Failing only</option>
-    </select>
-  </div>
-
   <div class="table-wrap">
     <div class="table-scroll">
     <table id="reportTable">
@@ -183,9 +156,7 @@ module.exports = {
           <th class="sortable" data-col="0">Plugin <span class="sort-icon">↕</span></th>
           <th class="sortable" data-col="1">Language <span class="sort-icon">↕</span></th>
           <th class="sortable" data-col="2">Stars <span class="sort-icon">↕</span></th>
-          <th data-col="3">PR Status</th>
-          <th class="sortable" data-col="4">Open PRs <span class="sort-icon">↕</span></th>
-          <th class="sortable" data-col="5">Branch <span class="sort-icon">↕</span></th>
+          <th class="sortable" data-col="3">Branch <span class="sort-icon">↕</span></th>
           ${checkHeaders}
           <th style="min-width:20px;padding:0;border:none;background:#161b22;"></th>
         </tr>
@@ -236,7 +207,7 @@ module.exports = {
         if (!aCell || !bCell) return 0
         let aVal = aCell.textContent.trim()
         let bVal = bCell.textContent.trim()
-        if (col === 2 || col === 4) {
+        if (col === 2) {
           aVal = parseInt(aVal.replace(/[^0-9]/g, '')) || 0
           bVal = parseInt(bVal.replace(/[^0-9]/g, '')) || 0
           return (aVal - bVal) * sortDir
