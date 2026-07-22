@@ -102,6 +102,8 @@ module.exports = {
     input[type="search"] { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 300px; }
     select { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
     .table-wrap { padding: 0 32px 32px; overflow-x: auto; }
+    table { min-width: max-content; }
+    td, th { white-space: nowrap; padding: 8px 12px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th { background: #161b22; color: #8b949e; padding: 10px 8px; text-align: left; border-bottom: 1px solid #30363d; white-space: nowrap; position: sticky; top: 0; }
     td { padding: 8px; border-bottom: 1px solid #21262d; vertical-align: middle; }
