@@ -61,6 +61,7 @@ module.exports = {
           <td>${plugin.data.open_prs > 0 ? plugin.data.open_prs : '—'}</td>
           <td>${plugin.data.default_branch}</td>
           ${checkCells}
+          <td style="min-width:20px;padding:0;border:none;"></td>
         </tr>`
     }).join('')
 
@@ -186,6 +187,7 @@ module.exports = {
           <th class="sortable" data-col="4">Open PRs <span class="sort-icon">↕</span></th>
           <th class="sortable" data-col="5">Branch <span class="sort-icon">↕</span></th>
           ${checkHeaders}
+          <th style="min-width:20px;padding:0;border:none;background:#161b22;"></th>
         </tr>
       </thead>
       <tbody>
