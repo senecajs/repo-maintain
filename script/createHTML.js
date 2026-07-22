@@ -109,7 +109,7 @@ module.exports = {
     .table-scroll::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
     .table-scroll::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
     .table-scroll::-webkit-scrollbar-corner { background: #161b22; }
-    .table-scroll { overflow-x: auto; overflow-y: scroll; max-height: calc(100vh - 280px); border: 1px solid #30363d; border-radius: 6px; scrollbar-gutter: stable; }
+    .table-scroll { overflow-x: auto; overflow-y: scroll; max-height: calc(100vh - 280px); border: 1px solid #30363d; border-radius: 6px; padding-right: 8px; box-sizing: border-box; }
     .table-scroll table { margin-right: 0; }
     .table-scroll table tr td:last-child, .table-scroll table tr th:last-child { padding-right: 20px; }
     table { min-width: max-content; width: 100%; border-collapse: collapse; font-size: 13px; }
