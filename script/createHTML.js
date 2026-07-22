@@ -65,8 +65,8 @@ module.exports = {
     }).join('')
 
     const checkNames = plugins[0] ? Object.keys(plugins[0].checks) : []
-    const checkHeaders = checkNames.map(name =>
-      `<th title="${name}">${name.replace(/_/g, ' ')}</th>`
+    const checkHeaders = checkNames.map((name, i) =>
+      `<th class="sortable" data-col="${6 + i}" title="${name}">${name.replace(/_/g, ' ')} <span class="sort-icon">↕</span></th>`
     ).join('')
 
     const generated = new Date().toUTCString()
@@ -166,12 +166,12 @@ module.exports = {
     <table id="reportTable">
       <thead>
         <tr>
-          <th>Plugin</th>
-          <th>Language</th>
-          <th>Stars</th>
-          <th>PR Status</th>
-          <th>Open PRs</th>
-          <th>Branch</th>
+          <th class="sortable" data-col="0">Plugin <span class="sort-icon">↕</span></th>
+          <th class="sortable" data-col="1">Language <span class="sort-icon">↕</span></th>
+          <th class="sortable" data-col="2">Stars <span class="sort-icon">↕</span></th>
+          <th data-col="3">PR Status</th>
+          <th class="sortable" data-col="4">Open PRs <span class="sort-icon">↕</span></th>
+          <th class="sortable" data-col="5">Branch <span class="sort-icon">↕</span></th>
           ${checkHeaders}
         </tr>
       </thead>
@@ -191,7 +191,53 @@ module.exports = {
       filterTable()
     }
 
-    function filterTable() {
+    let sortCol = -1
+    let sortDir = 1
+
+    function sortTable(col) {
+      if (sortCol === col) {
+        sortDir *= -1
+      } else {
+        sortCol = col
+        sortDir = 1
+      }
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc')
+        const icon = th.querySelector('.sort-icon')
+        if (icon) icon.textContent = '↕'
+      })
+      const activeTh = document.querySelector(`th.sortable[data-col="${col}"]`)
+      if (activeTh) {
+        activeTh.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc')
+        const icon = activeTh.querySelector('.sort-icon')
+        if (icon) icon.textContent = sortDir === 1 ? '↑' : '↓'
+      }
+      const tbody = document.querySelector('#reportTable tbody')
+      const rows = Array.from(tbody.querySelectorAll('tr'))
+      rows.sort((a, b) => {
+        const aCell = a.querySelectorAll('td')[col]
+        const bCell = b.querySelectorAll('td')[col]
+        if (!aCell || !bCell) return 0
+        let aVal = aCell.textContent.trim()
+        let bVal = bCell.textContent.trim()
+        if (col === 2 || col === 4) {
+          aVal = parseInt(aVal.replace(/[^0-9]/g, '')) || 0
+          bVal = parseInt(bVal.replace(/[^0-9]/g, '')) || 0
+          return (aVal - bVal) * sortDir
+        }
+        if (aVal === '✅' || aVal === '❌') {
+          return (aVal === bVal ? 0 : aVal === '✅' ? -1 : 1) * sortDir
+        }
+        return aVal.localeCompare(bVal) * sortDir
+      })
+      rows.forEach(r => tbody.appendChild(r))
+    }
+
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => sortTable(parseInt(th.dataset.col)))
+    })
+
+        function filterTable() {
       const search = document.getElementById('search').value.toLowerCase()
       const status = document.getElementById('statusFilter').value
       document.querySelectorAll('#reportTable tbody tr').forEach(row => {
