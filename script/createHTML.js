@@ -102,6 +102,12 @@ module.exports = {
     input[type="search"] { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 300px; }
     select { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
     .table-wrap { padding: 0 32px 32px; }
+    /* Dark mode scrollbar */
+    .table-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+    .table-scroll::-webkit-scrollbar-track { background: #161b22; border-radius: 4px; }
+    .table-scroll::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+    .table-scroll::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
+    .table-scroll::-webkit-scrollbar-corner { background: #161b22; }
     .table-scroll { overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 280px); border: 1px solid #30363d; border-radius: 6px; }
     table { min-width: max-content; width: 100%; border-collapse: collapse; font-size: 13px; }
     td, th { white-space: nowrap; padding: 8px 12px; }
