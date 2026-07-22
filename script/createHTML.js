@@ -109,6 +109,7 @@ module.exports = {
     .table-scroll::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
     .table-scroll::-webkit-scrollbar-corner { background: #161b22; }
     .table-scroll { overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 280px); border: 1px solid #30363d; border-radius: 6px; }
+    .table-scroll table tr td:last-child, .table-scroll table tr th:last-child { padding-right: 24px; }
     table { min-width: max-content; width: 100%; border-collapse: collapse; font-size: 13px; }
     td, th { white-space: nowrap; padding: 8px 12px; }
     thead tr th { position: sticky; top: 0; z-index: 10; background: #161b22; }
