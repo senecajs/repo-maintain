@@ -101,9 +101,11 @@ module.exports = {
     .controls { padding: 0 32px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
     input[type="search"] { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 300px; }
     select { background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
-    .table-wrap { padding: 0 32px 32px; overflow-x: auto; }
-    table { min-width: max-content; }
+    .table-wrap { padding: 0 32px 32px; }
+    .table-scroll { overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 280px); border: 1px solid #30363d; border-radius: 6px; }
+    table { min-width: max-content; width: 100%; border-collapse: collapse; font-size: 13px; }
     td, th { white-space: nowrap; padding: 8px 12px; }
+    thead tr th { position: sticky; top: 0; z-index: 10; background: #161b22; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th { background: #161b22; color: #8b949e; padding: 10px 8px; text-align: left; border-bottom: 1px solid #30363d; white-space: nowrap; position: sticky; top: 0; }
     td { padding: 8px; border-bottom: 1px solid #21262d; vertical-align: middle; }
@@ -165,6 +167,7 @@ module.exports = {
   </div>
 
   <div class="table-wrap">
+    <div class="table-scroll">
     <table id="reportTable">
       <thead>
         <tr>
@@ -181,6 +184,7 @@ module.exports = {
         ${rows}
       </tbody>
     </table>
+    </div>
   </div>
 
   <script>
