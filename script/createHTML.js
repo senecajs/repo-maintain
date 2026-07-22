@@ -206,7 +206,7 @@ module.exports = {
         const icon = th.querySelector('.sort-icon')
         if (icon) icon.textContent = '↕'
       })
-      const activeTh = document.querySelector(`th.sortable[data-col="${col}"]`)
+      const activeTh = document.querySelector('th.sortable[data-col="' + col + '"]')
       if (activeTh) {
         activeTh.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc')
         const icon = activeTh.querySelector('.sort-icon')
