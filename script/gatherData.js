@@ -87,6 +87,58 @@ module.exports = {
       }
     })
 
+
+    // Fetch PR status from official senecajs repo
+    try {
+      const repoName = apiData.full_name.split('/')[1]
+      const ghHeaders = {
+        'Authorization': 'token ' + process.env.GITHUB_TOKEN,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+      const openRes = await Fetch(
+        'https://api.github.com/repos/senecajs/' + repoName + '/pulls?state=open&per_page=100',
+        { headers: ghHeaders }
+      )
+      const openPrs = await openRes.json()
+      reqData.open_prs = Array.isArray(openPrs) ? openPrs.length : 0
+      const luizOpen = Array.isArray(openPrs)
+        ? openPrs.find(pr => pr.head && pr.head.label && pr.head.label.startsWith('luiz-justino:'))
+        : null
+      if (luizOpen) {
+        reqData.fork_status = 'pr_open'
+        reqData.fork_pr_url = luizOpen.html_url
+        reqData.fork_pr_number = luizOpen.number
+      } else {
+        const closedRes = await Fetch(
+          'https://api.github.com/repos/senecajs/' + repoName + '/pulls?state=closed&per_page=20',
+          { headers: ghHeaders }
+        )
+        const closedPrs = await closedRes.json()
+        const luizMerged = Array.isArray(closedPrs)
+          ? closedPrs.find(pr =>
+              pr.head && pr.head.label &&
+              pr.head.label.startsWith('luiz-justino:') &&
+              pr.merged_at !== null
+            )
+          : null
+        if (luizMerged) {
+          reqData.fork_status = 'merged'
+          reqData.fork_pr_url = luizMerged.html_url
+          reqData.fork_pr_number = luizMerged.number
+        } else {
+          reqData.fork_status = 'not_started'
+          reqData.fork_pr_url = null
+          reqData.fork_pr_number = null
+        }
+      }
+    } catch (e) {
+      console.error('PR status error for ' + apiData.full_name + ':', e.message)
+      reqData.open_prs = 0
+      reqData.fork_status = 'not_started'
+      reqData.fork_pr_url = null
+      reqData.fork_pr_number = null
+    }
+
     return {
       data: reqData,
       checks: relCheckList,
