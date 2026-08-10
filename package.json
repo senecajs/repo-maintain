@@ -47,7 +47,7 @@
     "node-fetch": "^2.6.7",
     "readline": "^1.3.0",
     "request": "^2.88.2",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.3.1",
     "stafo": "^1.0.0",
     "underscore": "^1.13.2"
   },
